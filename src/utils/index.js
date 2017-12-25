@@ -38,7 +38,7 @@ export function parseJSON(response) {
 export const requireAuthentication = UserAuthWrapper({
   authSelector: state => state.auth,
   predicate: auth => auth.isAuthenticated,
-  failureRedirectPath: '/mobile-test/login',
+  failureRedirectPath: '/mobile-zq/login',
   redirectAction: push,
   //redirectAction: routerActions.replace,
   wrapperDisplayName: 'UserIsJWTAuthenticated'

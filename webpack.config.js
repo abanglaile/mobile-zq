@@ -53,7 +53,8 @@ module.exports = {
           plugins: [
             'external-helpers', // why not work?
             ["transform-runtime", { polyfill: false }],
-            ["import", [{ "style": "css", "libraryName": "antd-mobile" }]]
+            ["import", [{ "style": "css", "libraryName": "antd-mobile" },
+              { "libraryName": "antd", "libraryDirectory": "es", "style": "css" }]]
           ],
           presets: ['es2015', 'stage-2', 'react']
           // presets: [['es2015', { modules: false }], 'stage-0', 'react'] // tree-shaking

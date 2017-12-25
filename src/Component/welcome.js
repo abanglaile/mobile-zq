@@ -41,7 +41,7 @@ class Welcome extends React.Component {
         var history = this.context.router.history;
         var exercise = [problems, problem1];
         var state = { exindex: 0, exercise: exercise };
-        history.push("/mobile-test/Question", state);
+        history.push("/mobile-zq/Question", state);
       }, 5000);
   }
   render(){

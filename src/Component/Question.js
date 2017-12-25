@@ -391,13 +391,13 @@ class Question extends React.Component {
           () => alert('退出练习？', '退出后将不保存本次练习记录', 
           [
             { text: '取消', onPress: () => console.log('cancel') },
-            { text: '退出练习', onPress: () => this.props.router.push("/mobile-test/mytest")},
+            { text: '退出练习', onPress: () => this.props.router.push("/mobile-zq/mytest")},
           ])
           :
-          () => this.props.router.push("/mobile-test/mytest")
+          () => this.props.router.push("/mobile-zq/mytest")
         }
         rightContent={[
-          <Button inline type="ghost" size="small" onClick={e => this.props.router.push("/mobile-test/AnswerSheet")}>{exindex + 1}</Button>,
+          <Button inline type="ghost" size="small" onClick={e => this.props.router.push("/mobile-zq/AnswerSheet")}>{exindex + 1}</Button>,
         ]}
         ></NavBar>
         <WingBlank>

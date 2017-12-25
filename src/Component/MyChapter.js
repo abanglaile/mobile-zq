@@ -24,7 +24,7 @@ class MyChapter extends React.Component {
                 <List>
                   {
                     bookitem.chapters.map((chapteritem, i) => (
-                      <List.Item onClick={e => this.props.router.push("/mobile-test/mychapterkp")}>{chapteritem}</List.Item>
+                      <List.Item onClick={e => this.props.router.push("/mobile-zq/mychapterkp")}>{chapteritem}</List.Item>
                     ))
                   }
                 </List>

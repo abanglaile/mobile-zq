@@ -8,6 +8,7 @@ import KpTestResult from '../Component/KpTestResult.js'
 import MyTest from '../Component/my_test.js'
 import MyChapter from '../Component/MyChapter.js'
 import login from '../Component/login.js'
+import StudentStatus from '../Component/StudentStatus.js'
 import { Route, IndexRoute } from 'react-router';
 import { requireAuthentication } from '../utils';
 
@@ -24,11 +25,12 @@ const component = (component) => {
 
 export default (
   	<Route path="/">
-      <Route path="mobile-test">
+      <Route path="mobile-zq">
       	<Route path="login" component={login} />
       	<Route path="mychapter" component={MyChapter} />
         <Route path="mytest" component={MyTest} />
         <Route path="Question" component={Question} />
+        <Route path="studentstatus" component={StudentStatus} />
 
         <Route path="AnswerSheet" component={AnswerSheet} />
         <Route path="TestStatus/:test_id" component={TestStatus} />

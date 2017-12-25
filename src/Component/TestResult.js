@@ -103,7 +103,7 @@ class TestResult extends React.Component {
 
   jumpToExercise(i){
     this.props.updateExindex(i);
-    this.props.router.push("/mobile-test/Question/");
+    this.props.router.push("/mobile-zq/Question/");
   }
 
   renderExerciseList2(){

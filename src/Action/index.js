@@ -79,7 +79,7 @@ export const logout = () => {
 export const logoutAndRedirect = () => {
     return (dispatch, state) => {
         dispatch(logout());
-        dispatch(push('/mobile-test/login'));
+        dispatch(push('/mobile-zq/login'));
     }
 }
 
@@ -320,7 +320,7 @@ export const getTestData = (student_id, test_id) => {
         return NetUtil.get(url, {test_id, student_id}, json => {
             console.log(json);
             dispatch(getTestSuccess(json, test_id));
-            dispatch(push("/mobile-test/Question"));
+            dispatch(push("/mobile-zq/Question"));
             dispatch(updateExerciseST());
         }, errors => {
             console.log(errors);
@@ -381,7 +381,7 @@ export const jumpNext = (answer_test) => {
                 dispatch(closeModal());
                 dispatch(updateExindex(next));
                 dispatch(updateExerciseST());
-                //dispatch(push("/mobile-test/Question"));
+                //dispatch(push("/mobile-zq/Question"));
             }
             //题目全部完成
             else{
@@ -404,7 +404,7 @@ export const jumpNext = (answer_test) => {
                 return NetUtil.post(url, {student_id: '1', student_rating: 500, test_result: test_result}, json => {
                     console.log(json);
                     dispatch(submitTestSuccess(json));
-                    dispatch(push("/mobile-test/kpTestResult"));
+                    dispatch(push("/mobile-zq/kpTestResult"));
                 }, errors => {
                     console.log(errors);
                 });
@@ -413,7 +413,7 @@ export const jumpNext = (answer_test) => {
             console.log('jump');
             dispatch(closeModal());
             dispatch(showAnswerTest(exindex));
-            //dispatch(push("/mobile-test/AnswerTest"));
+            //dispatch(push("/mobile-zq/AnswerTest"));
         }
     }
 }
@@ -682,7 +682,7 @@ export const getStuAbility = (student_id) => {
     return (dispatch) => {
         dispatch(getStatusStart());
         let url = target + '/klmanager/getStuAbility';
-        return NetUtil.post(url, {student_id}, json => {
+        return NetUtil.get(url, {student_id}, json => {
             dispatch(getStuAbilitySuccess(json));
         }, errors => {
             console.log(errors);
@@ -694,7 +694,7 @@ export const getStuLadder = (student_id) => {
     return (dispatch) => {
         dispatch(getStatusStart());
         let url = target + '/klmanager/getStuLadder';
-        return NetUtil.post(url, {student_id}, json => {
+        return NetUtil.get(url, {student_id}, json => {
             dispatch(getStuLadderSuccess(json));
         }, errors => {
             console.log(errors);
@@ -710,7 +710,7 @@ export const getTestResult = (student_id, test_id) => {
         return NetUtil.post(url, {student_id, test_id}, json => {
             console.log(json);
             dispatch(getTestResultSuccess(json));
-            // dispatch(push("/mobile-test/testResult"));
+            // dispatch(push("/mobile-zq/testResult"));
         }, errors => {
             console.log(errors);
         });

@@ -58,7 +58,7 @@ class MyTest extends React.Component {
     var finish_item = finish_test.map((item,i) => {
         var time = item.enable_time;
         return(
-          <Item arrow="horizontal" multipleLine extra={item.teacher_id} onClick={e => this.props.router.push("/mobile-test/TestStatus/"+ item.test_id)}>
+          <Item arrow="horizontal" multipleLine extra={item.teacher_id} onClick={e => this.props.router.push("/mobile-zq/TestStatus/"+ item.test_id)}>
             {item.test_name}
             <Brief>{item.enable_time}</Brief>
           </Item>
@@ -69,7 +69,7 @@ class MyTest extends React.Component {
 
         var time = item.enable_time;
         return(
-          <Item arrow="horizontal" multipleLine extra={item.teacher_id} onClick={e => this.props.router.push("/mobile-test/TestStatus/"+ item.test_id)}>
+          <Item arrow="horizontal" multipleLine extra={item.teacher_id} onClick={e => this.props.router.push("/mobile-zq/TestStatus/"+ item.test_id)}>
             {item.test_name}
             <Brief>{item.enable_time}</Brief>
           </Item>
