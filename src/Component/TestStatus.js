@@ -98,7 +98,7 @@ class TestStatus extends React.Component {
           onLeftClick={() => this.props.history.goBack()}
         >测试详情</NavBar>
         <Result
-          title={<div><div style={{marginBottom: '0.2rem'}}><b style={{fontSize: '0.4rem', color: 'blue'}}>平均正确率</b></div><Progress type="circle" percent={test_status.avg_accurracy} /></div>}
+          title={<div><div style={{marginBottom: '0.2rem'}}><b style={{fontSize: '1rem', color: 'blue'}}>平均正确率</b></div><Progress type="circle" percent={test_status.avg_accurracy} /></div>}
           message={<div>平均答对<span>{((test_status.avg_accurracy*test_status.test_size)/100).toFixed(1)}</span>题</div>}
         />
         <WhiteSpace size='lg' />

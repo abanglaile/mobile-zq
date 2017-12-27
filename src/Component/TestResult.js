@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import *as action from '../Action/';
 import {connect} from 'react-redux';
-import { List, Result, Icon, WhiteSpace, Badge, ActivityIndicator, Button, Modal, Grid } from 'antd-mobile';
+import { List, Result, Icon, WhiteSpace, Badge, ActivityIndicator, Button, Modal, NavBar, Grid } from 'antd-mobile';
 import { Progress } from 'antd';
 
 import Tex from './renderer.js';
@@ -116,8 +116,8 @@ class TestResult extends React.Component {
               <svg width="75px" height="75px" version="1.1"
                     xmlns="http://www.w3.org/2000/svg">
 
-                <circle cx="50%" cy="50%" r="20%" stroke="blue" fill="white" />
-                <text dx="45%" dy="57%" fontSize="0.3rem" style={{fill: 'blue'}}>{i+1}</text>
+                <circle cx="50%" cy="30%" r="20%" stroke="blue" fill="white" />
+                <text dx="45%" dy="37%" fontSize="0.8rem" style={{fill: 'blue'}}>{i+1}</text>
               </svg>
             )} 
         />
@@ -131,6 +131,10 @@ class TestResult extends React.Component {
     const accurracy = test_log.length ? correct/test_log.length : 0;
     return (
       <div>
+        <NavBar
+          mode="light"
+          onLeftClick={() => this.props.history.goBack()}
+        >测试详情</NavBar>
         <Result
           title={<Progress type="circle" percent={accurracy} />}
           message={'测试结果' + correct + '/' + test_log.length}
