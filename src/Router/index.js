@@ -24,8 +24,8 @@ const component = (component) => {
 //        <Route path="Question" {...component(Question)} />
 
 export default (
-  	<Route path="/">
-      <Route path="mobile-zq">
+  	<Route path="mobile-zq">
+        <IndexRoute component={MyTest} />
       	<Route path="login" component={login} />
       	<Route path="mychapter" component={MyChapter} />
         <Route path="mytest" component={MyTest} />
@@ -36,6 +36,5 @@ export default (
         <Route path="TestStatus/:test_id" component={TestStatus} />
         <Route path="kpTestResult" component={KpTestResult} />
         <Route path="testResult/:test_id" component={TestResult} />
-      </Route>
     </Route>
 );

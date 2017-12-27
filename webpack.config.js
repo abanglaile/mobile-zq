@@ -4,16 +4,16 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const pxtorem = require('postcss-pxtorem');
 
-// const Visualizer = require('webpack-visualizer-plugin'); // remove it in production environment.
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin; // remove it in production environment.
-// const otherPlugins = process.argv[1].indexOf('webpack-dev-server') >= 0 ? [] : [
-//   new Visualizer(), // remove it in production environment.
-//   new BundleAnalyzerPlugin({
-//     defaultSizes: 'parsed',
-//     // generateStatsFile: true,
-//     statsOptions: { source: false }
-//   }), // remove it in production environment.
-// ];
+const Visualizer = require('webpack-visualizer-plugin'); // remove it in production environment.
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin; // remove it in production environment.
+const otherPlugins = process.argv[1].indexOf('webpack-dev-server') >= 0 ? [] : [
+  new Visualizer(), // remove it in production environment.
+  new BundleAnalyzerPlugin({
+    defaultSizes: 'parsed',
+    // generateStatsFile: true,
+    statsOptions: { source: false }
+  }), // remove it in production environment.
+];
 
 const postcssOpts = {
   ident: 'postcss', // https://webpack.js.org/guides/migrating/#complex-options
@@ -28,10 +28,13 @@ const postcssOpts = {
 module.exports = {
   devtool: 'source-map', // or 'inline-source-map'
   devServer: {
-    disableHostCheck: true
+    disableHostCheck: true,
+    historyApiFallback:{
+            index:'index.html'
+        },
   },
 
-  entry: { "index": path.resolve(__dirname, 'src/app.js') },
+  entry: { "index": path.resolve(__dirname, 'src/app') },
 
   output: {
     filename: '[name].js',
@@ -82,10 +85,10 @@ module.exports = {
       }
     ]
   },
-  // externals: {
-  //   "react": "React",
-  //   "react-dom": "ReactDOM"
-  // },
+  externals: {
+    "react": "React",
+    "react-dom": "ReactDOM"
+  },
   plugins: [
     new webpack.optimize.ModuleConcatenationPlugin(),
     // new webpack.optimize.CommonsChunkPlugin('shared.js'),
@@ -95,6 +98,6 @@ module.exports = {
       filename: 'shared.js'
     }),
     new ExtractTextPlugin({ filename: '[name].css', allChunks: true }),
-    //...otherPlugins
+    ...otherPlugins
   ]
 }

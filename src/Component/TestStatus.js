@@ -105,45 +105,48 @@ class TestStatus extends React.Component {
         <Flex>
           <Flex.Item><div style={{
                   textAlign: 'center',
-                  height: '0.4rem',
-                  lineHeight: '0.4rem',
+                  height: '1.5rem',
+                  lineHeight: '1.5rem',
                   width: '100%',
-                  fontSize: '0.4rem',
+                  fontWeight: 'bold',
+                  fontSize: '1.2rem',
                 }} >{test_status.test_submit}</div>
                 <div style={{
                   textAlign: 'center',
-                  height: '0.5rem',
-                  lineHeight: '0.5rem',
+                  height: '1.2rem',
+                  lineHeight: '1.2rem',
                   width: '100%',
-                  fontSize: '0.3rem'}}>已提交</div>
+                  fontSize: '1rem'}}>已提交</div>
           </Flex.Item>
           <Flex.Item><div style={{
                   textAlign: 'center',
-                  height: '0.4rem',
-                  lineHeight: '0.5rem',
+                  height: '1.5rem',
+                  lineHeight: '1.5rem',
                   width: '100%',
-                  fontSize: '0.4rem',
+                  fontWeight: 'bold',
+                  fontSize: '1.2rem',
                 }} >{test_status.test_students}</div>
                 <div style={{
                   textAlign: 'center',
-                  height: '0.5rem',
-                  lineHeight: '0.4rem',
+                  height: '1.2rem',
+                  lineHeight: '1.2rem',
                   width: '100%',
-                  fontSize: '0.3rem'}}>参与人数</div>
+                  fontSize: '1rem'}}>参与人数</div>
           </Flex.Item>
           <Flex.Item><div style={{
                   textAlign: 'center',
-                  height: '0.4rem',
-                  lineHeight: '0.4rem',
+                  height: '1.5rem',
+                  lineHeight: '1.5rem',
                   width: '100%',
-                  fontSize: '0.4rem',
+                  fontWeight: 'bold',
+                  fontSize: '1.2rem',
                 }} >{test_status.bingo}</div>
                 <div style={{
                   textAlign: 'center',
-                  height: '0.5rem',
-                  lineHeight: '0.5rem',
+                  height: '1.2rem',
+                  lineHeight: '1.2rem',
                   width: '100%',
-                  fontSize: '0.3rem'}}>全对</div>
+                  fontSize: '1rem'}}>全对</div>
           </Flex.Item>
         </Flex>
         {this.renderRanking()}
@@ -154,13 +157,13 @@ class TestStatus extends React.Component {
             position: 'fixed',
             bottom: '0',
             width: '100%',
-            height: "1.2rem",
+            height: "3.8rem",
             zIndex: 100,
             borderTop: "solid 1px #d9d9d9",
             background: "#fff",
             }}>
-          <span style={{float: 'left', margin: '0.3rem 0.7rem 0 0.5rem', fontSize:"0.4rem"}}>测试共{test_status.test_size}条题</span>
-          <Button style={{float: 'right', margin: '0.2rem 0.3rem 0 0'}} inline type="primary"
+          <span style={{float: 'left', margin: '1rem 0.7rem 0 2rem', fontSize:"1.2rem"}}>测试共{test_status.test_size}条题</span>
+          <Button style={{float: 'right', margin: '0.5rem 1.2rem 0 0'}} inline type="primary"
             onClick={ isFinish
               ? e => this.props.router.push("/mobile-zq/TestResult/"+ test_id)  
               : e => this.props.getTestData(student_id, test_id) 
