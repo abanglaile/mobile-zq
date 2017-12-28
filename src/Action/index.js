@@ -251,6 +251,14 @@ const getStuLadderSuccess = (json) => {
     }
 }
 
+const getStuComUsedKpSuccess = (json) => {
+    return {
+        type: 'GET_COMUSED_KP_SUCCESS',
+        json,
+    }
+}
+
+
 
 //成功获取测试结果数据
 const getTestResultSuccess = (json) => {
@@ -701,7 +709,18 @@ export const getStuLadder = (student_id) => {
         });
     }
 }
-
+//获取学生经常使用知识点的情况
+export const getStuComUsedKp = (student_id) => {
+    return (dispatch) => {
+        dispatch(getStatusStart());
+        let url = target + '/klmanager/getStuComUsedKp';
+        return NetUtil.get(url, {student_id}, json => {
+            dispatch(getStuComUsedKpSuccess(json));
+        }, errors => {
+            console.log(errors);
+        });
+    }
+}
 
 export const getTestResult = (student_id, test_id) => {
     return (dispatch) => {

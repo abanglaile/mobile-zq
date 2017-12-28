@@ -133,6 +133,7 @@ class TestResult extends React.Component {
       <div>
         <NavBar
           mode="light"
+          icon={<Icon type="left" />}
           onLeftClick={() => this.props.history.goBack()}
         >测试详情</NavBar>
         <Result
