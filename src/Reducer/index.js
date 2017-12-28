@@ -20,8 +20,9 @@ const defaulatStudentData = Immutable.fromJS({
 
 const defaulatStuStatus = Immutable.fromJS({
         isFetching: false,
-        capatity: [{}],
-        ladder : [{}],
+        capatity: [],
+        ladder : [],
+        comusedkp : [],
     });
 
 const defaulatAuthData = Immutable.fromJS({
@@ -230,9 +231,11 @@ export const stuStatus = (state = defaulatStuStatus, action = {}) => {
         case 'GET_STATUS_START':
             return state.set('isFetching', true);
         case 'GET_ABILITY_STATUS_SUCCESS':
-            return state.set('capatity', Immutable.fromJS(action.json));
+            return state.set('capatity', Immutable.fromJS(action.json)).set('isFetching', false);
         case 'GET_LADDER_STATUS_SUCCESS':
-            return state.set('ladder', Immutable.fromJS(action.json));
+            return state.set('ladder', Immutable.fromJS(action.json)).set('isFetching', false);
+        case 'GET_COMUSED_KP_SUCCESS':
+            return state.set('comusedkp', Immutable.fromJS(action.json)).set('isFetching', false);
         default:
             return state;
     }
