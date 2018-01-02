@@ -1,8 +1,8 @@
 ﻿import React from 'react';
 import *as action from '../Action/';
 import {connect} from 'react-redux';
-import { List, Result, Icon, WhiteSpace, Badge, ActivityIndicator, Button, Modal, NavBar, Grid } from 'antd-mobile';
-import { Progress } from 'antd';
+import { List, Result, Icon, WhiteSpace, Badge, ActivityIndicator, Button, Modal, NavBar, Grid, Progress } from 'antd-mobile';
+import { Progress as Circle} from 'antd';
 
 import Tex from './renderer.js';
 
@@ -60,12 +60,16 @@ class TestResult extends React.Component {
         <List renderHeader={() => '相关知识点情况'} >
           {
             test_kp.map((item) => {
-
+              const percent = item.practice ? item.practice : 0;
               return (
                 <Item
-                  extra={item.kp_rating}>
-                  {item.kpname}
-                  
+                  >
+                  <div style={{color: 'royalblue'}}>{item.kpname}</div>
+                  <div style={{display: 'flex', marginTop: '0.5rem', alignItems: 'center'}}><div style={{fontSize: '1rem', color: "gold"}}>正确率</div>
+                    <Progress style={{width: '50%', marginLeft: '1rem'}} percent={percent} position="normal" />
+                    <div style={{fontSize: '1rem', marginLeft: '1rem'}}>{percent}%</div>
+                  </div>
+                  <Brief><div>练习{item.practice ? item.practice : 0}次</div></Brief>
                 </Item>
               )
             })
@@ -137,7 +141,7 @@ class TestResult extends React.Component {
           onLeftClick={() => this.props.history.goBack()}
         >测试详情</NavBar>
         <Result
-          title={<Progress type="circle" percent={accurracy} />}
+          title={<Circle type="circle" percent={accurracy} />}
           message={'测试结果' + correct + '/' + test_log.length}
         />
         {this.renderExerciseList2()}

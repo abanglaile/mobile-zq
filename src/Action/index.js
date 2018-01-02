@@ -289,7 +289,7 @@ const getChapterSuccess = (json) => {
 /*-------------------------------------------------*/
 
 //获取章节数据
-export const getMyChapter = (student_id, course_id) => {
+export const getBookChapter = (student_id, course_id) => {
     let url = target + '/klmanager/getBookChapter';
     return dispatch => {
         dispatch(getDataStart());
@@ -300,6 +300,48 @@ export const getMyChapter = (student_id, course_id) => {
             console.log(errors);
         });
     }
+}
+
+//获取章节正确率、练习次数
+export const getChapterStatus = (student_id, chapter_id) => {
+    let url = target + '/klmanager/getChapterStatus';
+    return dispatch => {
+        dispatch(getDataStart());
+        return NetUtil.get(url, {student_id, chapter_id}, json => {
+            dispatch(getChapterStatusSuccess(json));
+        }, errors => {
+            console.log(errors);
+        });
+    }
+}
+
+//获取章节知识点状态
+export const getChapterKpStatus = (student_id, chapter_id) => {
+    let url = target + '/klmanager/getChapterStatus';
+    return dispatch => {
+        dispatch(getDataStart());
+        return NetUtil.get(url, {student_id, chapter_id}, json => {
+            dispatch(getChapterKpStatusSuccess(json));
+        }, errors => {
+            console.log(errors);
+        });
+    }
+}
+
+//获取章节状态成功
+const getChapterStatusSuccess = (json) => {
+  return {
+    type: 'GET_CHAPTER_STATUS_SUCCESS',
+    json,
+  }
+}
+
+//获取章节知识点状态成功
+const getChapterKpStatusSuccess = (json) => {
+  return {
+    type: 'GET_CHAPTER_KP_SUCCESS',
+    json,
+  }
 }
 
 /*----------------------个人中心--------------------*/

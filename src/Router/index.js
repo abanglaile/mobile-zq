@@ -7,6 +7,7 @@ import TestResult from '../Component/TestResult.js'
 import KpTestResult from '../Component/KpTestResult.js'
 import MyTest from '../Component/my_test.js'
 import MyChapter from '../Component/MyChapter.js'
+import my_chapter_kp from '../Component/my_chapter_kp.js'
 import login from '../Component/login.js'
 import StudentStatus from '../Component/StudentStatus.js'
 import { Route, IndexRoute } from 'react-router';
@@ -28,6 +29,7 @@ export default (
         <IndexRoute component={MyTest} />
       	<Route path="login" component={login} />
       	<Route path="mychapter" component={MyChapter} />
+        <Route path="my_chapter_kp/:chapter_id" component={my_chapter_kp} />
         <Route path="mytest" component={MyTest} />
         <Route path="Question" component={Question} />
         <Route path="studentstatus" component={StudentStatus} />

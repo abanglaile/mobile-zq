@@ -16,6 +16,10 @@ const defaulatStudentData = Immutable.fromJS({
         isFetching: false,
         book: [],
         my_test_list: [],
+        chapter: {
+            status: {practice: 0, correct:0},
+            kp: [],
+        }
     });
 
 const defaulatStuStatus = Immutable.fromJS({
@@ -218,6 +222,10 @@ export const studentData = (state = defaulatStudentData, action = {}) => {
             return state.set('isFetching', true);
         case 'GET_CHAPTER_SUCCESS':
             return state.set('book', action.json).set('isFetching', false);
+        case 'GET_CHAPTER_STATUS_SUCCESS':
+            return state.set('chapter', 'status', action.json).set('isFetching', false);
+        case 'GET_CHAPTER_KP_SUCCESS':
+            return state.set('chapter', 'kp', action.json).set('isFetching', false);
         case 'GET_MYTEST_SUCCESS':
             return state.set('my_test_list', action.json).set('isFetching', false);
         default:
