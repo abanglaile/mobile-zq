@@ -223,9 +223,10 @@ export const studentData = (state = defaulatStudentData, action = {}) => {
         case 'GET_CHAPTER_SUCCESS':
             return state.set('book', action.json).set('isFetching', false);
         case 'GET_CHAPTER_STATUS_SUCCESS':
-            return state.set('chapter', 'status', action.json).set('isFetching', false);
+            console.log(action.json);
+            return state.setIn(['chapter', 'status'], action.json).set('isFetching', false);
         case 'GET_CHAPTER_KP_SUCCESS':
-            return state.set('chapter', 'kp', action.json).set('isFetching', false);
+            return state.setIn(['chapter', 'kp'], action.json).set('isFetching', false);
         case 'GET_MYTEST_SUCCESS':
             return state.set('my_test_list', action.json).set('isFetching', false);
         default:

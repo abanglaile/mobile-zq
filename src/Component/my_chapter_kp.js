@@ -48,7 +48,8 @@ class TestResult extends React.Component {
 
   render() {
     var {isFetching, chapter} = this.props;
-    var {practice, correct} = chapter.status;
+    console.log(chapter.status);
+    var {status, kp} = chapter;
     return (
       <div>
         <NavBar
@@ -57,43 +58,43 @@ class TestResult extends React.Component {
           onLeftClick={() => this.props.history.goBack()}
         >测试详情</NavBar>
         <div style={{
-            height: '4rem',
+            textAlign: 'center',
+            height: '10rem',
             fontSize: '2rem',
+            backgroundColor: 'green',
             color: "white"
           }}>音程</div>
         <WhiteSpace size='lg' />
         <Flex>
           <Flex.Item><div style={{
                   textAlign: 'center',
-                  height: '0.4rem',
-                  lineHeight: '0.4rem',
+                  height: '1.5rem',
+                  lineHeight: '1.5rem',
                   width: '100%',
-                  fontSize: '0.4rem',
-                }} >{practice}</div>
+                  fontWeight: 'bold',
+                  fontSize: '1.2rem',
+                }} >{status.practice}</div>
                 <div style={{
                   textAlign: 'center',
-                  height: '0.5rem',
-                  lineHeight: '0.5rem',
+                  height: '1.2rem',
+                  lineHeight: '1.2rem',
                   width: '100%',
-                  fontSize: '0.3rem',
-                  color: '#00FFFF',
-                }}>练习次数</div>
+                  fontSize: '1rem'}}>练习次数</div>
           </Flex.Item>
           <Flex.Item><div style={{
                   textAlign: 'center',
-                  height: '0.4rem',
-                  lineHeight: '0.5rem',
+                  height: '1.5rem',
+                  lineHeight: '1.5rem',
                   width: '100%',
-                  fontSize: '0.4rem',
-                }} >{correct}</div>
+                  fontWeight: 'bold',
+                  fontSize: '1.2rem',
+                }} >{status.practice ? status.correct/status.practice : 0}</div>
                 <div style={{
                   textAlign: 'center',
-                  height: '0.5rem',
-                  lineHeight: '0.4rem',
+                  height: '1.2rem',
+                  lineHeight: '1.2rem',
                   width: '100%',
-                  fontSize: '0.3rem',
-                  color: '#00FFFF',
-                }}>正确率</div>
+                  fontSize: '1rem'}}>正确率</div>
           </Flex.Item>
         </Flex>
       </div>
@@ -102,8 +103,9 @@ class TestResult extends React.Component {
 }
 
 export default connect(state => {
-  const test_state = state.studentData.toJS();
-  const {isFetching, chapter} = test_state;
+  const studentData = state.studentData.toJS();
+  const {isFetching, chapter} = studentData;
+  console.log(studentData)
   return {
     chapter: chapter,
     isFetching: isFetching ? isFetching : false,
