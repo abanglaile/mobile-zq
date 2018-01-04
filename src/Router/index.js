@@ -28,7 +28,7 @@ export default (
   	<Route path="mobile-zq">
         <IndexRoute component={MyTest} />
       	<Route path="login" component={login} />
-      	<Route path="mychapter" component={MyChapter} />
+      	<Route path="my_book_chapter" component={MyChapter} />
         <Route path="my_chapter_kp/:chapter_id" component={my_chapter_kp} />
         <Route path="mytest" component={MyTest} />
         <Route path="Question" component={Question} />

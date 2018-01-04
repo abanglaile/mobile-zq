@@ -317,7 +317,7 @@ export const getChapterStatus = (student_id, chapter_id) => {
 
 //获取章节知识点状态
 export const getChapterKpStatus = (student_id, chapter_id) => {
-    let url = target + '/klmanager/getChapterStatus';
+    let url = target + '/klmanager/getChapterKpStatus';
     return dispatch => {
         dispatch(getDataStart());
         return NetUtil.get(url, {student_id, chapter_id}, json => {
