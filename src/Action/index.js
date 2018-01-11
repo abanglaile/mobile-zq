@@ -206,6 +206,14 @@ const getTestSuccess = (json, test_id) => {
   }
 }
 
+//获取知识点id获取测试信息成功
+const getTestByKpSuccess = (json) => {
+  return {
+    type: 'GET_TEST_SUCCESS',
+    json,
+  }
+}
+
 //获取测试数据成功
 const getTestExerciseSuccess = (json) => {
   return {
@@ -302,6 +310,19 @@ export const getBookChapter = (student_id, course_id) => {
     }
 }
 
+//获取章节名称
+export const getChapterName = (chapter_id) => {
+    let url = target + '/klmanager/getChapterName';
+    return dispatch => {
+        dispatch(getDataStart());
+        return NetUtil.get(url, {chapter_id}, json => {
+            dispatch(getChapterNameSuccess(json));
+        }, errors => {
+            console.log(errors);
+        });
+    }
+}
+
 //获取章节正确率、练习次数
 export const getChapterStatus = (student_id, chapter_id) => {
     let url = target + '/klmanager/getChapterStatus';
@@ -326,6 +347,14 @@ export const getChapterKpStatus = (student_id, chapter_id) => {
             console.log(errors);
         });
     }
+}
+
+//获取章节名称成功
+const getChapterNameSuccess = (json) => {
+  return {
+    type: 'GET_CHAPTER_NAME_SUCCESS',
+    json,
+  }
 }
 
 //获取章节状态成功
@@ -370,6 +399,22 @@ export const getTestData = (student_id, test_id) => {
         return NetUtil.get(url, {test_id, student_id}, json => {
             console.log(json);
             dispatch(getTestSuccess(json, test_id));
+            dispatch(push("/mobile-zq/Question"));
+            dispatch(updateExerciseST());
+        }, errors => {
+            console.log(errors);
+        });
+    }
+}
+
+//根据kpid或者该主测点下的试题
+export const getTestDataByKp = (student_id, kpid, kpname) => {
+    let url = target + '/klmanager/getExerciseByKpid';
+    return dispatch => {
+        dispatch(getTestStart());
+        return NetUtil.get(url, {student_id, kpid, kpname}, json => {
+            console.log(json);
+            dispatch(getTestByKpSuccess(json));
             dispatch(push("/mobile-zq/Question"));
             dispatch(updateExerciseST());
         }, errors => {

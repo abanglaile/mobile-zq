@@ -17,6 +17,7 @@ const defaulatStudentData = Immutable.fromJS({
         book: [],
         my_test_list: [],
         chapter: {
+            chaptername : null,
             status: {practice: 0, correct:0},
             kp: [],
         }
@@ -110,7 +111,7 @@ export const testData = (state = defaulatTestData, action = {}) => {
             return state.set('isFinish', action.json.isFinish)
                         .set('student_rating', action.json.student_rating);
         case 'GET_TEST_SUCCESS':
-            const exercise = action.json;
+            const exercise = action.json.exercises ? action.json.exercises : action.json;
             const start_time = new Date();
             var test_log = [];
             for(var i = 0; i < exercise.length; i++){
@@ -142,7 +143,7 @@ export const testData = (state = defaulatTestData, action = {}) => {
                 exindex: 0, 
                 record: {correct: 0, wrong: 0, new_rating: action.student_rating, combo_correct: 0, max_combo: 0},
                 start_time: start_time, 
-                test_id: action.test_id, 
+                test_id: action.json.test_id ? action.json.test_id : action.test_id, 
                 test_log: test_log,
                 isFetching: false,
                 modalOpen: false,
@@ -150,6 +151,47 @@ export const testData = (state = defaulatTestData, action = {}) => {
             
             return state.mergeDeep(Immutable.fromJS(newState));
             break;
+        // case 'GET_TEST_SUCCESS':
+        //     const exercise = action.json;
+        //     const start_time = new Date();
+        //     var test_log = [];
+        //     for(var i = 0; i < exercise.length; i++){
+        //         const breakdown = exercise[i].breakdown;
+        //         var breakdown_sn = [];
+        //         for(var j = 0; j < breakdown.length; j++){
+        //           //如果没有前置步骤的都设为0并在渲染中显示，-1代表不确定在渲染中不显示
+        //           const sn_state = breakdown[j].presn ? -1 : 0;
+        //           breakdown_sn[j] = {
+        //             sn: breakdown[j].sn, 
+        //             kpid: breakdown[j].kpid,
+        //             kpname: breakdown[j].kpname, 
+        //             sn_state: sn_state, 
+        //             presn: breakdown[j].presn, 
+        //             kp_old_rating: breakdown[j].kp_rating, 
+        //             sn_old_rating: breakdown[j].sn_rating
+        //           };
+        //         }
+        //         test_log[i] = {
+        //             exercise_state: -1,
+        //             answer: JSON.parse(exercise[i].answer),
+        //             start_time: start_time,
+        //             breakdown_sn: breakdown_sn,
+        //             ac_time: 0,
+        //         }
+        //     }
+        //     var newState = {
+        //         exercise: exercise, 
+        //         exindex: 0, 
+        //         record: {correct: 0, wrong: 0, new_rating: action.student_rating, combo_correct: 0, max_combo: 0},
+        //         start_time: start_time, 
+        //         test_id: action.test_id, 
+        //         test_log: test_log,
+        //         isFetching: false,
+        //         modalOpen: false,
+        //     };
+            
+        //     return state.mergeDeep(Immutable.fromJS(newState));
+        //     break;
         case 'GET_TEST_EXERCISE_SUCCESS':
             return state.set('exercise', Immutable.fromJS(action.json));
         case 'GET_TEST_RESULT_SUCCESS':
@@ -222,6 +264,8 @@ export const studentData = (state = defaulatStudentData, action = {}) => {
             return state.set('isFetching', true);
         case 'GET_CHAPTER_SUCCESS':
             return state.set('book', action.json).set('isFetching', false);
+        case 'GET_CHAPTER_NAME_SUCCESS':
+            return state.setIn(['chapter', 'chaptername'], action.json.chaptername).set('isFetching', false);
         case 'GET_CHAPTER_STATUS_SUCCESS':
             console.log(action.json);
             return state.setIn(['chapter', 'status'], action.json).set('isFetching', false);

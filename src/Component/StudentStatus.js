@@ -1,8 +1,8 @@
-import { SegmentedControl, WhiteSpace, List, Badge, Button, ActivityIndicator,Flex } from 'antd-mobile';
+import { SegmentedControl, Progress, WhiteSpace, List, Badge, Button,NavBar,ActivityIndicator,Flex } from 'antd-mobile';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Tex from './renderer.js';
-import { Progress } from 'antd';
+import { Progress as Circle} from 'antd';
 
 import *as action from '../Action/';
 import {connect} from 'react-redux';
@@ -25,56 +25,126 @@ class StudentStatus extends React.Component {
   }
 
   onChange(e){
+    console.log(e.nativeEvent.selectedSegmentIndex);
      this.setState({selectedIndex : e.nativeEvent.selectedSegmentIndex});
   }
   renderOneAbility(){
     const {capatity,ladder} = this.props;
+    var abilityheaderDom = (<Flex justify="center">
+              <Flex.Item><div style={{
+                  textAlign: 'center',
+                  height: '1.5rem',
+                  lineHeight: '1.5rem',
+                  width: '100%',
+                  fontWeight: 'bold',
+                  fontSize: '1rem',
+                }} >练题数</div></Flex.Item>
+                <Flex.Item><div style={{
+                  textAlign: 'center',
+                  height: '1.5rem',
+                  lineHeight: '1.5rem',
+                  width: '100%',
+                  fontWeight: 'bold',
+                  fontSize: '1rem',
+                }} >正确率</div></Flex.Item>
+                <Flex.Item><div style={{
+                  textAlign: 'center',
+                  height: '1.5rem',
+                  lineHeight: '1.5rem',
+                  width: '100%',
+                  fontWeight: 'bold',
+                  fontSize: '1rem',
+                }} >天梯分</div></Flex.Item>
+            </Flex>);
+
     switch(this.state.selectedIndex){
       case 0 : 
         return (
           <div>
-            <Flex justify="center">
-              <Flex.Item>练题数</Flex.Item>
-              <Flex.Item>正确率</Flex.Item>
-              <Flex.Item>天梯分</Flex.Item>
-            </Flex>
+            {abilityheaderDom}
             <WhiteSpace size="lg" />
             <Flex align="baseline">
-              <Flex.Item><p>{capatity[0].exercount}</p></Flex.Item>
-              <Flex.Item><div><Progress type="circle" percent={capatity[0].rate} width={60} format={(percent) => `${percent}%`}/></div></Flex.Item>
-              <Flex.Item><p>{capatity[0].ladderscore}</p></Flex.Item>
+              <Flex.Item><div style={{
+                  textAlign: 'center',
+                  height: '3rem',
+                  lineHeight: '1.5rem',
+                  width: '100%',
+                  fontSize: '1rem',
+                }} >{capatity[0].exercount}</div></Flex.Item>
+              <Flex.Item><div style={{
+                  textAlign: 'center',
+                  height: '3rem',
+                  lineHeight: '1.5rem',
+                  width: '100%',
+                  fontSize: '1rem',
+                }}><Circle type="circle" percent={capatity[0].rate} width={60} format={(percent) => `${percent}%`}/></div></Flex.Item>
+              <Flex.Item><div style={{
+                  textAlign: 'center',
+                  height: '3rem',
+                  lineHeight: '1.5rem',
+                  width: '100%',
+                  fontSize: '1rem',
+                }} >{capatity[0].ladderscore}</div></Flex.Item>
             </Flex>
           </div>
         );
       case 1 : 
         return (
           <div>
-            <Flex justify="center">
-              <Flex.Item><p>练题数</p></Flex.Item>
-              <Flex.Item><p>正确率</p></Flex.Item>
-              <Flex.Item><p>天梯分变化</p></Flex.Item>
-            </Flex>
+            {abilityheaderDom}
             <WhiteSpace size="lg" />
             <Flex align="baseline">
-              <Flex.Item><p>{capatity[1].exercount}</p></Flex.Item>
-              <Flex.Item><div><Progress type="circle" percent={capatity[1].rate} width={60} format={(percent) => `${percent}%`}/></div></Flex.Item>
-              <Flex.Item><p>{capatity[1].ladderscore>0? "+"+capatity[1].ladderscore : "-"+Math.abs(capatity[1].ladderscore)}</p></Flex.Item>
+              <Flex.Item><div style={{
+                  textAlign: 'center',
+                  height: '3rem',
+                  lineHeight: '1.5rem',
+                  width: '100%',
+                  fontSize: '1rem',
+                }} >{capatity[1].exercount}</div></Flex.Item>
+              <Flex.Item><div style={{
+                  textAlign: 'center',
+                  height: '3rem',
+                  lineHeight: '1.5rem',
+                  width: '100%',
+                  fontSize: '1rem',
+                }}><Circle type="circle" percent={capatity[1].rate} width={60} format={(percent) => `${percent}%`}/></div></Flex.Item>
+              <Flex.Item><div style={{
+                  textAlign: 'center',
+                  height: '3rem',
+                  lineHeight: '1.5rem',
+                  width: '100%',
+                  fontSize: '1rem',
+                }} >{capatity[1].ladderscore>0? "+"+capatity[1].ladderscore : "-"+Math.abs(capatity[1].ladderscore)}</div></Flex.Item>
             </Flex>
           </div>
         );
       case 2 : 
         return (
           <div>
-            <Flex justify="center">
-              <Flex.Item><p>练题数</p></Flex.Item>
-              <Flex.Item><p>正确率</p></Flex.Item>
-              <Flex.Item><p>天梯分变化</p></Flex.Item>
-            </Flex>
+            {abilityheaderDom}
             <WhiteSpace size="lg" />
             <Flex align="baseline">
-              <Flex.Item><p>{capatity[2].exercount}</p></Flex.Item>
-              <Flex.Item><div><Progress type="circle" percent={capatity[2].rate} width={60} format={(percent) => `${percent}%`}/></div></Flex.Item>
-              <Flex.Item><p>{capatity[2].ladderscore>0? "+"+capatity[2].ladderscore : "-"+Math.abs(capatity[2].ladderscore)}</p></Flex.Item>
+              <Flex.Item><div style={{
+                  textAlign: 'center',
+                  height: '3rem',
+                  lineHeight: '1.5rem',
+                  width: '100%',
+                  fontSize: '1rem',
+                }} >{capatity[2].exercount}</div></Flex.Item>
+              <Flex.Item><div style={{
+                  textAlign: 'center',
+                  height: '3rem',
+                  lineHeight: '1.5rem',
+                  width: '100%',
+                  fontSize: '1rem',
+                }}><Circle type="circle" percent={capatity[2].rate} width={60} format={(percent) => `${percent}%`}/></div></Flex.Item>
+              <Flex.Item><div style={{
+                  textAlign: 'center',
+                  height: '3rem',
+                  lineHeight: '1.5rem',
+                  width: '100%',
+                  fontSize: '1rem',
+                }} >{capatity[2].ladderscore>0? "+"+capatity[2].ladderscore : "-"+Math.abs(capatity[2].ladderscore)}</div></Flex.Item>
             </Flex>
           </div>
         );
@@ -88,13 +158,15 @@ class StudentStatus extends React.Component {
 
     if(capatity.length > 0){
       return(
-        <div>
+        <div style={{backgroundColor:"white"}}>
           <div>
             <SegmentedControl
               values={['全部', '近20题', '近50题']}
-              style={{ height: '30px', width: '180px' }}
+              selectedIndex = {this.state.selectedIndex}
+              style={{ height: '30px', width: '250px',margin:'0px 0 10px 60px'}}
               onChange={(e) => this.onChange(e)}
             />
+            <WhiteSpace />
             {this.renderOneAbility()}
           </div>
           <WhiteSpace />
@@ -110,15 +182,16 @@ class StudentStatus extends React.Component {
           <div>
             <div>
               <List renderHeader={() => '最近练习知识点'}>
-                <Item extra={'练习次数/天梯分'}>知识点/正确率</Item>
                 {
                   comusedkp.map((item) => {
                     return (
-                      <Item extra={item.usedcount} multipleLine>
+                      <Item multipleLine>
                         {item.kpname}
-                        <Brief>
-                          <div><Progress size="small" percent={item.rate} format={(percent) => `${percent}%`}/></div>
-                        </Brief>
+                        <div style={{display: 'flex', marginTop: '0.5rem', alignItems: 'center'}}>
+                          <Progress style={{width: '60%'}} percent={item.rate} position="normal" />
+                          <div style={{fontSize: '1rem', marginLeft: '1rem'}}>{item.rate}%</div>
+                        </div>
+                        <Brief><div>练习{item.usedcount ? item.usedcount : 0}次</div></Brief>
                       </Item>
                     )
                   })
@@ -130,14 +203,31 @@ class StudentStatus extends React.Component {
         ); 
       }
   }
+
+  renderAllKp(){
+    return(
+        <div>
+          <List>
+            <Item arrow="horizontal" onClick={e => this.props.router.push("/mobile-zq/my_book_chapter/")}>
+              所有知识点
+            </Item>
+          </List>
+          <WhiteSpace />
+        </div>
+      ); 
+  }
   
   render() {
     console.log('this.props 1:'+JSON.stringify(this.props));
     return (
       <div>
+        <NavBar
+          mode="light"
+        >学习概况</NavBar>
         <div>
           {this.renderOverallAbility()}
           {this.renderComUsedKp()}
+          {this.renderAllKp()}
         </div>
         <WhiteSpace />
       </div>
