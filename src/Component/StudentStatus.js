@@ -223,7 +223,7 @@ class StudentStatus extends React.Component {
       <div>
         <NavBar
           mode="light"
-        >学情</NavBar>
+        >学习概况</NavBar>
         <div>
           {this.renderOverallAbility()}
           {this.renderComUsedKp()}
