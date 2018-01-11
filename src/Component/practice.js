@@ -30,7 +30,6 @@ Date.prototype.Format = function (fmt) { //author: meizz
 class MyTest extends React.Component {
   constructor(props) { 
   	super(props);
-    // alert(window.innerWidth);
   }
 
   componentDidMount(){
@@ -44,61 +43,46 @@ class MyTest extends React.Component {
 
   render() {
     var {isFetching, my_test_list} = this.props;
-    var teacher_test = [], auto_test = [];
+    var not_finish_test = [];
     if(my_test_list){
       for(var i = 0; i < my_test_list.length; i++){
-        if(my_test_list[i].teacher_id){
-          auto_test.push(my_test_list[i]);
-        }else{
-          teacher_test.push(my_test_list[i]);
+        if(!my_test_list[i].finish_time){
+          not_finish_test.push(my_test_list[i]);
         }
       }
     }
-
-    var auto_test_item = auto_test.map((item,i) => {
+    var not_finish_item = not_finish_test.map((item,i) => {
         var time = item.enable_time;
         return(
-          <Item arrow="horizontal" multipleLine extra={item.finish_time ? '测试报告' : '开始练习'} onClick={e => this.props.router.push("/mobile-zq/TestStatus/"+ item.test_id)}>
+          <Item arrow="horizontal" multipleLine extra='开始练习' onClick={e => this.props.router.push("/mobile-zq/TestStatus/"+ item.test_id)}>
             {item.test_name}
             <Brief>{item.enable_time}</Brief>
           </Item>
       );
     });
-    var teacher_test_item = teacher_test.map((item,i) => {
-
-        var time = item.enable_time;
-        return(
-          <Item arrow="horizontal" multipleLine extra={item.finish_time ? '测试报告' : '开始练习'} onClick={e => this.props.router.push("/mobile-zq/TestStatus/"+ item.test_id)}>
-            {item.test_name}
-            <Brief>{item.enable_time}</Brief>
-          </Item>
-      );
-    });
-    const tabs = [
-      { title: '老师布置'},
-      { title: '自主练习'},
-    ];
     return (
     <div>
       <NavBar
           mode="light"
-          icon={<Icon type="left" />}
-          onLeftClick={() => this.props.history.goBack()}
-        >做题历史</NavBar>
-      <ActivityIndicator toast animating={this.props.isFetching} />
-      <Tabs tabs={tabs}
-         initialPage={0}>
-        <div>
-          <List className="my-list">
-            {teacher_test_item}
-          </List>
-        </div> 
-        <div>
-        	<List className="my-list">
-          	{auto_test_item}
-        	</List>
-        </div> 
-      </Tabs>
+        >提分</NavBar>
+      <ActivityIndicator toast animating={this.props.isFetching} /> 
+      <div>
+        <List>
+          <Item arrow="horizontal" extra='设置'>提分计划</Item>
+          <Item extra={<Button type='ghost' size='small' inline>继续</Button>} >
+            薄弱知识点
+            <Brief>已掌握0/4</Brief>
+          </Item>
+        </List>
+      </div>
+      <WhiteSpace />
+      <div>
+      	<List>
+          <Item arrow="horizontal" onClick={e => this.props.router.push("/mobile-zq/mytest/")} extra='做题历史'>待完成作业</Item>
+        	{not_finish_item}
+      	</List>
+      </div>
+
     </div>
     
     );

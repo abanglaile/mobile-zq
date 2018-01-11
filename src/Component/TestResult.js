@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import *as action from '../Action/';
 import {connect} from 'react-redux';
-import { List, Result, Icon, WhiteSpace, Badge, ActivityIndicator, Button, Modal, NavBar, Grid, Progress } from 'antd-mobile';
+import { List, Result, Icon, WhiteSpace, WingBlank, Badge, ActivityIndicator, Button, Modal, NavBar, Grid, Flex, Progress } from 'antd-mobile';
 import { Progress as Circle} from 'antd';
 
 import Tex from './renderer.js';
@@ -60,49 +60,22 @@ class TestResult extends React.Component {
         <List renderHeader={() => '相关知识点情况'} >
           {
             test_kp.map((item) => {
-              const percent = item.practice ? item.practice : 0;
+              var correct_rate = item.practice ? item.correct/item.practice : 0;
               return (
-                <Item
-                  >
-                  <div style={{color: 'royalblue'}}>{item.kpname}</div>
-                  <div style={{display: 'flex', marginTop: '0.5rem', alignItems: 'center'}}><div style={{fontSize: '1rem', color: "gold"}}>正确率</div>
-                    <Progress style={{width: '50%', marginLeft: '1rem'}} percent={percent} position="normal" />
-                    <div style={{fontSize: '1rem', marginLeft: '1rem'}}>{percent}%</div>
-                  </div>
-                  <Brief><div>练习{item.practice ? item.practice : 0}次</div></Brief>
-                </Item>
+                <Item multipleLine 
+                  thumb={<Circle width="3rem" type="circle" percent={10}/>}>
+                        {item.kpname}
+                        <div style={{display: 'flex', marginTop: '0.5rem', alignItems: 'center'}}>
+                          <Progress style={{width: '60%'}} percent={correct_rate} position="normal" />
+                          <div style={{fontSize: '1rem', marginLeft: '1rem'}}>{correct_rate}%</div>
+                        </div>
+                        <Brief><div>练习{item.practice ? item.practice : 0}次</div></Brief>
+                      </Item>
               )
             })
           }
         </List>
     )
-  }
-
-  renderExerciseList(){
-    const {test_log, correct_time} = this.props;
-    var c_hour = this.PrefixInteger(parseInt(correct_time/3600), 2);
-    var c_min = this.PrefixInteger(parseInt(correct_time%3600/60), 2);
-    var c_sec = this.PrefixInteger(correct_time%3600%60, 2);
-    return (
-        <List renderHeader={() => '答对耗时：' + c_hour + ':' + c_min + ':' + c_sec}>
-          {
-            test_log.map((item, i) => {
-              var t = (Date.parse(item.finish_time) - Date.parse(item.start_time))/1000;
-              var min = this.PrefixInteger(parseInt(t/60), 2);
-              var sec = this.PrefixInteger(t%60, 2);
-
-              return (
-                <Item style={{backgroundColor: "#fcdbc9"}} arrow="horizontal"                  
-                  onClick={e => this.props.getExerciseSample(item.exercise_id)}
-                  extra={item.exercise_state ? min + ':' + 'sec' : ''}>
-                  <div style={{fontSize: "0.5rem"}}>{i+1}<span style = {{fontSize: "0.1rem", color: "#CCC"}}> 难度系数：506</span></div>
-                  <Brief>{<Tex content="求 $sin6^{\circ} sin42^{\circ} sin66^{\circ} sin78^{\circ}$的值。" />}</Brief>
-                </Item>
-              )
-            })
-          }
-        </List>
-      );
   }
 
   jumpToExercise(i){
@@ -114,6 +87,23 @@ class TestResult extends React.Component {
     const {test_log} = this.props;
 
     return (
+        <div>
+        <div style={{marginLeft: '1.5rem'}}>
+        <Flex>
+          <Flex.Item style={{fontSize: '1rem'}}>{'答题卡(' + test_log.length + '题)'}</Flex.Item>
+          <Flex.Item>
+            <Flex>
+              <Flex.Item>
+                <svg width="5rem" height="2rem" version="1.1"
+                    xmlns="http://www.w3.org/2000/svg">
+                <rect x="50%" y="50%" width="0.6rem" height="0.6rem" fill="green" />
+                <text dx="68%" dy="80%" fontSize="0.8rem" >正确</text>
+                </svg>
+              </Flex.Item>
+            </Flex>
+          </Flex.Item>
+        </Flex>
+        </div>
         <Grid data={test_log} hasLine={false} onClick={(e, i) => this.jumpToExercise(i)}
             columnNum={5}
             renderItem={(dataItem,i) => (
@@ -125,6 +115,7 @@ class TestResult extends React.Component {
               </svg>
             )} 
         />
+        </div>
       );
   }
 
@@ -142,26 +133,28 @@ class TestResult extends React.Component {
         >测试详情</NavBar>
         <Result
           title={<Circle type="circle" percent={accurracy} />}
-          message={'测试结果' + correct + '/' + test_log.length}
+          message={<div><span style={{fontSize: '3rem'}} >{correct}</span>{'/' + test_log.length + '题'}</div>}
         />
         {this.renderExerciseList2()}
         <List className="my-list">
           {this.renderKpList()}
         </List>
         <div style={{
-            display: 'flex',
             position: 'fixed',
             bottom: '0',
-            zIndex: "100",
             width: '100%',
-            height: "1.3rem",
-            borderTop: "solid 1px #CCC",
+            height: "3.8rem",
+            zIndex: 100,
+            borderTop: "solid 1px #d9d9d9",
+            background: "#fff",
             }}>
-          <Button style={{float: 'left', margin: '0.2rem 0 0 60%'}}
-            onClick={e => console.log(e)} 
-            type="ghost" inline>
-          返回测试列表
+          <WhiteSpace />
+          <WingBlank>
+          <Button  type="primary"
+            onClick={ e => this.props.router.push("/mobile-zq/mytest/")} >
+              继续修炼
           </Button>
+          </WingBlank>
         </div>
         <ActivityIndicator animating = {isFetching}/>
         {this.renderModal()}
