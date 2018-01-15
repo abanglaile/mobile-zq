@@ -31,7 +31,6 @@ export default (
   	<Route path="mobile-zq" component={App}>
         <IndexRoute component={practice} />
         <Route path="practice" component={practice} />
-        <Route path="my_book_chapter" component={my_book_chapter} />
       	<Route path="login" component={login} />
       	<Route path="my_book_chapter" component={MyChapter} />
         <Route path="my_chapter_kp/:chapter_id" component={my_chapter_kp} />
