@@ -293,12 +293,33 @@ const getChapterSuccess = (json) => {
   }
 }
 
+//获取我的天梯分数成功
+const getMyScoreSuccess = (json) => {
+  return {
+    type: 'GET_MY_SCORE_SUCCESS',
+    json,
+  }
+}
+
 
 /*-------------------------------------------------*/
+//获取我的天梯总分
+export const getMyLadderScore = (student_id) => {
+    let url = target + '/klmanager/getMyLadderScore';
+    return dispatch => {
+        dispatch(getDataStart());
+        return NetUtil.get(url, {student_id}, json => {
+            console.log(json);
+            dispatch(getMyScoreSuccess(json));
+        }, errors => {
+            console.log(errors);
+        });
+    }
+}
 
-//获取章节数据
-export const getBookChapter = (student_id, course_id) => {
-    let url = target + '/klmanager/getBookChapter';
+//获取我的章节数据
+export const getMyBookChapter = (student_id, course_id) => {
+    let url = target + '/klmanager/getMyBookChapter';
     return dispatch => {
         dispatch(getDataStart());
         return NetUtil.get(url, {student_id, course_id}, json => {
