@@ -246,106 +246,112 @@ class Question extends React.Component {
     
   }
 
-  renderFooter(){
-    const {exindex, test_log,record,exercise,student_rating} = this.props;
+  renderSubmitFooter(){
+    const {exindex, test_log, exercise, student_rating} = this.props;
     const { exercise_state} = test_log[exindex];
     if(test_log[exindex].answer_test){
-      return (
-        <div style={{
-                  position: 'fixed',
-                  bottom: '0',
-                  width: '100%',
-                  height: "1.2rem",
-                  borderTop: "solid 1px #CCC",
-                  }}>
-              <Button inline 
-                style={{margin: '0.2rem 0.5rem 0 0.5rem'}} 
-                type="primary"
-                disabled = {exindex == 0}
-                onClick={e => this.props.updateExindex(exindex-1)}
-              >
-                上一题
-              </Button>
-              <Button style={{margin: '0.2rem 0.5rem 0 0'}}
-                onClick={e => this.props.submitFeedBack(exindex)} 
-                type="primary" inline>
+      return(
+      <div style={{
+        position: 'fixed',
+                    bottom: '3.8rem',
+                    width: '100%',
+                    height: "2.2rem",
+                    borderTop: "solid 1px #CCC",
+              }}>
+        <WingBlank>
+        <Flex>
+          <Flex.Item>
+            <Button style={{margin: '0.5rem 0 0 0'}}
+                  onClick={e => this.props.submitFeedBack(exindex)} 
+                  type="ghost" size='small'>
+              没有思路
+            </Button>
+          </Flex.Item>
+          <Flex.Item>
+            <Button style={{margin: '0.5rem 0 0 0'}}
+                  onClick={e => this.props.submitFeedBack(exindex)} 
+                  type="primary" size='small'>
               提交反馈
-              </Button>
-              <Button inline 
-                style={{margin: '0.2rem 0 0 0'}} 
-                type="primary"
-                disabled = {exindex == exercise.length - 1}
-                onClick={e => this.props.updateExindex(exindex+1)}
-              >
-                下一题
-              </Button>
-        </div>
-      )  
-    }else if(exercise_state < 0){
-      return (
-          <div style={{
-                  position: 'fixed',
-                  bottom: '0',
-                  width: '100%',
-                  height: "1.2rem",
-                  borderTop: "solid 1px #CCC",
-                  }}>
-              <Button inline 
-                style={{margin: '0.2rem 0.5rem 0 0.5rem'}} 
-                type="primary"
-                disabled = {exindex == 0}
-                onClick={e => this.props.updateExindex(exindex-1)}
-              >
-                上一题
-              </Button>
-              <Button style={{margin: '0.2rem 0.5rem 0 0'}} 
-                onClick={e => this.props.submitExerciseLog(exercise[exindex], test_log[exindex].answer,student_rating)} 
-                type="primary" inline>
-              提交答案
-              </Button>
-              <Button inline 
-                style={{margin: '0.2rem 0 0 0'}} 
-                type="primary"
-                disabled = {exindex == exercise.length - 1}
-                onClick={e => this.props.updateExindex(exindex+1)}
-              >
-                下一题
-              </Button>
-          </div>
+            </Button>
+          </Flex.Item>
+        </Flex>
+        </WingBlank>
+      </div>
       )
-    }else{
-      return (
-          <div style={{
-                  position: 'fixed',
-                  bottom: '0',
-                  width: '100%',
-                  height: "1.2rem",
-                  borderTop: "solid 1px #CCC",
-                  }}>
-              <Button inline 
-                style={{margin: '0.2rem 0.5rem 0 0.5rem'}} 
-                type="primary"
-                disabled = {exindex == 0}
-                onClick={e => this.props.updateExindex(exindex-1)}
-              >
-                上一题
-              </Button>
-              <Button style={{margin: '0.2rem 0.5rem 0 0'}} disabled
+    }else if(exercise_state < 0){
+      return(
+      <div style={{
+        position: 'fixed',
+                    bottom: '3.8rem',
+                    width: '100%',
+                    height: "2.2rem",
+                    borderTop: "solid 1px #CCC",
+              }}>
+        <WingBlank>
+        <Flex>
+          <Flex.Item>
+            <Button style={{margin: '0.5rem 0 0 0'}}
                 onClick={e => this.props.submitExerciseLog(exercise[exindex], test_log[exindex].answer,student_rating)} 
-                type="primary" inline>
+                type="ghost" size='small'>
+              我不会做
+            </Button>
+          </Flex.Item>
+          <Flex.Item>
+            <Button style={{margin: '0.5rem 0 0 0'}}
+                onClick={e => this.props.submitExerciseLog(exercise[exindex], test_log[exindex].answer,student_rating)} 
+                type="primary" size='small'>
               提交答案
-              </Button>
-              <Button inline 
-                style={{margin: '0.2rem 0 0 0'}} 
-                type="primary"
-                disabled = {exindex == exercise.length - 1}
-                onClick={e => this.props.updateExindex(exindex+1)}
-              >
-                下一题
-              </Button>
-          </div>
+            </Button>
+          </Flex.Item>
+        </Flex>
+        </WingBlank>
+      </div>
       )
     }
+  }
+
+  renderFooter(){
+    const {exindex, exercise} = this.props;
+      return (
+          <div style={{
+                  position: 'absolute',
+                  bottom: '0',
+                  width: '100%',
+                  height: "3rem",
+                  borderTop: "solid 1px #CCC",
+                  }}>
+                <WingBlank>
+                <div height="3rem" style={{marginTop: '0.5rem'}}>
+                <Button inline 
+                  style={{margin: '0 25% 0 0rem'}} 
+                  type="ghost"                
+                  size="small"
+                  onClick={e => this.props.router.push('/mobile-zq/AnswerSheet')}
+                >
+                  题目列表
+                </Button>
+                <Button inline 
+                  style={{margin: '0 1rem 0 0'}} 
+                  type="ghost"
+                  size="small"
+                  disabled = {exindex == 0}
+                  onClick={e => this.props.updateExindex(exindex-1)}
+                >
+                  上一题
+                </Button>
+                <Button inline 
+                  style={{margin: '0rem 0 0 0'}} 
+                  type="ghost"                
+                  size="small"
+                  disabled = {exindex == exercise.length - 1}
+                  onClick={e => this.props.updateExindex(exindex+1)}
+                >
+                  下一题
+                </Button>
+                </div>
+                </WingBlank>
+          </div>
+      )
   }
 
 
@@ -397,7 +403,7 @@ class Question extends React.Component {
           () => this.props.router.push("/mobile-zq/mytest")
         }
         rightContent={[
-          <Button inline type="ghost" size="small" onClick={e => this.props.router.push("/mobile-zq/AnswerSheet")}>{exindex + 1}</Button>,
+          <div><span style={{fontSize: '2rem'}}>{exindex + 1}</span><span>{'/' + exercise.length}</span></div>
         ]}
         ></NavBar>
         <WingBlank>
@@ -407,6 +413,7 @@ class Question extends React.Component {
         </div>
         </WingBlank>
         {this.renderAnswer()}
+        {this.renderSubmitFooter()}
         {this.renderFooter()}
         {this.renderModal()}
       </div>

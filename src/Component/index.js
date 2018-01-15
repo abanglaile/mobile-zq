@@ -53,7 +53,7 @@ class App extends React.Component {
           hidden={this.state.hidden}
         >
           <TabBar.Item
-            title="Life"
+            title="训练"
             key="Life"
             icon={<div style={{
               width: '22px',
@@ -73,6 +73,7 @@ class App extends React.Component {
               this.setState({
                 selectedTab: 'blueTab',
               });
+              this.props.router.push("/mobile-zq/root/practice");
             }}
             data-seed="logId"
           >
@@ -93,7 +94,7 @@ class App extends React.Component {
                 background: 'url(https://gw.alipayobjects.com/zos/rmsportal/ekLecvKBnRazVLXbWOnE.svg) center center /  21px 21px no-repeat' }}
               />
             }
-            title="Koubei"
+            title="学情"
             key="Koubei"
             badge={'new'}
             selected={this.state.selectedTab === 'redTab'}
@@ -101,6 +102,7 @@ class App extends React.Component {
               this.setState({
                 selectedTab: 'redTab',
               });
+              this.props.router.push("/mobile-zq/root/my_book_chapter");
             }}
             data-seed="logId1"
           >

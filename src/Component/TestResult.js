@@ -25,34 +25,6 @@ class TestResult extends React.Component {
     }
   }
 
-  //补零
-  PrefixInteger(num, n) {
-    return (Array(n).join(0) + num).slice(-n);
-  }
-
-  renderModal(){
-    const defaultExercise = {
-      title: '',
-      exercise_id: '',
-    };
-    var {modalOpen, exercise_sample} = this.props;
-    exercise_sample = exercise_sample ? exercise_sample : defaultExercise;
-    return (
-      <Modal
-          title="题目"
-          transparent
-          maskClosable={false}
-          visible={modalOpen}
-          footer={[
-                    { text: '取消', onPress: () => this.props.closeModal() },
-                    { text: '重做', onPress: () => this.props.jumpToExercise(exercise_sample.exercise_id) },
-                  ]}
-        >
-          <Tex content={exercise_sample.title} />
-      </Modal>
-    )
-  }
-
   renderKpList(){
     const {test_kp} = this.props;
     //<Brief>{item.kpid}</Brief>
@@ -62,15 +34,14 @@ class TestResult extends React.Component {
             test_kp.map((item) => {
               var correct_rate = item.practice ? item.correct/item.practice : 0;
               return (
-                <Item multipleLine 
-                  thumb={<Circle width="3rem" type="circle" percent={10}/>}>
-                        {item.kpname}
-                        <div style={{display: 'flex', marginTop: '0.5rem', alignItems: 'center'}}>
-                          <Progress style={{width: '60%'}} percent={correct_rate} position="normal" />
-                          <div style={{fontSize: '1rem', marginLeft: '1rem'}}>{correct_rate}%</div>
-                        </div>
-                        <Brief><div>练习{item.practice ? item.practice : 0}次</div></Brief>
-                      </Item>
+                <Item multipleLine> 
+                    {item.kpname}
+                    <div style={{display: 'flex', marginTop: '0.5rem', alignItems: 'center'}}>
+                      <Progress style={{width: '60%'}} percent={correct_rate} position="normal" />
+                      <div style={{fontSize: '1rem', marginLeft: '1rem'}}>{correct_rate}%</div>
+                    </div>
+                    <Brief><div>练习{item.practice ? item.practice : 0}次</div></Brief>
+                  </Item>
               )
             })
           }
@@ -129,7 +100,7 @@ class TestResult extends React.Component {
         <NavBar
           mode="light"
           icon={<Icon type="left" />}
-          onLeftClick={() => this.props.history.goBack()}
+          onLeftClick={() => this.props.router.goBack()}
         >测试详情</NavBar>
         <Result
           title={<Circle type="circle" percent={accurracy} />}
@@ -157,7 +128,6 @@ class TestResult extends React.Component {
           </WingBlank>
         </div>
         <ActivityIndicator animating = {isFetching}/>
-        {this.renderModal()}
       </div>
     );
   }

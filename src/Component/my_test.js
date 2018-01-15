@@ -30,6 +30,7 @@ Date.prototype.Format = function (fmt) { //author: meizz
 class MyTest extends React.Component {
   constructor(props) { 
   	super(props);
+    console.log(this.props);
     // alert(window.innerWidth);
   }
 
@@ -83,7 +84,7 @@ class MyTest extends React.Component {
       <NavBar
           mode="light"
           icon={<Icon type="left" />}
-          onLeftClick={() => this.props.history.goBack()}
+          onLeftClick={() => this.props.router.goBack()}
         >做题历史</NavBar>
       <ActivityIndicator toast animating={this.props.isFetching} />
       <Tabs tabs={tabs}
