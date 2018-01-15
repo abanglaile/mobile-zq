@@ -84,7 +84,7 @@ class Question extends React.Component {
     const {exercise, exindex} = this.props;
     const {title, title_img_url, title_audio_url} = exercise[exindex]; 
     return (
-      <div style={{ margin: '30px 0 18px 0', fontSize: '0.3rem'}}>
+      <div style={{ margin: '30px 0 18px 0', fontSize: '1.0rem'}}>
         <Tex content={title} />
         {
           title_img_url? 
@@ -151,7 +151,7 @@ class Question extends React.Component {
               {answer.map((i,index) => (
                 <CheckboxItem key={index} disabled defaultChecked = {i.select} 
                   onChange={() => this.props.selectChange(exindex, index)} wrap>
-                  <img src={i.url} style={{height: "1rem", width: "auto"}}/>
+                  <img src={i.url} style={{height: "4rem", width: "auto"}}/>
                 </CheckboxItem>
               ))}
             </List>
@@ -162,7 +162,7 @@ class Question extends React.Component {
               {answer.map((i,index) => (
                 <CheckboxItem key={index} defaultChecked = {i.select} 
                   onChange={() => this.props.selectChange(exindex, index)} wrap>
-                  <img src={i.url} style={{height: "1rem", width: "auto"}}/>
+                  <img src={i.url} style={{height: "4rem", width: "auto"}}/>
                 </CheckboxItem>
               ))}
             </List>
@@ -408,9 +408,7 @@ class Question extends React.Component {
         ></NavBar>
         <WingBlank>
         {this.renderBreakdown()}
-        <div style={{ margin: '30px 0 18px 0', fontSize: '0.3rem'}}>
-        	<Tex content={title} />
-        </div>
+        {this.renderTitle()}
         </WingBlank>
         {this.renderAnswer()}
         {this.renderSubmitFooter()}

@@ -28,11 +28,13 @@ const component = (component) => {
 //        <Route path="Question" {...component(Question)} />
 
 export default (
-  	<Route path="mobile-zq" component={App}>
-        <IndexRoute component={practice} />
-        <Route path="practice" component={practice} />
-      	<Route path="login" component={login} />
-      	<Route path="my_book_chapter" component={MyChapter} />
+  	<Route path="mobile-zq">
+        <Route path="root" component={App}>
+          <IndexRoute component={practice} />
+          <Route path="practice" component={practice} /> 
+          <Route path="my_book_chapter" component={MyChapter} />
+        </Route>
+        <Route path="login" component={login} />
         <Route path="my_chapter_kp/:chapter_id" component={my_chapter_kp} />
         <Route path="mytest" component={MyTest} />
         <Route path="Question" component={Question} />
