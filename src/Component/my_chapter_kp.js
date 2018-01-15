@@ -8,7 +8,6 @@ import Tex from './renderer.js';
 
 const Item = List.Item;
 const Brief = Item.Brief;
-const operation = Modal.operation;
 
 class my_chapter_kp extends React.Component {
   constructor(props) {
@@ -19,7 +18,6 @@ class my_chapter_kp extends React.Component {
     const {student_id, params} = this.props;
     const chapter_id = params.chapter_id;
     if(chapter_id){
-      this.props.getChapterName(chapter_id);
       this.props.getChapterStatus(student_id, chapter_id);
       this.props.getChapterKpStatus(student_id, chapter_id);
     }else{
@@ -27,38 +25,40 @@ class my_chapter_kp extends React.Component {
     }
   }
 
-  getChapterName(){
-    var chaptername = "";
-    const {book,params} = this.props;
-    const chapter_id = params.chapter_id;
-    console.log('book:'+JSON.stringify(book));
-    book.map((itemb) => {
-      console.log('itemb:'+JSON.stringify(itemb));
-      itemb.chapters.map((itemc) =>{
-        if(itemc.chapterid == chapter_id)
-          chaptername = itemc.chaptername;
-      })
-    });
-    return chaptername;
-  }
+  // renderKpList(){
+  //   const {test_kp} = this.props;
+  //   //<Brief>{item.kpid}</Brief>
+  //   return (
+  //       <List renderHeader={() => '相关知识点情况'} >
+  //         {
+  //           test_kp.map((item) => {
+
+  //             return (
+  //               <Item
+  //                 extra={item.kp_rating}>
+  //                 {item.kpname}
+                  
+  //               </Item>
+  //             )
+  //           })
+  //         }
+  //       </List>
+  //   )
+  // }
 
   renderKpList(){
-      const {chapter,student_id} = this.props;
-      const {kp} = chapter;
+      const {chapter} = this.props;
+      const {kp} = chapter
       if(kp.length > 0){
       return(
           <div>
             <div>
-              <List renderHeader={() => ''}>
+              <List renderHeader={() => '相关知识点情况'}>
                 {
                   kp.map((item) => {
                     var correct_rate = item.practice ? item.correct/item.practice : 0;
                     return (
-                      <Item multipleLine arrow="horizontal" onClick={() => operation([
-                        { text: '知识点讲解', onPress: () => console.log('知识点讲解被点击了') },
-                        { text: '能力详情', onPress: () => console.log('能力详情被点击了') },
-                        { text: '继续修炼', onPress: () => this.props.getTestDataByKp(student_id,item.kpid,item.kpname) },
-                      ])}>
+                      <Item multipleLine>
                         {item.kpname}
                         <div style={{display: 'flex', marginTop: '0.5rem', alignItems: 'center'}}>
                           <Progress style={{width: '60%'}} percent={correct_rate} position="normal" />
@@ -80,22 +80,21 @@ class my_chapter_kp extends React.Component {
   render() {
     var {isFetching, chapter} = this.props;
     console.log("chapter:"+JSON.stringify(chapter));
-    var {status, kp, chaptername} = chapter;
+    var {status, kp} = chapter;
     return (
       <div>
         <NavBar
           mode="light"
           icon={<Icon type="left" />}
           onLeftClick={() => this.props.history.goBack()}
-        >我的知识点</NavBar>
+        >测试详情</NavBar>
         <div style={{
             textAlign: 'center',
-            lineHeight:'8rem',
-            height: '8rem',
+            height: '10rem',
             fontSize: '2rem',
-            backgroundColor: '#5cdbd3',
+            backgroundColor: 'green',
             color: "white"
-          }}>{chaptername}</div>
+          }}>音程</div>
         <WhiteSpace size='lg' />
         <Flex>
           <Flex.Item><div style={{
@@ -137,11 +136,10 @@ class my_chapter_kp extends React.Component {
 
 export default connect(state => {
   const studentData = state.studentData.toJS();
-  const {isFetching, chapter, book} = studentData;
-  console.log(studentData);
+  const {isFetching, chapter} = studentData;
+  console.log(studentData)
   return {
     chapter: chapter,
-    book : book,
     isFetching: isFetching ? isFetching : false,
     student_id:state.AuthData.get('userid'),
   };
