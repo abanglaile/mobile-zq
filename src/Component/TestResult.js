@@ -71,6 +71,13 @@ class TestResult extends React.Component {
                 <text dx="68%" dy="80%" fontSize="0.8rem" >正确</text>
                 </svg>
               </Flex.Item>
+              <Flex.Item>
+                <svg width="5rem" height="2rem" version="1.1"
+                    xmlns="http://www.w3.org/2000/svg">
+                <rect x="20%" y="50%" width="0.6rem" height="0.6rem" fill="red" />
+                <text dx="38%" dy="80%" fontSize="0.8rem" >错误</text>
+                </svg>
+              </Flex.Item>
             </Flex>
           </Flex.Item>
         </Flex>
@@ -81,8 +88,8 @@ class TestResult extends React.Component {
               <svg width="75px" height="75px" version="1.1"
                     xmlns="http://www.w3.org/2000/svg">
 
-                <circle cx="50%" cy="30%" r="20%" stroke="blue" fill="white" />
-                <text dx="45%" dy="37%" fontSize="0.8rem" style={{fill: 'blue'}}>{i+1}</text>
+                <circle cx="50%" cy="30%" r="20%" stroke={dataItem.exercise_state ? 'green' : 'red'} fill="white" />
+                <text dx="45%" dy="37%" fontSize="0.8rem" style={{fill: dataItem.exercise_state ? 'green' : 'red'}}>{i+1}</text>
               </svg>
             )} 
         />

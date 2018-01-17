@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { WingBlank, Flex, List, Checkbox, Button, Icon, Modal, Toast, Progress, NavBar,ActivityIndicator} from 'antd-mobile';
+import { WingBlank, Grid, Flex, List, Checkbox, Button, Icon, Modal, Toast, Progress, NavBar,ActivityIndicator} from 'antd-mobile';
 import Tex from './renderer.js';
 // import MathInput from '../../math-input/src/components/app.js'
 
@@ -14,7 +14,46 @@ const alert = Modal.alert;
 class Question extends React.Component {
   constructor(props) { 
   	super(props);
+    this.state = {
+      sheetmodal: false,
+    };
   	this.onSelectChange = this.onSelectChange.bind(this);
+  }
+
+  showModal(e){
+    e.preventDefault(); // 修复 Android 上点击穿透
+    this.setState({
+      sheetmodal: ! this.state.sheetmodal,
+    });
+  }
+
+  onCloseModal(){
+    this.setState({
+      sheetmodal: ! this.state.sheetmodal,
+    });
+  }
+
+
+  circleFill(exercise_state){
+    switch(exercise_state){
+      case -1: 
+        return 'white';
+      case 0: 
+        return '#ff7875';
+      case 1: 
+        return '#73d13d';
+    }
+  }
+
+  strokecol(exercise_state){
+    switch(exercise_state){
+      case -1: 
+        return '#595959';
+      case 0: 
+        return '#ff7875';
+      case 1: 
+        return '#73d13d';
+    }
   }
 
   isAllUnSelected(){
@@ -54,6 +93,15 @@ class Question extends React.Component {
     const {exercise_st, exindex} = this.props;
     const ac_time = Date.parse(new Date()) - Date.parse(exercise_st);
     this.props.updateExerciseTime(exindex, ac_time/1000);
+  }
+
+  jumpToExercise(i){
+    this.setState({
+      sheetmodal: ! this.state.sheetmodal,
+    });
+    this.props.updateExindex(i);
+    this.props.updateExerciseST();
+    this.props.router.push("/mobile-zq/Question/");
   }
 
   // jumpToExercise(e, i){
@@ -109,6 +157,7 @@ class Question extends React.Component {
     const {exercise_type} = exercise[exindex];
     console.log(test_log);
     const {answer, exercise_state} = test_log[exindex];
+    const answerjson = JSON.parse(answer);
     console.log(answer);
     
     switch(exercise_type){
@@ -124,7 +173,7 @@ class Question extends React.Component {
         if(exercise_state >= 0){
           return (
             <List key={'answer'+ exindex}>
-              {answer.map((i,index) => (
+              {answerjson.map((i,index) => (
                 <CheckboxItem key={index} disabled defaultChecked = {i.select} 
                   onChange={() => this.props.selectChange(exindex, index)} wrap>
                   <Tex content = {i.value} />
@@ -136,7 +185,7 @@ class Question extends React.Component {
         //未做完
         return (
             <List key={'answer'+ exindex}>
-              {answer.map((i,index) => (
+              {answerjson.map((i,index) => (
                 <CheckboxItem key={index} defaultChecked = {i.select} 
                   onChange={() => this.props.selectChange(exindex, index)} wrap>
                   <Tex content = {i.value} />
@@ -148,7 +197,7 @@ class Question extends React.Component {
         if(exercise_state >= 0){
           return (
             <List key={'answer'+ exindex}>
-              {answer.map((i,index) => (
+              {answerjson.map((i,index) => (
                 <CheckboxItem key={index} disabled defaultChecked = {i.select} 
                   onChange={() => this.props.selectChange(exindex, index)} wrap>
                   <img src={i.url} style={{height: "4rem", width: "auto"}}/>
@@ -159,7 +208,7 @@ class Question extends React.Component {
         }
         return (
             <List key={'answer'+ exindex}>
-              {answer.map((i,index) => (
+              {answerjson.map((i,index) => (
                 <CheckboxItem key={index} defaultChecked = {i.select} 
                   onChange={() => this.props.selectChange(exindex, index)} wrap>
                   <img src={i.url} style={{height: "4rem", width: "auto"}}/>
@@ -311,7 +360,9 @@ class Question extends React.Component {
   }
 
   renderFooter(){
-    const {exindex, exercise} = this.props;
+    const {exindex, exercise, test_log, test_status} = this.props;
+    console.log("test_log:"+JSON.stringify(test_log));
+    const {sheetmodal} = this.state;
       return (
           <div style={{
                   position: 'absolute',
@@ -326,7 +377,7 @@ class Question extends React.Component {
                   style={{margin: '0 25% 0 0rem'}} 
                   type="ghost"                
                   size="small"
-                  onClick={e => this.props.router.push('/mobile-zq/AnswerSheet')}
+                  onClick={(e) => this.showModal(e)}
                 >
                   题目列表
                 </Button>
@@ -350,6 +401,28 @@ class Question extends React.Component {
                 </Button>
                 </div>
                 </WingBlank>
+
+                <Modal
+                  popup
+                  visible={sheetmodal}
+                  onClose={() => this.onCloseModal()}
+                  animationType="slide-up"
+                >
+                  <Grid data={test_log} hasLine={false} onClick={(e, i) => this.jumpToExercise(i)}
+                      columnNum={5}
+                      renderItem={(dataItem,i) => (
+                        <svg width="75px" height="75px" version="1.1"
+                              xmlns="http://www.w3.org/2000/svg">
+
+                          <circle cx="50%" cy="30%" r="20%" stroke={this.strokecol(dataItem.exercise_state)} fill={this.circleFill(dataItem.exercise_state)}/>
+                          <text dx="45%" dy="37%" fontSize="0.8rem" style={
+                            {fill: dataItem.exercise_state > -1 ? 'white' : '#595959'}}>
+                            {i+1}</text>
+                        </svg>
+
+                      )} 
+                  />
+                </Modal>
           </div>
       )
   }

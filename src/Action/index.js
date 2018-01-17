@@ -731,7 +731,7 @@ export const submitExerciseLog = (exercise, log_answer, student_rating) => {
         exercise_log.breakdown_sn = breakdown_sn;
     }else if(breakdown.length == 1){
         breakdown_sn[0] = {
-            sn: 0,
+            sn: breakdown[0].sn,
             kpid: breakdown[0].kpid,
             kpname: breakdown[0].kpname,
             sn_state: 0,

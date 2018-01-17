@@ -133,7 +133,7 @@ export const testData = (state = defaulatTestData, action = {}) => {
                 }
                 test_log[i] = {
                     exercise_state: -1,
-                    answer: JSON.parse(exercise[i].answer),
+                    answer: exercise[i].answer,
                     start_time: start_time,
                     breakdown_sn: breakdown_sn,
                     ac_time: 0,
