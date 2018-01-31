@@ -37,7 +37,10 @@ const defaulatAuthData = Immutable.fromJS({
         userid: null,
         isAuthenticated: false,
         isAuthenticating: false,
-        statusText: null
+        statusText: null,
+        wxinfo:{},
+        accjson:{},
+        accerrors:{},
     });
 
 //获取鉴权数据
@@ -93,6 +96,12 @@ export const AuthData = (state = defaulatAuthData, action = {}) => {
                     .set('userName',null)
                     .set('userid',null)
                     .set('statusText','You have been successfully logged out.');
+        case 'GET_WX_USERINFO_SUCCESS':
+            return state.set('wxinfo', Immutable.fromJS(action.json));
+        case 'GET_ACCESS_TOKEN_SUCCESS':
+            return state.set('accjson',Immutable.fromJS(action.json));
+        case 'GET_ACCESS_ERRORS_SUCCESS':
+            return state.set('accerrors',Immutable.fromJS(action.errors));
         default:
             return state;
     }

@@ -19,16 +19,17 @@ class NetUtil extends React.Component{
             } else {
                 url += '&' + paramsArray.join('&')
             }
+            alert("url:" + url);
         }
         //fetch请求
         fetch(url, {
             method: 'GET',
-            mode: "cors",
-            headers:{
-                'Content-Type': 'application/json; charset=UTF-8'
-            }
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
         })
             .then((response) => {
+                console.log(response);
                 if (response.status >= 200 && response.status < 300) {
                     return response.json();
                 }
@@ -38,8 +39,10 @@ class NetUtil extends React.Component{
                 //return response.json();
             })
             .then((responseJSON) => {
+                console.log(responseJSON);
                 resolve(responseJSON);
             }).catch((err) => {
+                console.log(err);
                 reject(err);
                 console.log(err);
             });
