@@ -157,7 +157,7 @@ class Question extends React.Component {
     const {exercise_type} = exercise[exindex];
     console.log(test_log);
     const {answer, exercise_state} = test_log[exindex];
-    const answerjson = JSON.parse(answer);
+    const answerjson = answer;
     console.log(answer);
     
     switch(exercise_type){

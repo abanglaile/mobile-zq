@@ -3,6 +3,7 @@ import {push} from 'react-router-redux'
 import config from '../utils/Config'
 import jwtDecode from 'jwt-decode';
 import { checkHttpStatus, parseJSON } from '../utils';
+import axios from 'axios';
 
 
 let target = config.server_url;
@@ -305,67 +306,98 @@ const getMyScoreSuccess = (json) => {
 /*-------------------------------------------------*/
 //获取我的天梯总分
 export const getMyLadderScore = (student_id) => {
-    let url = target + '/klmanager/getMyLadderScore';
-    return dispatch => {
+    let url = target + "/getMyLadderScore";
+    return (dispatch) => {
         dispatch(getDataStart());
-        return NetUtil.get(url, {student_id}, json => {
-            console.log(json);
-            dispatch(getMyScoreSuccess(json));
-        }, errors => {
-            console.log(errors);
+        return axios.get(url,{
+                params:{
+                   student_id,
+                }
+        })
+        .then(function (response) {
+            dispatch(getMyScoreSuccess(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
         });
     }
 }
 
 //获取我的章节数据
 export const getMyBookChapter = (student_id, course_id) => {
-    let url = target + '/klmanager/getMyBookChapter';
-    return dispatch => {
+    let url = target + "/getMyBookChapter";
+    return (dispatch) => {
         dispatch(getDataStart());
-        return NetUtil.get(url, {student_id, course_id}, json => {
-            console.log(json);
-            dispatch(getChapterSuccess(json));
-        }, errors => {
-            console.log(errors);
+        return axios.get(url,{
+                params:{
+                   student_id,
+                   course_id,
+                }
+        })
+        .then(function (response) {
+            dispatch(getChapterSuccess(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
         });
     }
 }
 
 //获取章节名称
 export const getChapterName = (chapter_id) => {
-    let url = target + '/klmanager/getChapterName';
-    return dispatch => {
+    let url = target + "/getChapterName";
+    return (dispatch) => {
         dispatch(getDataStart());
-        return NetUtil.get(url, {chapter_id}, json => {
-            dispatch(getChapterNameSuccess(json));
-        }, errors => {
-            console.log(errors);
+        return axios.get(url,{
+                params:{
+                   chapter_id,
+                }
+        })
+        .then(function (response) {
+            dispatch(getChapterNameSuccess(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
         });
     }
 }
 
 //获取章节正确率、练习次数
 export const getChapterStatus = (student_id, chapter_id) => {
-    let url = target + '/klmanager/getChapterStatus';
-    return dispatch => {
+    let url = target + "/getChapterStatus";
+    return (dispatch) => {
         dispatch(getDataStart());
-        return NetUtil.get(url, {student_id, chapter_id}, json => {
-            dispatch(getChapterStatusSuccess(json));
-        }, errors => {
-            console.log(errors);
+        return axios.get(url,{
+                params:{
+                   student_id,
+                   chapter_id,
+                }
+        })
+        .then(function (response) {
+            dispatch(getChapterStatusSuccess(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
         });
     }
 }
 
 //获取章节知识点状态
 export const getChapterKpStatus = (student_id, chapter_id) => {
-    let url = target + '/klmanager/getChapterKpStatus';
-    return dispatch => {
+    let url = target + "/getChapterKpStatus";
+    return (dispatch) => {
         dispatch(getDataStart());
-        return NetUtil.get(url, {student_id, chapter_id}, json => {
-            dispatch(getChapterKpStatusSuccess(json));
-        }, errors => {
-            console.log(errors);
+        return axios.get(url,{
+                params:{
+                   student_id,
+                   chapter_id,
+                }
+        })
+        .then(function (response) {
+            dispatch(getChapterKpStatusSuccess(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
         });
     }
 }
@@ -398,61 +430,84 @@ const getChapterKpStatusSuccess = (json) => {
 
 //获取指定测试数据
 export const getTestExercise = (student_id, test_id) => {
-    let url = target + '/klmanager/getExerciseByTest';
-    console.log(student_id, test_id);
-    return dispatch => {
+    let url = target + "/getExerciseByTest";
+    return (dispatch) => {
         dispatch(getTestStart());
-        return NetUtil.get(url, {test_id, student_id}, json => {
-            console.log(json);
-            dispatch(getTestExerciseSuccess(json));
-        }, errors => {
-            console.log(errors);
+        return axios.get(url,{
+                params:{
+                   test_id,
+                   student_id,
+                }
+        })
+        .then(function (response) {
+            dispatch(getTestExerciseSuccess(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
         });
     }
 }
 
 //获取指定测试的数据
 export const getTestData = (student_id, test_id) => {
-    let url = target + '/klmanager/getExerciseByTest';
-    console.log(student_id, test_id);
-    return dispatch => {
+    let url = target + "/getExerciseByTest";
+    return (dispatch) => {
         dispatch(getTestStart());
-        return NetUtil.get(url, {test_id, student_id}, json => {
-            console.log(json);
-            dispatch(getTestSuccess(json, test_id));
+        return axios.get(url,{
+                params:{
+                   test_id,
+                   student_id,
+                }
+        })
+        .then(function (response) {
+            dispatch(getTestSuccess(response.data,test_id));
             dispatch(push("/mobile-zq/Question"));
             dispatch(updateExerciseST());
-        }, errors => {
-            console.log(errors);
+        })
+        .catch(function (error) {
+            console.log(error);
         });
     }
 }
 
 //根据kpid或者该主测点下的试题
 export const getTestDataByKp = (student_id, kpid, kpname) => {
-    let url = target + '/klmanager/getExerciseByKpid';
-    return dispatch => {
+    let url = target + "/getExerciseByKpid";
+    return (dispatch) => {
         dispatch(getTestStart());
-        return NetUtil.get(url, {student_id, kpid, kpname}, json => {
-            console.log(json);
-            dispatch(getTestByKpSuccess(json));
+        return axios.get(url,{
+                params:{
+                   student_id,
+                   kpid,
+                   kpname,
+                }
+        })
+        .then(function (response) {
+            dispatch(getTestByKpSuccess(response.data));
             dispatch(push("/mobile-zq/Question"));
             dispatch(updateExerciseST());
-        }, errors => {
-            console.log(errors);
+        })
+        .catch(function (error) {
+            console.log(error);
         });
     }
 }
 
 //获取测试列表
 export const getMyTestList = (student_id) => {
-    let url = target + '/klmanager/getMyTest';
-    return dispatch => {
+    let url = target + "/getMyTest";
+    return (dispatch) => {
         dispatch(getDataStart());
-        return NetUtil.get(url, {student_id}, json => {
-            dispatch(getMyTestSuccess(json));
-        }, errors => {
-            console.log(errors);
+        return axios.get(url,{
+                params:{
+                   student_id,
+                }
+        })
+        .then(function (response) {
+            dispatch(getMyTestSuccess(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
         });
     }
 }
@@ -521,8 +576,8 @@ export const jumpNext = (answer_test) => {
                     console.log(json);
                     dispatch(submitTestSuccess(json));
                     dispatch(push("/mobile-zq/kpTestResult"));
-                }, errors => {
-                    console.log(errors);
+                }, error => {
+                    console.log(error);
                 });
             }
         }else{
@@ -747,126 +802,157 @@ export const submitExerciseLog = (exercise, log_answer, student_rating) => {
 }
 
 export const getStudentData = (student_id) => {
+    let url = target + "/getStudentData";
     return (dispatch) => {
         dispatch(getDataStart());
-        let url = target + '/klmanager/getStudentData';
-        return NetUtil.post(url, {test_id, student_id}, json => {
-            console.log(json);
-            dispatch(getStudentDataSuccess(json));
-        }, errors => {
-            console.log(errors);
+        return axios.post(url,{test_id,student_id})
+        .then(function (response) {
+            dispatch(getStudentDataSuccess(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
         });
     }
 }
 
 export const getTestStatus = (student_id, test_id) => {
+    let url = target + "/getTestStatus";
     return (dispatch) => {
         dispatch(getTestStart());
-        let url = target + '/klmanager/getTestStatus';
-        return NetUtil.post(url, {test_id}, json => {
-            dispatch(getTestStatusSuccess(json, test_id));
-        }, errors => {
-            console.log(errors);
+        return axios.post(url,{test_id})
+        .then(function (response) {
+            dispatch(getTestStatusSuccess(response.data,test_id));
+        })
+        .catch(function (error) {
+            console.log(error);
         });
     }
 }
 
 export const getTestRankingList = (test_id) => {
+    let url = target + "/getTestRankingList";
     return (dispatch) => {
         dispatch(getTestStart());
-        let url = target + '/klmanager/getTestRankingList';
-        return NetUtil.post(url, {test_id}, json => {
-            dispatch(getTestRankingListSuccess(json));
-        }, errors => {
-            console.log(errors);
+        return axios.post(url,{test_id})
+        .then(function (response) {
+            dispatch(getTestRankingListSuccess(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
         });
     }
 }
 
 export const getStuTestInfo = (student_id,test_id) => {
+    let url = target + "/getStuTestInfo";
     return (dispatch) => {
-        let url = target + '/klmanager/getStuTestInfo';
-        return NetUtil.post(url, {student_id,test_id}, json => {
-            dispatch(getStuTestInfoSuccess(json));
-        }, errors => {
-            console.log(errors);
+        return axios.post(url,{student_id,test_id})
+        .then(function (response) {
+            dispatch(getStuTestInfoSuccess(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
         });
     }
 }
 //获取学生综合能力情况
 export const getStuAbility = (student_id) => {
+    let url = target + "/getStuAbility";
     return (dispatch) => {
         dispatch(getStatusStart());
-        let url = target + '/klmanager/getStuAbility';
-        return NetUtil.get(url, {student_id}, json => {
-            dispatch(getStuAbilitySuccess(json));
-        }, errors => {
-            console.log(errors);
+        return axios.get(url,{
+            params:{
+                student_id,
+            }
+        })
+        .then(function (response) {
+            dispatch(getStuAbilitySuccess(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
         });
     }
 }
 //获取学生天梯分数变化情况
 export const getStuLadder = (student_id) => {
+    let url = target + "/getStuLadder";
     return (dispatch) => {
         dispatch(getStatusStart());
-        let url = target + '/klmanager/getStuLadder';
-        return NetUtil.get(url, {student_id}, json => {
-            dispatch(getStuLadderSuccess(json));
-        }, errors => {
-            console.log(errors);
+        return axios.get(url,{
+            params:{
+                student_id,
+            }
+        })
+        .then(function (response) {
+            dispatch(getStuLadderSuccess(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
         });
     }
 }
 //获取学生经常使用知识点的情况
 export const getStuComUsedKp = (student_id) => {
+    let url = target + "/getStuComUsedKp";
     return (dispatch) => {
         dispatch(getStatusStart());
-        let url = target + '/klmanager/getStuComUsedKp';
-        return NetUtil.get(url, {student_id}, json => {
-            dispatch(getStuComUsedKpSuccess(json));
-        }, errors => {
-            console.log(errors);
+        return axios.get(url,{
+            params:{
+                student_id,
+            }
+        })
+        .then(function (response) {
+            dispatch(getStuComUsedKpSuccess(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
         });
     }
 }
 
 export const getTestResult = (student_id, test_id) => {
+    let url = target + "/getTestResult";
     return (dispatch) => {
         dispatch(getDataStart());
-        let url = target + '/klmanager/getTestResult';
-        return NetUtil.post(url, {student_id, test_id}, json => {
-            console.log(json);
-            dispatch(getTestResultSuccess(json));
-            // dispatch(push("/mobile-zq/testResult"));
-        }, errors => {
-            console.log(errors);
+        return axios.post(url,{student_id,test_id})
+        .then(function (response) {
+            dispatch(getTestResultSuccess(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
         });
     }
 }
 
 export const getChapter = (student_id, course_id) => {
+    let url = target + "/getChapter";
     return (dispatch) => {
         dispatch(getDataStart());
-        let url = target + '/klmanager/getChapter';
-        return NetUtil.post(url, {student_id, course_id}, json => {
-            console.log(json);
-            dispatch(getChapterSuccess(json));
-        }, errors => {
-            console.log(errors);
+        return axios.post(url,{student_id,course_id})
+        .then(function (response) {
+            dispatch(getChapterSuccess(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
         });
     }
 }
 
 //根据sample_id获取题目信息
 export const getExerciseSample = (exercise_id) => {
-    let url = target + '/klmanager/getExerciseSample';
-    return dispatch => {
+    let url = target + "/getExerciseSample";
+    return (dispatch) => {
         dispatch(getDataStart());
-        //TO-DO：指定样本参数
-        return NetUtil.get(url, {exercise_id}, json => {
-            dispatch(getExerciseSampleSuccess(json));
-        }, errors => {
-            console.log(errors);
+        return axios.get(url,{
+            params:{
+                exercise_id,
+            }
+        })
+        .then(function (response) {
+            dispatch(getExerciseSampleSuccess(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
         });
     }
 }
