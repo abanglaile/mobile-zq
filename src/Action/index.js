@@ -561,7 +561,7 @@ export const jumpNext = (answer_test) => {
                 const testData = getState().testData.toJS();
                 console.log(testData);
                 dispatch(submitTestStart());
-                let url = target + '/klmanager/submitTest';
+                let url = target + '/submitTest';
 
                 /**
                  * [提交后台测试数据]
@@ -572,11 +572,13 @@ export const jumpNext = (answer_test) => {
                     start_time: testData.start_time,
                     finish_time: testData.finish_time,
                 }
-                return NetUtil.post(url, {student_id: '1', student_rating: 500, test_result: test_result}, json => {
-                    console.log(json);
-                    dispatch(submitTestSuccess(json));
+
+                return axios.post(url,{student_id: '1', student_rating: 500, test_result: test_result})
+                .then(function (response) {
+                    dispatch(submitTestSuccess(response.data));
                     dispatch(push("/mobile-zq/kpTestResult"));
-                }, error => {
+                })
+                .catch(function (error) {
                     console.log(error);
                 });
             }
