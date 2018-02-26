@@ -11,6 +11,7 @@ import { syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-rou
 
 import * as reducer from './Reducer/index';
 import {loginUserSuccess} from './Action';
+import {getWxUserInfoSuccess} from './Action/reg_action';
 import routes from './Router/'; 
 // import reducers from './reducers' // Or wherever you keep your reducers
 
@@ -32,7 +33,8 @@ const history = syncHistoryWithStore(browserHistory, store)
 
 let token = localStorage.getItem('token');
 if (token !== null) {
-    store.dispatch(loginUserSuccess(token));
+    // store.dispatch(loginUserSuccess(token));
+    store.dispatch(getWxUserInfoSuccess(token));
 }
 
 ReactDOM.render(

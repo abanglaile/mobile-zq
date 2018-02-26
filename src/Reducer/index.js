@@ -33,12 +33,14 @@ const defaulatStuStatus = Immutable.fromJS({
 
 const defaulatAuthData = Immutable.fromJS({
         token: null,
-        userName: null,
+        nickname: null,
+        imgurl:null,
         userid: null,
+        hascode: null, 
         isAuthenticated: false,
         isAuthenticating: false,
         statusText: null,
-        wxinfo:{},
+        wx_info : null,
     });
 
 //获取鉴权数据
@@ -95,7 +97,25 @@ export const AuthData = (state = defaulatAuthData, action = {}) => {
                     .set('userid',null)
                     .set('statusText','You have been successfully logged out.');
         case 'GET_WX_USERINFO_SUCCESS':
-            return state.set('wxinfo', Immutable.fromJS(action.json));
+            var sucState = {
+                isAuthenticating: false,
+                isAuthenticated: true,
+                token: action.payload.token,
+                nickname: jwtDecode(action.payload.token).nickname,
+                userid: jwtDecode(action.payload.token).userid,
+                imgurl:jwtDecode(action.payload.token).imgurl,
+                hascode: -1,
+                statusText: 'You have been successfully logged in by wx.'
+            };
+            return Immutable.fromJS(sucState);
+        case 'CHECK_CODE_SUCCESS':
+            return state.set('hascode',1);
+        case 'CHECK_CODE_FAILURE':
+            return state.set('hascode',0);
+        case 'HIDE_HASCODE_TOAST':
+            return state.set('hascode',-1);
+        case 'SAVE_TEMP_WX_INFO':
+            return state.set('wx_info',Immutable.fromJS(action.wx_info));
         default:
             return state;
     }
