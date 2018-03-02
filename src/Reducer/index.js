@@ -96,6 +96,16 @@ export const AuthData = (state = defaulatAuthData, action = {}) => {
                     .set('userName',null)
                     .set('userid',null)
                     .set('statusText','You have been successfully logged out.');
+                    
+        case 'LOGOUT_WX_USER':
+            return state.set('isAuthenticated', false)
+                    .set('token',null)
+                    .set('nickname',null)
+                    .set('userid',null)
+                    .set('imgurl',null)
+                    .set('hascode',null)
+                    .set('statusText','You have been successfully logged out.');
+
         case 'GET_WX_USERINFO_SUCCESS':
             var sucState = {
                 isAuthenticating: false,

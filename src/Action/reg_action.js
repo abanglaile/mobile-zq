@@ -87,7 +87,19 @@ export const getWxAuth = (code,state) => {
     }
 }
 
+export const logoutwx = () => {
+    localStorage.removeItem('token');
+    return {
+        type: 'LOGOUT_WX_USER',
+    }
+}
 
+export const logoutwxAndRedirect = () => {
+    return (dispatch) => {
+        dispatch(logoutwx());
+        dispatch(push('/mobile-zq/login'));
+    }
+}
 
 export const checkInviCode = (wx_info,invitationcode) => {
     let url = target + "/check_invi_code";

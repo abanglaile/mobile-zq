@@ -39,8 +39,9 @@ class MyTest extends React.Component {
   }
 
   loadTest(){
-    // var student_id = '1';
-    this.props.getMyTestList(this.props.student_id);
+    var student_id = '17';
+    this.props.getMyHistoryTests(student_id);
+    // this.props.getMyTestList(this.props.student_id);
   }
 
   render() {
@@ -49,9 +50,9 @@ class MyTest extends React.Component {
     if(my_test_list){
       for(var i = 0; i < my_test_list.length; i++){
         if(my_test_list[i].teacher_id){
-          auto_test.push(my_test_list[i]);
-        }else{
           teacher_test.push(my_test_list[i]);
+        }else{
+          auto_test.push(my_test_list[i]);
         }
       }
     }
@@ -61,7 +62,14 @@ class MyTest extends React.Component {
         return(
           <Item arrow="horizontal" multipleLine extra={item.finish_time ? '测试报告' : '开始练习'} onClick={e => this.props.router.push("/mobile-zq/TestStatus/"+ item.test_id)}>
             {item.test_name}
-            <Brief>{item.enable_time}</Brief>
+            <Brief>
+              <span style={{paddingRight : "1rem",borderRight:"1px solid "}}>
+                正确率：{item.correct_exercise}/{item.total_exercise}
+              </span>
+              <span style={{paddingLeft : "1rem"}}>
+                {item.formatdate}
+              </span>
+            </Brief> 
           </Item>
       );
     });
@@ -71,7 +79,14 @@ class MyTest extends React.Component {
         return(
           <Item arrow="horizontal" multipleLine extra={item.finish_time ? '测试报告' : '开始练习'} onClick={e => this.props.router.push("/mobile-zq/TestStatus/"+ item.test_id)}>
             {item.test_name}
-            <Brief>{item.enable_time}</Brief>
+            <Brief>
+              <span style={{paddingRight : "1rem",borderRight:"1px solid "}}>
+                正确率：{item.correct_exercise}/{item.total_exercise}
+              </span>
+              <span style={{paddingLeft : "1rem"}}>
+                {item.formatdate}
+              </span>
+            </Brief>  
           </Item>
       );
     });

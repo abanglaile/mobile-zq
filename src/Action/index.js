@@ -493,9 +493,9 @@ export const getTestDataByKp = (student_id, kpid, kpname) => {
     }
 }
 
-//获取测试列表
-export const getMyTestList = (student_id) => {
-    let url = target + "/getMyTest";
+//获取我的历史做题记录
+export const getMyHistoryTests = (student_id) => {
+    let url = target + "/getMyHistoryTests";
     return (dispatch) => {
         dispatch(getDataStart());
         return axios.get(url,{
