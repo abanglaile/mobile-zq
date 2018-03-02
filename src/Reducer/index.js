@@ -8,9 +8,11 @@ const defaulatTestData = Immutable.fromJS({
         exindex: 0, 
         exercise: [{title: '', answer: '[]', type: 0, breakdown: []}],
         modalOpen: false,
-        test_log: [{}],
+        exercise_log: [{}],
         ranking_list: [{}],
+        test_log: {finish_time: '', correct_exercise: 0},
         record: {correct: 0, new_rating: 0},
+        test_reward: {credit: 30},
     });
 const defaulatStudentData = Immutable.fromJS({
         isFetching: false,
@@ -147,7 +149,7 @@ export const testData = (state = defaulatTestData, action = {}) => {
         case 'GET_TEST_SUCCESS':
             const exercise = action.json.exercises ? action.json.exercises : action.json;
             const start_time = new Date();
-            var test_log = [];
+            var exercise_log = [];
             for(var i = 0; i < exercise.length; i++){
                 const breakdown = exercise[i].breakdown;
                 var breakdown_sn = [];
@@ -164,7 +166,7 @@ export const testData = (state = defaulatTestData, action = {}) => {
                     sn_old_rating: breakdown[j].sn_rating
                   };
                 }
-                test_log[i] = {
+                exercise_log[i] = {
                     exercise_state: -1,
                     answer: exercise[i].answer,
                     start_time: start_time,
@@ -178,7 +180,7 @@ export const testData = (state = defaulatTestData, action = {}) => {
                 record: {correct: 0, wrong: 0, new_rating: action.student_rating, combo_correct: 0, max_combo: 0},
                 start_time: start_time, 
                 test_id: action.json.test_id ? action.json.test_id : action.test_id, 
-                test_log: test_log,
+                exercise_log: exercise_log,
                 isFetching: false,
                 modalOpen: false,
             };
@@ -188,7 +190,7 @@ export const testData = (state = defaulatTestData, action = {}) => {
         // case 'GET_TEST_SUCCESS':
         //     const exercise = action.json;
         //     const start_time = new Date();
-        //     var test_log = [];
+        //     var exercise_log = [];
         //     for(var i = 0; i < exercise.length; i++){
         //         const breakdown = exercise[i].breakdown;
         //         var breakdown_sn = [];
@@ -205,7 +207,7 @@ export const testData = (state = defaulatTestData, action = {}) => {
         //             sn_old_rating: breakdown[j].sn_rating
         //           };
         //         }
-        //         test_log[i] = {
+        //         exercise_log[i] = {
         //             exercise_state: -1,
         //             answer: JSON.parse(exercise[i].answer),
         //             start_time: start_time,
@@ -219,7 +221,7 @@ export const testData = (state = defaulatTestData, action = {}) => {
         //         record: {correct: 0, wrong: 0, new_rating: action.student_rating, combo_correct: 0, max_combo: 0},
         //         start_time: start_time, 
         //         test_id: action.test_id, 
-        //         test_log: test_log,
+        //         exercise_log: exercise_log,
         //         isFetching: false,
         //         modalOpen: false,
         //     };
@@ -228,10 +230,13 @@ export const testData = (state = defaulatTestData, action = {}) => {
         //     break;
         case 'GET_TEST_EXERCISE_SUCCESS':
             return state.set('exercise', Immutable.fromJS(action.json));
+        case 'GET_TEST_STU_REWARD_SUCCESS':
+            console.log(action.json.credit);
+            return state.setIn(['test_reward', 'credit'], action.json.credit);
         case 'GET_TEST_RESULT_SUCCESS':
-            return state.set('test_log', Immutable.fromJS(action.json.test_log))
+            return state.set('exercise_log', Immutable.fromJS(action.json.exercise_log))
                 .set('test_kp', Immutable.fromJS(action.json.test_kp))
-                .set('correct', action.json.correct)
+                .set('test_log', Immutable.fromJS(action.json.test_log))
                 .set('isFetching', false);
         case 'GET_EXERCISE_SAMPLE_SUCCESS':
             return state.set('exercise_sample', Immutable.fromJS(action.json)).set('isFetching', false).set('modalOpen', true);
@@ -240,18 +245,18 @@ export const testData = (state = defaulatTestData, action = {}) => {
         case 'UPDATE_EXERCISE_ST':
             return state.set('exercise_st', new Date());
         case 'UPDATE_EXERCISE_TIME':
-            return state.updateIn(['test_log', action.i, 'ac_time'], ac_time => ac_time + action.ac_time);
+            return state.updateIn(['exercise_log', action.i, 'ac_time'], ac_time => ac_time + action.ac_time);
         case 'UPDATE_FINISH_TIME':
             return state.set("finish_time", new Date());
         case 'SHOW_ANSWER_TEST':
-            return state.setIn(["test_log", action.exindex, 'answer_test'], true);
+            return state.setIn(["exercise_log", action.exindex, 'answer_test'], true);
         case 'HIDE_FEEDBACK_TOAST':
             return state.set('feedbackToast', false);
         case 'CLOSE_MODAL':
             return state.set('modalOpen', false);
         case 'SUBMIT_EXERCISE_LOG':
             const exindex = state.get('exindex');
-            return state.mergeDeepIn(['test_log', exindex], Immutable.fromJS(action.exercise_log)).set("modalOpen", true);
+            return state.mergeDeepIn(['exercise_log', exindex], Immutable.fromJS(action.exercise_log)).set("modalOpen", true);
         case 'UPDATE_RECORD':
             // const exercise_state = action.exercise_log.exercise_state;
             // const combo_correct = state.getIn(['record', 'combo_correct']);
@@ -265,11 +270,11 @@ export const testData = (state = defaulatTestData, action = {}) => {
             //     combo_correct 
             // }
         case 'EXERCISE_SELECT_CHANGE':
-            return state.updateIn(['test_log', action.exindex, 'answer', action.index, 'select'], select => !select)
+            return state.updateIn(['exercise_log', action.exindex, 'answer', action.index, 'select'], select => !select)
         case 'BREAKDOWN_SN_SELECT_CHANGE':
             const val = action.index;
 
-            var breakdown_sn = state.getIn(['test_log', action.exindex, 'breakdown_sn']).toJS();
+            var breakdown_sn = state.getIn(['exercise_log', action.exindex, 'breakdown_sn']).toJS();
             breakdown_sn[val].sn_state = breakdown_sn[val].sn_state ? 0 : 1;
             //取消选择，将以这步作为前置的步骤全部设为不确定-1并不渲染显示
             for(var i = 0; i < breakdown_sn.length; i++){
@@ -278,9 +283,9 @@ export const testData = (state = defaulatTestData, action = {}) => {
                     breakdown_sn[i].sn_state = breakdown_sn[val].sn_state ? 0 : -1;
                 }
             }
-            return state.setIn(['test_log', action.exindex, 'breakdown_sn'], Immutable.fromJS(breakdown_sn));
+            return state.setIn(['exercise_log', action.exindex, 'breakdown_sn'], Immutable.fromJS(breakdown_sn));
         case 'SUBMIT_FEEDBACK':
-            return state.setIn(['test_log', action.exindex, 'answer_test'], false).set('feedbackToast', true);
+            return state.setIn(['exercise_log', action.exindex, 'answer_test'], false).set('feedbackToast', true);
         case 'SUBMIT_TEST_START':
             return state;
         case 'SUBMIT_TEST_SUCCESS':

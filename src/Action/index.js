@@ -302,6 +302,13 @@ const getMyScoreSuccess = (json) => {
   }
 }
 
+const getTestStuRewardSuccess = (json) => {
+    return {
+        type: 'GET_TEST_STU_REWARD_SUCCESS',
+        json,
+    }
+}
+
 
 /*-------------------------------------------------*/
 //获取我的天梯总分
@@ -529,9 +536,9 @@ export const jumpNext = (answer_test) => {
     return (dispatch, getState) => {
         const testData = getState().testData;
         const exindex = testData.get("exindex");
-        const test_log = testData.get("test_log").toJS();
+        const exercise_log = testData.get("exercise_log").toJS();
         const exercise = testData.get("exercise").toJS();
-        const {exercise_state} = test_log[exindex];
+        const {exercise_state} = exercise_log[exindex];
         const blength = exercise[exindex].breakdown.length;
 
         if(answer_test || exercise_state || blength == 1){
@@ -539,7 +546,7 @@ export const jumpNext = (answer_test) => {
             var next = -1;
             var i = (exindex + 1)%exercise.length;
             while(i != exindex){
-                if(test_log[i].exercise_state < 0){
+                if(exercise_log[i].exercise_state < 0){
                     next = i;
                     break;
                 }
@@ -568,7 +575,7 @@ export const jumpNext = (answer_test) => {
                  */
                 const test_result = {
                     test_id: testData.test_id,
-                    test_log: testData.test_log,
+                    exercise_log: testData.exercise_log,
                     start_time: testData.start_time,
                     finish_time: testData.finish_time,
                 }
@@ -588,6 +595,36 @@ export const jumpNext = (answer_test) => {
             dispatch(showAnswerTest(exindex));
             //dispatch(push("/mobile-zq/AnswerTest"));
         }
+    }
+}
+
+export const getTestKpReward = (student_id, test_id) => {
+    let url = target + "/getTestKpReward";
+    return (dispatch) => {
+        dispatch(getDataStart());
+        return axios.get(url,{
+            params: {student_id, test_id}
+        }).then(function (response) {
+            dispatch(getTestKpRewardSuccess(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+}
+
+export const getTestStuReward = (student_id, test_id) => {
+    let url = target + "/getTestStuReward";
+    return (dispatch) => {
+        dispatch(getDataStart());
+        return axios.get(url, {
+            params: {student_id, test_id}
+        }).then(function (response) {
+            dispatch(getTestStuRewardSuccess(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
     }
 }
 
@@ -650,10 +687,10 @@ export const updateExerciseST = () => {
 }
 
 //提交单题测试结果
-export const updateTestLog = (test_log) => {
+export const updateTestLog = (exercise_log) => {
     return {
-        type: 'UPDATE_TEST_LOG',
-        test_log,
+        type: 'UPDATE_exercise_log',
+        exercise_log,
     }
 }
 

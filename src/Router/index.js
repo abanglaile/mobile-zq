@@ -45,7 +45,7 @@ export default (
 
         <Route path="AnswerSheet" component={AnswerSheet} />
         <Route path="TestStatus/:test_id" component={TestStatus} />
-        <Route path="kpTestResult" component={KpTestResult} />
+        <Route path="kpTestResult/:test_id" component={KpTestResult} />
         <Route path="testResult/:test_id" component={TestResult} />
         <Route path="percenter" component={perCenter} />
         <Route path="invite" component={Invite} />

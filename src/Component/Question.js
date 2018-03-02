@@ -57,8 +57,8 @@ class Question extends React.Component {
   }
 
   isAllUnSelected(){
-  	var {test_log, exindex} = this.props;
-  	var {breakdown_sn} = test_log[exindex];
+  	var {exercise_log, exindex} = this.props;
+  	var {breakdown_sn} = exercise_log[exindex];
   	for(var i = 0; i < select.length; i++){
   		console.log(select[i].sn + ":" + select[i].isSelected);
   		if(select[i].isSelected){
@@ -111,7 +111,7 @@ class Question extends React.Component {
   // }
 
   // onPopup(e){
-  //   const {exercise, test_log} = this.props;
+  //   const {exercise, exercise_log} = this.props;
   //   e.preventDefault();
   //   Popup.show(
   //   <div>
@@ -119,8 +119,8 @@ class Question extends React.Component {
   //         style={{height: "4.2rem", overflow: "auto"}}
   //     >
   //       {exercise.map((item, i) => (
-  //         test_log[i].delta_student_rating
-  //         ? <List.Item onClick={e => this.jumpToExercise(e, i)} extra={<Icon type={test_log[i].exercise_state ? 'check' : 'cross'} />} key={i}>{i+1}</List.Item>
+  //         exercise_log[i].delta_student_rating
+  //         ? <List.Item onClick={e => this.jumpToExercise(e, i)} extra={<Icon type={exercise_log[i].exercise_state ? 'check' : 'cross'} />} key={i}>{i+1}</List.Item>
   //         : <List.Item arrow="horizontal" onClick={e => this.jumpToExercise(e, i)} key={i} >{i+1}</List.Item>
   //       ))}
   //     </List>
@@ -153,10 +153,10 @@ class Question extends React.Component {
   }
 
   renderAnswer(){
-    const {exercise, exindex, test_log} = this.props;
+    const {exercise, exindex, exercise_log} = this.props;
     const {exercise_type} = exercise[exindex];
-    console.log(test_log);
-    const {answer, exercise_state} = test_log[exindex];
+    console.log(exercise_log, exindex);
+    const {answer, exercise_state} = exercise_log[exindex];
     const answerjson = answer;
     console.log(answer);
     
@@ -226,9 +226,9 @@ class Question extends React.Component {
       delta_student_rating: 0,
       exercise_state: 0,
     };
-    const {modalOpen, record, exindex, exercise, test_log} = this.props;
+    const {modalOpen, record, exindex, exercise, exercise_log} = this.props;
     const {breakdown} = exercise[exindex];
-    const {delta_student_rating, exercise_state} = (test_log && test_log[exindex]) ? test_log[exindex] : defaultLog;
+    const {delta_student_rating, exercise_state} = (exercise_log && exercise_log[exindex]) ? exercise_log[exindex] : defaultLog;
     var title = '很遗憾，错了！';
     var delta_tip = delta_student_rating < 0 ? delta_student_rating : '+' + delta_student_rating;  
     if(exercise_state){
@@ -250,9 +250,9 @@ class Question extends React.Component {
   }
 
   renderBreakdown(){
-    const {exercise, exindex, test_log, modalOpen} = this.props;
+    const {exercise, exindex, exercise_log, modalOpen} = this.props;
     const {breakdown, title} = exercise[exindex];
-    const {exercise_state, answer_test, breakdown_sn} = test_log[exindex];
+    const {exercise_state, answer_test, breakdown_sn} = exercise_log[exindex];
     if(answer_test){
       
       return (
@@ -271,7 +271,7 @@ class Question extends React.Component {
         })}
       </List>
       );
-    }else if(!modalOpen && test_log[exindex].exercise_state >= 0){
+    }else if(!modalOpen && exercise_log[exindex].exercise_state >= 0){
       var kpids = [];
       return (
         <List renderHeader={() => '相关知识点情况'} >
@@ -296,9 +296,9 @@ class Question extends React.Component {
   }
 
   renderSubmitFooter(){
-    const {exindex, test_log, exercise, student_rating} = this.props;
-    const { exercise_state} = test_log[exindex];
-    if(test_log[exindex].answer_test){
+    const {exindex, exercise_log, exercise, student_rating} = this.props;
+    const { exercise_state} = exercise_log[exindex];
+    if(exercise_log[exindex].answer_test){
       return(
       <div style={{
         position: 'fixed',
@@ -340,14 +340,14 @@ class Question extends React.Component {
         <Flex>
           <Flex.Item>
             <Button style={{margin: '0.5rem 0 0 0'}}
-                onClick={e => this.props.submitExerciseLog(exercise[exindex], test_log[exindex].answer,student_rating)} 
+                onClick={e => this.props.submitExerciseLog(exercise[exindex], exercise_log[exindex].answer,student_rating)} 
                 type="ghost" size='small'>
               我不会做
             </Button>
           </Flex.Item>
           <Flex.Item>
             <Button style={{margin: '0.5rem 0 0 0'}}
-                onClick={e => this.props.submitExerciseLog(exercise[exindex], test_log[exindex].answer,student_rating)} 
+                onClick={e => this.props.submitExerciseLog(exercise[exindex], exercise_log[exindex].answer,student_rating)} 
                 type="primary" size='small'>
               提交答案
             </Button>
@@ -360,8 +360,8 @@ class Question extends React.Component {
   }
 
   renderFooter(){
-    const {exindex, exercise, test_log, test_status} = this.props;
-    console.log("test_log:"+JSON.stringify(test_log));
+    const {exindex, exercise, exercise_log, test_status} = this.props;
+    console.log("exercise_log:"+JSON.stringify(exercise_log));
     const {sheetmodal} = this.state;
       return (
           <div style={{
@@ -408,7 +408,7 @@ class Question extends React.Component {
                   onClose={() => this.onCloseModal()}
                   animationType="slide-up"
                 >
-                  <Grid data={test_log} hasLine={false} onClick={(e, i) => this.jumpToExercise(i)}
+                  <Grid data={exercise_log} hasLine={false} onClick={(e, i) => this.jumpToExercise(i)}
                       columnNum={5}
                       renderItem={(dataItem,i) => (
                         <svg width="75px" height="75px" version="1.1"
@@ -429,7 +429,7 @@ class Question extends React.Component {
 
 
   render() {
-    const {exercise, exindex, test_log, record, feedbackToast, answer_test, isFetching} = this.props;
+    const {exercise, exindex, exercise_log, record, feedbackToast, answer_test, isFetching} = this.props;
     console.log(exindex);
     const { title, options } = exercise[exindex];
     
@@ -495,7 +495,7 @@ class Question extends React.Component {
 export default connect(state => {
   const test_state = state.testData.toJS();
   console.log(test_state);
-  const {exercise, exindex, test_log, test_status, modalOpen, feedbackToast, record, exercise_st, start_time, answer_test , isFetching, student_rating} = test_state;
+  const {exercise, exindex, exercise_log, test_status, modalOpen, feedbackToast, record, exercise_st, start_time, answer_test , isFetching, student_rating} = test_state;
   return {
     test_status: test_status,
     //整个测试以同一个开始时间
@@ -504,7 +504,7 @@ export default connect(state => {
     exercise_st: exercise_st,
     exercise: exercise,
     exindex: exindex,
-    test_log: test_log,
+    exercise_log: exercise_log,
     modalOpen: modalOpen,
     student_rating : student_rating,
     record: record,

@@ -64,7 +64,8 @@ class TestStatus extends React.Component {
     //   }
     // ];
     return (
-      <List renderHeader="测试排行榜">
+      <List>
+          <Item>测试排行榜</Item>
           {
             ranking_list.map((item, i) => {
               console.log("item:"+JSON.stringify(item));
@@ -89,8 +90,7 @@ class TestStatus extends React.Component {
     //TO-DO
     // isFinish = false;
     const buttonStr = isFinish ? '测试记录' : '进入测试';
-    // test_status.avg_accurracy = 30;
-    // test_status.test_size = 16;
+    var avg_correct = ((test_status.avg_accurracy*test_status.test_size)/100).toFixed(1)
     return (
       <div>
         <NavBar
@@ -98,58 +98,57 @@ class TestStatus extends React.Component {
           icon={<Icon type="left" />}
           onLeftClick={() => this.props.history.goBack()}
         >测试详情</NavBar>
-        <Result
-          title={<div><div style={{marginBottom: '0.2rem'}}><b style={{fontSize: '1rem', color: 'blue'}}>平均正确率</b></div><Progress type="circle" percent={test_status.avg_accurracy} /></div>}
-          message={<div>平均答对<span>{((test_status.avg_accurracy*test_status.test_size)/100).toFixed(1)}</span>题</div>}
-        />
-        <WhiteSpace size='lg' />
+        
+      <div style={{backgroundColor: '#1890ff', paddingTop: '2.5rem', paddingBottom: '0.5rem', color: 'white'}}>
         <Flex>
           <Flex.Item><div style={{
+                  color: 'white',
                   textAlign: 'center',
                   height: '1.5rem',
                   lineHeight: '1.5rem',
                   width: '100%',
-                  fontWeight: 'bold',
-                  fontSize: '1.2rem',
-                }} >{test_status.test_submit}</div>
+                  fontSize: '2rem',
+                }} >8/10</div>
                 <div style={{
                   textAlign: 'center',
-                  height: '1.2rem',
-                  lineHeight: '1.2rem',
+                  height: '3rem',
+                  lineHeight: '3rem',
                   width: '100%',
-                  fontSize: '1rem'}}>已提交</div>
+                  fontSize: '1rem'}}>已提交(人)</div>
+          </Flex.Item>
+          <Flex.Item>
+                <div style={{
+                  color: 'white',
+                  textAlign: 'center',
+                  height: '1.5rem',
+                  lineHeight: '1.5rem',
+                  width: '100%',
+                  fontSize: '2rem',
+                }} >3.5/7</div>
+                <div style={{
+                  textAlign: 'center',
+                  height: '3rem',
+                  lineHeight: '3rem',
+                  width: '100%',
+                  fontSize: '1rem'}}>平均答对(题)</div>
           </Flex.Item>
           <Flex.Item><div style={{
                   textAlign: 'center',
                   height: '1.5rem',
                   lineHeight: '1.5rem',
                   width: '100%',
-                  fontWeight: 'bold',
-                  fontSize: '1.2rem',
-                }} >{test_status.test_students}</div>
+                  fontSize: '2rem',
+                }} >05:36</div>
                 <div style={{
                   textAlign: 'center',
-                  height: '1.2rem',
-                  lineHeight: '1.2rem',
+                  height: '3rem',
+                  lineHeight: '3rem',
                   width: '100%',
-                  fontSize: '1rem'}}>参与人数</div>
-          </Flex.Item>
-          <Flex.Item><div style={{
-                  textAlign: 'center',
-                  height: '1.5rem',
-                  lineHeight: '1.5rem',
-                  width: '100%',
-                  fontWeight: 'bold',
-                  fontSize: '1.2rem',
-                }} >{test_status.bingo}</div>
-                <div style={{
-                  textAlign: 'center',
-                  height: '1.2rem',
-                  lineHeight: '1.2rem',
-                  width: '100%',
-                  fontSize: '1rem'}}>全对</div>
+                  fontSize: '1rem'}}>平均耗时</div>
           </Flex.Item>
         </Flex>
+      </div>
+      
         {this.renderRanking()}
         <WhiteSpace size='lg' />
         <div>
@@ -158,7 +157,7 @@ class TestStatus extends React.Component {
             position: 'fixed',
             bottom: '0',
             width: '100%',
-            height: "3.8rem",
+            height: "3.6rem",
             zIndex: 100,
             borderTop: "solid 1px #d9d9d9",
             background: "#fff",
