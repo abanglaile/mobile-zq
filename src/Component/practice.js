@@ -38,25 +38,40 @@ class MyTest extends React.Component {
 
   loadTest(){
     // var student_id = '1';
-    this.props.getMyTestList(this.props.student_id);
+    this.props.getUncompletedTest(this.props.student_id);
   }
 
   render() {
-    var {isFetching, my_test_list} = this.props;
-    var not_finish_test = [];
-    if(my_test_list){
-      for(var i = 0; i < my_test_list.length; i++){
-        if(!my_test_list[i].finish_time){
-          not_finish_test.push(my_test_list[i]);
-        }
-      }
-    }
-    var not_finish_item = not_finish_test.map((item,i) => {
+    var {isFetching, my_uncompleted_test,student_id} = this.props;
+    // var not_finish_test = [];
+    // if(my_test_list){
+    //   for(var i = 0; i < my_test_list.length; i++){
+    //     if(!my_test_list[i].finish_time){
+    //       not_finish_test.push(my_test_list[i]);
+    //     }
+    //   }
+    // }
+    var not_finish_item = my_uncompleted_test.map((item,i) => {
         var time = item.enable_time;
         return(
-          <Item arrow="horizontal" multipleLine extra='开始练习' onClick={e => this.props.router.push("/mobile-zq/TestStatus/"+ item.test_id)}>
+          <Item 
+            arrow="horizontal" 
+            multipleLine 
+            extra='开始练习' 
+            onClick={e => this.props.getTestData(student_id, item.test_id)}
+          >
             {item.test_name}
-            <Brief>{item.enable_time}</Brief>
+            <Brief>
+              <span style={{paddingRight : "1rem",borderRight:"1px solid "}}>
+                {item.total_exercise}题
+              </span>
+              <span style={{paddingLeft : "1rem"}}>
+                {item.formatdate}
+              </span>
+              <span style={{paddingLeft : "1rem"}}>
+                {item.nickname}
+              </span>
+            </Brief> 
           </Item>
       );
     });
@@ -93,7 +108,7 @@ export default connect(state => {
   console.log(state);
   const student_state = state.studentData.toJS();
   return {
-    my_test_list: student_state.my_test_list, 
+    my_uncompleted_test: student_state.my_uncompleted_test, 
     isFetching: student_state.isFetching,
     student_id: state.AuthData.get('userid'), 
   }

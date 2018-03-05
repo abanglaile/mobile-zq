@@ -19,6 +19,7 @@ const defaulatStudentData = Immutable.fromJS({
         ladderscore: 0,
         book: [],
         my_test_list: [],
+        my_uncompleted_test: [],
         chapter: {
             chaptername : null,
             status: {practice: 0, correct:0},
@@ -314,6 +315,8 @@ export const studentData = (state = defaulatStudentData, action = {}) => {
             return state.setIn(['chapter', 'kp'], action.json).set('isFetching', false);
         case 'GET_MYTEST_SUCCESS':
             return state.set('my_test_list', action.json).set('isFetching', false);
+        case 'GET_MY_UNCOMPLETEDTEST_SUCCESS':
+            return state.set('my_uncompleted_test', action.json).set('isFetching', false);
         default:
             return state;
     }

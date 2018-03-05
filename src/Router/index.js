@@ -35,18 +35,17 @@ export default (
           <IndexRoute component={practice} />
           <Route path="practice" component={practice} /> 
           <Route path="my_book_chapter" component={MyChapter} />
+          <Route path="percenter" component={perCenter} />
         </Route>
         <Route path="login" component={login} />
         <Route path="my_chapter_kp/:chapter_id" component={my_chapter_kp} />
         
         <Route path="mytest" component={MyTest} />
-        <Route path="Question" component={Question} />
+        <Route path="question" component={Question} />
         <Route path="studentstatus" component={StudentStatus} />
 
-        <Route path="AnswerSheet" component={AnswerSheet} />
-        <Route path="TestStatus/:test_id" component={TestStatus} />
-        <Route path="kpTestResult/:test_id" component={KpTestResult} />
-        <Route path="testResult/:test_id" component={TestResult} />
+        <Route path="kp_test_result/:test_id" component={KpTestResult} />
+        <Route path="test_result/:test_id" component={TestResult} />
         <Route path="percenter" component={perCenter} />
         <Route path="invite" component={Invite} />
     </Route>

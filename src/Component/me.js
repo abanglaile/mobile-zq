@@ -23,7 +23,7 @@ class perCenter extends React.Component {
         <NavBar
           mode="light"
           // icon={<Icon type="left" />}
-          // onLeftClick={() => this.props.router.push("/mobile-zq/Question")}
+          // onLeftClick={() => this.props.router.push("/mobile-zq/question")}
           >我</NavBar>
         <WhiteSpace />
         <List>

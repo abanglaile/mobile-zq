@@ -101,7 +101,7 @@ class Question extends React.Component {
     });
     this.props.updateExindex(i);
     this.props.updateExerciseST();
-    this.props.router.push("/mobile-zq/Question/");
+    this.props.router.push("/mobile-zq/question/");
   }
 
   // jumpToExercise(e, i){

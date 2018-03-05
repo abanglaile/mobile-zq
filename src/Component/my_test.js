@@ -39,9 +39,9 @@ class MyTest extends React.Component {
   }
 
   loadTest(){
-    var student_id = '17';
-    this.props.getMyHistoryTests(student_id);
-    // this.props.getMyTestList(this.props.student_id);
+    // var student_id = '17';
+    // this.props.getMyHistoryTests(student_id);
+    this.props.getMyHistoryTests(this.props.student_id);
   }
 
   render() {
@@ -49,7 +49,7 @@ class MyTest extends React.Component {
     var teacher_test = [], auto_test = [];
     if(my_test_list){
       for(var i = 0; i < my_test_list.length; i++){
-        if(my_test_list[i].teacher_id){
+        if(my_test_list[i].test_type == 1){
           teacher_test.push(my_test_list[i]);
         }else{
           auto_test.push(my_test_list[i]);
@@ -99,7 +99,7 @@ class MyTest extends React.Component {
       <NavBar
           mode="light"
           icon={<Icon type="left" />}
-          onLeftClick={() => this.props.router.goBack()}
+          onLeftClick={e => this.props.router.push("/mobile-zq/root")}
         >做题历史</NavBar>
       <ActivityIndicator toast animating={this.props.isFetching} />
       <Tabs tabs={tabs}

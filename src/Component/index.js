@@ -138,16 +138,17 @@ class App extends React.Component {
           <TabBar.Item
             icon={{ uri: 'https://zos.alipayobjects.com/rmsportal/asJMfBrNqpMMlVpeInPQ.svg' }}
             selectedIcon={{ uri: 'https://zos.alipayobjects.com/rmsportal/gjpzzcrPMkhfEqgbYvmN.svg' }}
-            title="My"
+            title="我"
             key="my"
             selected={this.state.selectedTab === 'yellowTab'}
             onPress={() => {
               this.setState({
                 selectedTab: 'yellowTab',
               });
+              this.props.router.push("/mobile-zq/root/percenter");
             }}
           >
-            {this.renderContent('My')}
+            {this.props.children}
           </TabBar.Item>
         </TabBar>
       </div>

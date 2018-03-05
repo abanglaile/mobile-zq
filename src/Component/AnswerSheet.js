@@ -10,7 +10,7 @@ class AnswerSheet extends React.Component {
   jumpToExercise(i){
     this.props.updateExindex(i);
     this.props.updateExerciseST();
-    this.props.router.push("/mobile-zq/Question/");
+    this.props.router.push("/mobile-zq/question/");
   }
 
   circleFill(exercise_state){
@@ -32,7 +32,7 @@ class AnswerSheet extends React.Component {
       <NavBar
         mode="light"
         icon={<Icon type="cross" />}
-        onLeftClick={() => this.props.router.push("/mobile-zq/Question")}
+        onLeftClick={() => this.props.router.push("/mobile-zq/question")}
         >答题卡</NavBar>
       <WingBlank><div style={{fontSize: "0.5rem"}}>{test_status.test_name}</div></WingBlank>
       <Grid data={test_log} hasLine={false} onClick={(e, i) => this.jumpToExercise(i)}

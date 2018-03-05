@@ -165,7 +165,7 @@ class TestStatus extends React.Component {
           <span style={{float: 'left', margin: '1rem 0.7rem 0 2rem', fontSize:"1.2rem"}}>测试共{test_status.test_size}道题</span>
           <Button style={{float: 'right', margin: '0.5rem 1.2rem 0 0'}} inline type="primary"
             onClick={ isFinish
-              ? e => this.props.router.push("/mobile-zq/TestResult/"+ test_id)  
+              ? e => this.props.router.push("/mobile-zq/test_result/"+ test_id)  
               : e => this.props.getTestData(student_id, test_id) 
               } >
               {buttonStr}

@@ -198,6 +198,14 @@ const getMyTestSuccess = (json) => {
   }
 }
 
+//获取未完成的测试数据成功
+const getMyUncompletedTestSuccess = (json) => {
+  return {
+    type: 'GET_MY_UNCOMPLETEDTEST_SUCCESS',
+    json,
+  }
+}
+
 //获取测试数据成功
 const getTestSuccess = (json, test_id) => {
   return {
@@ -468,7 +476,7 @@ export const getTestData = (student_id, test_id) => {
         })
         .then(function (response) {
             dispatch(getTestSuccess(response.data,test_id));
-            dispatch(push("/mobile-zq/Question"));
+            dispatch(push("/mobile-zq/question"));
             dispatch(updateExerciseST());
         })
         .catch(function (error) {
@@ -491,7 +499,7 @@ export const getTestDataByKp = (student_id, kpid, kpname) => {
         })
         .then(function (response) {
             dispatch(getTestByKpSuccess(response.data));
-            dispatch(push("/mobile-zq/Question"));
+            dispatch(push("/mobile-zq/question"));
             dispatch(updateExerciseST());
         })
         .catch(function (error) {
@@ -519,6 +527,25 @@ export const getMyHistoryTests = (student_id) => {
     }
 }
 
+//获取老师布置的未完成的作业
+export const getUncompletedTest = (student_id) => {
+    let url = target + "/getUncompletedTest";
+    return (dispatch) => {
+        dispatch(getDataStart());
+        return axios.get(url,{
+                params:{
+                   student_id,
+                }
+        })
+        .then(function (response) {
+            dispatch(getMyUncompletedTestSuccess(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+}
+
 export const submitFeedBack = (exindex) => {
     console.log(exindex);
     return {
@@ -535,6 +562,7 @@ export const jumpNext = (answer_test) => {
     console.log('jumpNext');
     return (dispatch, getState) => {
         const testData = getState().testData;
+        const student_id = getState().AuthData.get('userid');
         const exindex = testData.get("exindex");
         const exercise_log = testData.get("exercise_log").toJS();
         const exercise = testData.get("exercise").toJS();
@@ -559,7 +587,7 @@ export const jumpNext = (answer_test) => {
                 dispatch(closeModal());
                 dispatch(updateExindex(next));
                 dispatch(updateExerciseST());
-                //dispatch(push("/mobile-zq/Question"));
+                //dispatch(push("/mobile-zq/question"));
             }
             //题目全部完成
             else{
@@ -579,11 +607,12 @@ export const jumpNext = (answer_test) => {
                     start_time: testData.start_time,
                     finish_time: testData.finish_time,
                 }
-
-                return axios.post(url,{student_id: '1', student_rating: 500, test_result: test_result})
+                console.log(test_result.exercise_log);
+                return axios.post(url,{student_id: student_id, student_rating: 500, test_result: test_result})
                 .then(function (response) {
+                    console.log(response.data);
                     dispatch(submitTestSuccess(response.data));
-                    dispatch(push("/mobile-zq/kpTestResult"));
+                    dispatch(push("/mobile-zq/kp_test_result/"+testData.test_id));
                 })
                 .catch(function (error) {
                     console.log(error);
