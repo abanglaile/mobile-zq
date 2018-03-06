@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {List,NavBar,Icon,ActivityIndicator,Menu,Result,WhiteSpace} from 'antd-mobile';
+import {List,NavBar,Icon,ActivityIndicator,Menu,Result,WhiteSpace,Modal} from 'antd-mobile';
 import Tex from './renderer.js'
 import { Progress as Circle} from 'antd';
 
@@ -9,6 +9,7 @@ import {connect} from 'react-redux';
 
 
 const Item = List.Item;
+const Brief = Item.Brief;
 const data = [
   {
     value: '0',
@@ -22,6 +23,7 @@ class MyChapter extends React.Component {
     super(props);
     this.state = {
       show: false,
+      modal: false,
       m_index: 0,
     };
   }
@@ -64,8 +66,14 @@ class MyChapter extends React.Component {
     });
   }
 
+  getKpByChapterid(chapterid){
+    console.log("chapterid:"+chapterid);
+    this.props.getChapterKpStatus(this.props.student_id, chapterid);
+    this.setState({modal: true});
+  }
+
   renderChapterList(){
-    const {book} = this.props;
+    const {book,student_id} = this.props;
     const { m_index} = this.state;
 
     if(book.length > 0){
@@ -76,8 +84,8 @@ class MyChapter extends React.Component {
               return (
                 <Item 
                   extra={'开始练习'}
-                  thumb={<Circle width={50} type="circle" percent={chapteritem.chapterrate} />} 
-                  onClick={e => this.props.router.push("/mobile-zq/my_chapter_kp/"+ chapteritem.chapterid)}
+                  thumb={<Circle width={50} type="circle" percent={chapteritem.chapterrate} format={(percent) => `${percent}%`}/>} 
+                  onClick={() => this.getKpByChapterid(chapteritem.chapterid)}
                 >
                   <div style={{display: 'flex', marginTop: '1.5rem',marginBottom: '1.5rem', alignItems: 'center'}}>
                     {chapteritem.chaptername}
@@ -96,7 +104,8 @@ class MyChapter extends React.Component {
 
   render(){
     const { show } = this.state;
-    const {book,ladderscore} = this.props;
+    const {book,ladderscore,chapter} = this.props;
+    const {kp} = chapter
     var initData = [];
     if(book.length > 0){
       for(var i=0;i<book.length;i++){
@@ -127,7 +136,7 @@ class MyChapter extends React.Component {
       <div>
         <div>
           <NavBar
-            style = {{position:'relative',color: '#FFF' ,backgroundColor: '#5cdbd3',zIndex: '90'}}
+            style = {{position:'relative',color: '#FFF' ,backgroundColor: '#1890ff',zIndex: '90'}}
             mode="light"
             rightContent={<div onClick={(e) => this.handleClick(e)} >基本乐理<Icon type={show ? "up" : "down"} /></div>}
           >
@@ -156,6 +165,33 @@ class MyChapter extends React.Component {
         </List>
         <WhiteSpace size='lg' />
         {this.renderChapterList()}
+
+        <Modal
+          title='相关知识点'
+          transparent
+          visible={this.state.modal}
+          onClose
+          footer={[{ text: '确定', onPress: () => { this.setState({modal: false})} }]}
+        >
+          <List>
+          {
+            kp.map((item) => {
+              var correct_rate = item.practice ? item.correct/item.practice : 0;
+              return (
+                <Item multipleLine> 
+                    {item.kpname}
+                    <Brief>
+                      <div>
+                        <span>掌握度： </span>
+                        <span style={{color: '#1890ff', fontSize: '1.5rem'}}>{item.kp_rating}</span>
+                      </div>
+                    </Brief>
+                </Item>
+              )
+            })
+          }
+          </List>
+        </Modal>
       </div>
     );
   }
@@ -164,11 +200,12 @@ class MyChapter extends React.Component {
 
 export default connect((state, ownProps) => {
   const studentData = state.studentData.toJS();
-  const {book, course_id,ladderscore} = studentData;
+  const {book, course_id,ladderscore,chapter} = studentData;
   return {
     book: book,
     course_id: 3,
     ladderscore : ladderscore,
+    chapter: chapter ? chapter : [],
     student_id: state.AuthData.get('userid'),
   };
 }, action)(MyChapter);
