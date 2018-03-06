@@ -13,7 +13,7 @@ const Brief = Item.Brief;
 
 const F2 = require('@antv/f2');
 
-class StudentStatus extends React.Component {
+class StudentKp extends React.Component {
   constructor(props) { 
   	super(props);
     this.state = {selectedIndex : 0};
@@ -28,15 +28,12 @@ class StudentStatus extends React.Component {
 
   renderF2(){
     const data = [
-    { time: '2016-08-08 00:00:00', tem: 10 },
-    { time: '2016-08-08 00:10:00', tem: 22 },
-    { time: '2016-08-08 00:30:00', tem: 20 },
-    { time: '2016-08-09 00:35:00', tem: 26 },
-    { time: '2016-08-09 01:00:00', tem: 20 },
-    { time: '2016-08-09 01:20:00', tem: 26 },
-    { time: '2016-08-10 01:40:00', tem: 28 },
-    { time: '2016-08-10 02:00:00', tem: 20 },
-    { time: '2016-08-10 02:20:00', tem: 28 }
+      {procount:10,score:1600},
+      {procount:11,score:1605},
+      {procount:12,score:1608},
+      {procount:13,score:1615},
+      {procount:14,score:1611},
+      {procount:15,score:1609},
   ];
 
   const chart = new F2.Chart({
@@ -45,30 +42,26 @@ class StudentStatus extends React.Component {
   });
 
   const defs = {
-    time: {
-      type: 'timeCat',
-      mask: 'MM/DD',
-      tickCount: 3,
-      range: [ 0, 1 ]
+    procount: {
+      type: 'linear',
     },
-    tem: {
-      tickCount: 5,
-      min: 0
+    score: {
+      tickCount : 5,
     }
   };
   // 配置刻度文字大小，供PC端显示用(移动端可以使用默认值20px)
-  chart.axis('tem', {
+  chart.axis('procount', {
     label: {
-      fontSize: 14
+      fontSize: 14,
     }
   });
-  chart.axis('time', {
+  chart.axis('score', {
     label: {
-      fontSize: 14
+      fontSize: 14,
     }
   });
   chart.source(data, defs);
-  chart.line().position('time*tem');
+  chart.line().position('procount*score').size(2);
   chart.render();
   }
 
@@ -173,12 +166,17 @@ class StudentStatus extends React.Component {
             }}>音程 ></div>
           </div>
           <List>
-            <Item extra='查看详细' arrow='horizontal'>
-              <div style={{fontWeight: 'bold'}}>知识点情况</div>
+            <Item>
+              <div style={{fontWeight: 'bold'}}>知识点概况</div>
             </Item>
           </List> 
           {this.renderKpAbility()}
-          <canvas id="c1" style={{width: "90%", height: "40%"}}></canvas>
+          <List>
+            <Item>
+              <div style={{fontWeight: 'bold'}}>掌握度变化情况</div>
+            </Item>
+          </List> 
+          <canvas id="c1" style={{width: "90%", height: "50%"}}></canvas>
           
           <WhiteSpace size='xl'/>
           <WingBlank>
@@ -227,4 +225,4 @@ export default connect(state => {
     comusedkp : comusedkp.length > 0 ? comusedkp : default_comusedkp,
     student_id: state.AuthData.get('userid'), 
   }
-}, action)(StudentStatus);
+}, action)(StudentKp);

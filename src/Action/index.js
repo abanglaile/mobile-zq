@@ -485,7 +485,7 @@ export const getTestData = (student_id, test_id) => {
     }
 }
 
-//根据kpid或者该主测点下的试题
+//根据kpid获得该主测点下的试题
 export const getTestDataByKp = (student_id, kpid, kpname) => {
     let url = target + "/getExerciseByKpid";
     return (dispatch) => {

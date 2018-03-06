@@ -37,6 +37,17 @@ class perCenter extends React.Component {
             </div>
             <div style={{float:'left',display:'inline',marginTop:"2rem"}}>{nickname}</div>
           </Item>
+          <Item
+            arrow="horizontal"
+          >
+            姓名
+          </Item>
+          <Item
+            arrow="horizontal"
+            extra={'未绑定'}
+          >
+            班级
+          </Item>
         </List>
         <WhiteSpace />
         <List>
