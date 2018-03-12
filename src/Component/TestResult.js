@@ -141,7 +141,7 @@ class TestResult extends React.Component {
       test_time = new Date(time).Format("hh:mm:ss");
 
       finish_time = new Date(Date.parse(test_log.finish_time)).Format('MM月dd日 hh:mm');
-      console.log(test_time);
+      console.log(exercise_log);
     }
     return(
       <div>
@@ -302,18 +302,39 @@ class TestResult extends React.Component {
     )
   }
 
+  onLeftClick(){
+    if(entry == "test_result"){
+      this.props.router.push("/mobile-zq/root/");
+    }else {
+      this.props.router.push("/mobile-zq/" + entry);
+    }
+  }
+
+  navBarContent(){
+    const {test_log} = this.props;
+    console.log(test_log);
+    if(test_log.test_type == 1){
+      //老师布置
+      return (<SegmentedControl values={['我的', '排行']} style={{width: '6rem'}} onChange={e => this.SegmentedChange(e)} />)
+    }else if(test_log.test_type == 2){
+      //自主练习
+      return test_name;
+    }
+  }
+
   render() {
-    
-    
+    const {test_log} = this.props;
+    const {test_type, test_name} = test_log;
+
     // const accurracy = exercise_log.length ? test_log.correct_exercise/exercise_log.length : 0;
     return (
       <div>
         <NavBar
           mode="light"
           icon={<Icon type="left" />}
-          onLeftClick={() => this.props.router.goBack()}
+          onLeftClick={() => onLeftClick()}
         >
-          <SegmentedControl values={['我的', '排行']} style={{width: '6rem'}} onChange={e => this.SegmentedChange(e)} />
+        {this.navBarContent()}          
         </NavBar>
         {this.state.segmentedIndex ? this.renderGlobalResult() : this.renderMyResult()}
       </div>
@@ -323,13 +344,14 @@ class TestResult extends React.Component {
 
 export default connect(state => {
   const test_state = state.testData.toJS();
-  const {exercise_log, test_kp, test_log, isFetching, modalOpen, ranking_list, exercise, exindex} = test_state;
+  const {exercise_log, test_kp, test_log, isFetching, modalOpen, ranking_list, exercise, entry, exindex} = test_state;
   return {
     exindex: exindex,
     exercise: exercise,
     exercise_log: exercise_log ? exercise_log : [],
     test_kp: test_kp ? test_kp : [],
     test_log: test_log,
+    entry: entry,
     ranking_list: ranking_list,
     isFetching: isFetching ? isFetching : false,
     student_id:state.AuthData.get('userid'),

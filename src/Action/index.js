@@ -207,24 +207,19 @@ const getMyUncompletedTestSuccess = (json) => {
 }
 
 //获取测试数据成功
-const getTestSuccess = (json, test_id) => {
+const getTestSuccess = (json, test_type, entry) => {
   return {
     type: 'GET_TEST_SUCCESS',
-    json,
-    test_id,
-  }
-}
-
-//获取知识点id获取测试信息成功
-const getTestByKpSuccess = (json) => {
-  return {
-    type: 'GET_TEST_SUCCESS',
-    json,
+    exercise: json.exercise,
+    test_id: json.test_id,
+    test_type,
+    entry,
   }
 }
 
 //获取测试数据成功
 const getTestExerciseSuccess = (json) => {
+  console.log(json);
   return {
     type: 'GET_TEST_EXERCISE_SUCCESS',
     json,
@@ -467,7 +462,7 @@ export const getTestExercise = (student_id, test_id) => {
                 }
         })
         .then(function (response) {
-            dispatch(getTestExerciseSuccess(response.data));
+            dispatch(getTestExerciseSuccess(response.data.exercise));
         })
         .catch(function (error) {
             console.log(error);
@@ -476,7 +471,7 @@ export const getTestExercise = (student_id, test_id) => {
 }
 
 //获取指定测试的数据
-export const getTestData = (student_id, test_id) => {
+export const getTestData = (student_id, test_id, test_type, entry) => {
     let url = target + "/getExerciseByTest";
     return (dispatch) => {
         dispatch(getTestStart());
@@ -487,7 +482,7 @@ export const getTestData = (student_id, test_id) => {
                 }
         })
         .then(function (response) {
-            dispatch(getTestSuccess(response.data,test_id));
+            dispatch(getTestSuccess(response.data, test_type, entry));
             dispatch(push("/mobile-zq/question"));
             dispatch(updateExerciseST());
         })
@@ -497,12 +492,13 @@ export const getTestData = (student_id, test_id) => {
     }
 }
 
+
 //根据kpid获得该主测点下的试题
 export const getTestDataByKp = (student_id, kpid, kpname) => {
     let url = target + "/getExerciseByKpid";
     return (dispatch) => {
         dispatch(getTestStart());
-        return axios.get(url,{
+        return axios.post(url,{
                 params:{
                    student_id,
                    kpid,
@@ -510,7 +506,7 @@ export const getTestDataByKp = (student_id, kpid, kpname) => {
                 }
         })
         .then(function (response) {
-            dispatch(getTestByKpSuccess(response.data));
+            dispatch(getTestSuccess(response.data, {test_type: 2}, entry));
             dispatch(push("/mobile-zq/question"));
             dispatch(updateExerciseST());
         })
@@ -568,9 +564,9 @@ export const submitFeedBack = (exindex) => {
 
 /**
  * 提交后跳转到下一题
- * @param  {Boolean} answer_test [true:当前为导学页面/false:当前不为导学页面]
+ * @param  exercise_status [0:当前为做题页面，1:当前为导学页面，2:当前为完成页面]
  */
-export const jumpNext = (answer_test) => {
+export const jumpNext = (exercise_status) => {
     console.log('jumpNext');
     return (dispatch, getState) => {
         const testData = getState().testData;
@@ -581,7 +577,7 @@ export const jumpNext = (answer_test) => {
         const {exercise_state} = exercise_log[exindex];
         const blength = exercise[exindex].breakdown.length;
 
-        if(answer_test || exercise_state || blength == 1){
+        if(exercise_status == 1 || exercise_state || blength == 1){
             
             var next = -1;
             var i = (exindex + 1)%exercise.length;
@@ -674,6 +670,13 @@ export const showAnswerTest = (exindex) => {
     return {
         type: 'SHOW_ANSWER_TEST',
         exindex,
+    }
+}
+
+export const updateEntry = (entry) => {
+    return {
+        type: 'UPDATE_ENTRY',
+        entry,
     }
 }
 

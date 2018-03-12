@@ -60,7 +60,11 @@ class MyTest extends React.Component {
     var auto_test_item = auto_test.map((item,i) => {
         var time = item.enable_time;
         return(
-          <Item arrow="horizontal" multipleLine extra={item.finish_time ? '测试报告' : '开始练习'} onClick={e => this.props.router.push("/mobile-zq/TestStatus/"+ item.test_id)}>
+          <Item arrow="horizontal" multipleLine extra={item.finish_time ? '测试报告' : '开始练习'} onClick={e => {
+            this.props.updateEntry("mytest");
+            this.props.router.push("/mobile-zq/test_result/"+ item.test_id);
+            }
+          }>
             {item.test_name}
             <Brief>
               <span style={{paddingRight : "1rem",borderRight:"1px solid "}}>
@@ -77,7 +81,7 @@ class MyTest extends React.Component {
 
         var time = item.enable_time;
         return(
-          <Item arrow="horizontal" multipleLine extra={item.finish_time ? '测试报告' : '开始练习'} onClick={e => this.props.router.push("/mobile-zq/TestStatus/"+ item.test_id)}>
+          <Item arrow="horizontal" multipleLine extra={item.finish_time ? '测试报告' : '开始练习'} onClick={e => this.props.router.push("/mobile-zq/test_result/"+ item.test_id)}>
             {item.test_name}
             <Brief>
               <span style={{paddingRight : "1rem",borderRight:"1px solid "}}>

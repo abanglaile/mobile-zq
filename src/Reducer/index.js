@@ -149,9 +149,12 @@ export const testData = (state = defaulatTestData, action = {}) => {
         case 'GET_STU_TESTINFO_SUCCESS':
             return state.set('isFinish', action.json.isFinish)
                         .set('student_rating', action.json.student_rating);
+        //获取全新测试数据
         case 'GET_TEST_SUCCESS':
-            const exercise = action.json.exercises ? action.json.exercises : action.json;
+            const exercise = action.exercises;
+            //初始化测试开始时间
             const start_time = new Date();
+            //构造exercise_log
             var exercise_log = [];
             for(var i = 0; i < exercise.length; i++){
                 const breakdown = exercise[i].breakdown;
@@ -170,9 +173,10 @@ export const testData = (state = defaulatTestData, action = {}) => {
                   };
                 }
                 exercise_log[i] = {
-                    exercise_state: -1,
+                    exercise_state: -1,//-1:未做, 0:错误, 1:正确
                     answer: exercise[i].answer,
                     start_time: start_time,
+                    exercise_status: 0,//0: 全新未做，1: 做完待反馈，2：反馈完毕
                     breakdown_sn: breakdown_sn,
                     ac_time: 0,
                 }
@@ -182,55 +186,17 @@ export const testData = (state = defaulatTestData, action = {}) => {
                 exindex: 0, 
                 record: {correct: 0, wrong: 0, new_rating: action.student_rating, combo_correct: 0, max_combo: 0},
                 start_time: start_time, 
-                test_id: action.json.test_id ? action.json.test_id : action.test_id, 
+                test_id: action.test_id, 
+                test_type: action.test_type,
+                entry: action.entry,//0: 从测试列表进入, 1: 从知识点修炼进入 
                 exercise_log: exercise_log,
-                isFetching: false,
-                modalOpen: false,
+                isFetching: false,//to do
+                modalOpen: false,//to do
             };
             
             return state.mergeDeep(Immutable.fromJS(newState));
             break;
-        // case 'GET_TEST_SUCCESS':
-        //     const exercise = action.json;
-        //     const start_time = new Date();
-        //     var exercise_log = [];
-        //     for(var i = 0; i < exercise.length; i++){
-        //         const breakdown = exercise[i].breakdown;
-        //         var breakdown_sn = [];
-        //         for(var j = 0; j < breakdown.length; j++){
-        //           //如果没有前置步骤的都设为0并在渲染中显示，-1代表不确定在渲染中不显示
-        //           const sn_state = breakdown[j].presn ? -1 : 0;
-        //           breakdown_sn[j] = {
-        //             sn: breakdown[j].sn, 
-        //             kpid: breakdown[j].kpid,
-        //             kpname: breakdown[j].kpname, 
-        //             sn_state: sn_state, 
-        //             presn: breakdown[j].presn, 
-        //             kp_old_rating: breakdown[j].kp_rating, 
-        //             sn_old_rating: breakdown[j].sn_rating
-        //           };
-        //         }
-        //         exercise_log[i] = {
-        //             exercise_state: -1,
-        //             answer: JSON.parse(exercise[i].answer),
-        //             start_time: start_time,
-        //             breakdown_sn: breakdown_sn,
-        //             ac_time: 0,
-        //         }
-        //     }
-        //     var newState = {
-        //         exercise: exercise, 
-        //         exindex: 0, 
-        //         record: {correct: 0, wrong: 0, new_rating: action.student_rating, combo_correct: 0, max_combo: 0},
-        //         start_time: start_time, 
-        //         test_id: action.test_id, 
-        //         exercise_log: exercise_log,
-        //         isFetching: false,
-        //         modalOpen: false,
-        //     };
-            
-        //     return state.mergeDeep(Immutable.fromJS(newState));
-        //     break;
+
         case 'GET_TEST_EXERCISE_SUCCESS':
             return state.set('exercise', Immutable.fromJS(action.json));
         case 'GET_TEST_STU_REWARD_SUCCESS':
@@ -243,6 +209,8 @@ export const testData = (state = defaulatTestData, action = {}) => {
                 .set('isFetching', false);
         case 'GET_EXERCISE_SAMPLE_SUCCESS':
             return state.set('exercise_sample', Immutable.fromJS(action.json)).set('isFetching', false).set('modalOpen', true);
+        case 'UPDATE_ENTRY': 
+            return state.set('entry', action.entry);
         case 'UPDATE_EXINDEX':
             return state.set('exindex', action.exindex);
         case 'UPDATE_EXERCISE_ST':
@@ -252,7 +220,7 @@ export const testData = (state = defaulatTestData, action = {}) => {
         case 'UPDATE_FINISH_TIME':
             return state.set("finish_time", new Date());
         case 'SHOW_ANSWER_TEST':
-            return state.setIn(["exercise_log", action.exindex, 'answer_test'], true);
+            return state.setIn(["exercise_log", action.exindex, 'exercise_status'], 1);
         case 'HIDE_FEEDBACK_TOAST':
             return state.set('feedbackToast', false);
         case 'CLOSE_MODAL':
@@ -288,7 +256,7 @@ export const testData = (state = defaulatTestData, action = {}) => {
             }
             return state.setIn(['exercise_log', action.exindex, 'breakdown_sn'], Immutable.fromJS(breakdown_sn));
         case 'SUBMIT_FEEDBACK':
-            return state.setIn(['exercise_log', action.exindex, 'answer_test'], false).set('feedbackToast', true);
+            return state.setIn(['exercise_log', action.exindex, 'exercise_status'], 2).set('feedbackToast', true);
         case 'SUBMIT_TEST_START':
             return state;
         case 'SUBMIT_TEST_SUCCESS':
