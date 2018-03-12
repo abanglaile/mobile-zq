@@ -178,7 +178,10 @@ class MyChapter extends React.Component {
             kp.map((item) => {
               var correct_rate = item.practice ? item.correct/item.practice : 0;
               return (
-                <Item multipleLine> 
+                <Item 
+                  multipleLine
+                  onClick={e => this.props.router.push("/mobile-zq/student_kp/"+item.kpid)}
+                > 
                     {item.kpname}
                     <Brief>
                       <div>

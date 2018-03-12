@@ -268,6 +268,18 @@ const getStuLadderSuccess = (json) => {
     }
 }
 
+const getStuKpLadderSuccess = (json) => {
+    return {
+        type: 'GET_KP_LADDER_STATUS_SUCCESS',
+        json,
+    }
+}
+const getStuKpAbilitySuccess = (json) => {
+    return {
+        type: 'GET_KP_ABILITY_STATUS_SUCCESS',
+        json,
+    }
+}
 const getStuComUsedKpSuccess = (json) => {
     return {
         type: 'GET_COMUSED_KP_SUCCESS',
@@ -942,8 +954,8 @@ export const getStuAbility = (student_id) => {
     }
 }
 //获取学生天梯分数变化情况
-export const getStuLadder = (student_id) => {
-    let url = target + "/getStuLadder";
+export const getStuLadderWithTime = (student_id) => {
+    let url = target + "/getStuLadderWithTime";
     return (dispatch) => {
         dispatch(getStatusStart());
         return axios.get(url,{
@@ -953,6 +965,44 @@ export const getStuLadder = (student_id) => {
         })
         .then(function (response) {
             dispatch(getStuLadderSuccess(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+}
+//获取学生某知识点天梯分数变化情况
+export const getStuKpLadder = (student_id,kpid) => {
+    let url = target + "/getStuKpLadder";
+    return (dispatch) => {
+        dispatch(getStatusStart());
+        return axios.get(url,{
+            params:{
+                student_id,
+                kpid,
+            }
+        })
+        .then(function (response) {
+            dispatch(getStuKpLadderSuccess(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+}
+//获取学生某知识点天能力概况
+export const getStuKpAbility = (student_id,kpid) => {
+    let url = target + "/getStuKpAbility";
+    return (dispatch) => {
+        dispatch(getStatusStart());
+        return axios.get(url,{
+            params:{
+                student_id,
+                kpid,
+            }
+        })
+        .then(function (response) {
+            dispatch(getStuKpAbilitySuccess(response.data));
         })
         .catch(function (error) {
             console.log(error);

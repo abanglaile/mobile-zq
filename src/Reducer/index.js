@@ -31,6 +31,8 @@ const defaulatStuStatus = Immutable.fromJS({
         isFetching: false,
         capatity: [],
         ladder : [],
+        kpladder : [],
+        kpcapatity: [],
         comusedkp : [],
     });
 
@@ -333,6 +335,10 @@ export const stuStatus = (state = defaulatStuStatus, action = {}) => {
             return state.set('ladder', Immutable.fromJS(action.json)).set('isFetching', false);
         case 'GET_COMUSED_KP_SUCCESS':
             return state.set('comusedkp', Immutable.fromJS(action.json)).set('isFetching', false);
+        case 'GET_KP_LADDER_STATUS_SUCCESS':
+            return state.set('kpladder', Immutable.fromJS(action.json)).set('isFetching', false);
+        case 'GET_KP_ABILITY_STATUS_SUCCESS':
+            return state.set('kpcapatity', Immutable.fromJS(action.json)).set('isFetching', false);
         default:
             return state;
     }
