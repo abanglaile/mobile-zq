@@ -1,4 +1,4 @@
-import { SegmentedControl, Progress, WhiteSpace, WingBlank, List, Button, NavBar, ActivityIndicator, Flex } from 'antd-mobile';
+import { Progress, WhiteSpace, WingBlank, List, Button, NavBar, ActivityIndicator, Flex,Icon } from 'antd-mobile';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Tex from './renderer.js';
@@ -13,126 +13,167 @@ const Brief = Item.Brief;
 
 const F2 = require('@antv/f2');
 
-class StudentStatus extends React.Component {
+class StudentKp extends React.Component {
   constructor(props) { 
   	super(props);
-    this.state = {selectedIndex : 0};
+    this.state = { kpladder : []};
   }
 
   componentDidMount(){
-     this.renderF2();
-     // this.props.getStuAbility(this.props.student_id);
-     // this.props.getStuComUsedKp(this.props.student_id);
-     // // this.props.getStuLadder(this.props.student_id);
+    const {student_id, params} = this.props;
+    const kpid = params.kpid;
+    // const kpid = "167772686";
+    console.log("student_id params:"+student_id+' '+params);
+    if(kpid){
+      setTimeout(() => {
+        this.props.getStuKpLadder(student_id, kpid);
+        this.props.getStuKpAbility(student_id, kpid);
+      }, 2000);
+      
+      // this.props.getTestRankingList(test_id);
+      // this.props.getStuTestInfo(student_id,test_id);
+    }else{
+      alert("页面参数错误");
+    }
+  }
+
+  componentWillReceiveProps(nextProps){
+    this.setState({kpladder : nextProps.kpladder},() => {
+      if(nextProps.kpladder.length > 0){
+        this.renderF2();
+      }
+    });
   }
 
   renderF2(){
-    const data = [
-    { time: '2016-08-08 00:00:00', tem: 10 },
-    { time: '2016-08-08 00:10:00', tem: 22 },
-    { time: '2016-08-08 00:30:00', tem: 20 },
-    { time: '2016-08-09 00:35:00', tem: 26 },
-    { time: '2016-08-09 01:00:00', tem: 20 },
-    { time: '2016-08-09 01:20:00', tem: 26 },
-    { time: '2016-08-10 01:40:00', tem: 28 },
-    { time: '2016-08-10 02:00:00', tem: 20 },
-    { time: '2016-08-10 02:20:00', tem: 28 }
-  ];
+    const data = this.state.kpladder;
+    console.log("data:"+JSON.stringify(data));
 
-  const chart = new F2.Chart({
-    id: 'c1',
-    pixelRatio: window.devicePixelRatio
-  });
+    const chart = new F2.Chart({
+      id: 'c1',
+      pixelRatio: window.devicePixelRatio
+    });
 
-  const defs = {
-    time: {
-      type: 'timeCat',
-      mask: 'MM/DD',
-      tickCount: 3,
-      range: [ 0, 1 ]
-    },
-    tem: {
-      tickCount: 5,
-      min: 0
-    }
-  };
-  // 配置刻度文字大小，供PC端显示用(移动端可以使用默认值20px)
-  chart.axis('tem', {
-    label: {
-      fontSize: 14
-    }
-  });
-  chart.axis('time', {
-    label: {
-      fontSize: 14
-    }
-  });
-  chart.source(data, defs);
-  chart.line().position('time*tem');
-  chart.render();
+    const defs = {
+      update_time: {
+        type: 'timeCat',
+        tickCount: 2,
+        range: [ 0, 1 ]
+      },
+      kp_rating: {
+        tickCount: 5,
+        min: 300  
+      }
+    };
+    // 配置刻度文字大小，供PC端显示用(移动端可以使用默认值20px)
+    chart.axis('kp_rating', {
+      label: {
+        textAlign: 'end',
+        offset: 0,
+        fontSize: 14
+      }
+    });
+    const label = {
+      fill: '#979797',
+      font: '14px san-serif',
+      offset: 6
+    };
+    chart.axis('update_time', {
+      label(text, index, total) {
+        const cfg = label;
+        // 第一个点左对齐，最后一个点右对齐，其余居中，只有一个点时左对齐
+        if (index === 0) {
+          cfg.textAlign = 'start';
+        }
+        if (index > 0 && index === total - 1) {
+          cfg.textAlign = 'end';
+        }
+        return cfg;
+      }
+    });
+    chart.source(data, defs);
+    // 绘制渐变色区域图
+    const canvas = document.getElementById('c1');
+    const linear_gradient = canvas.getContext('2d').createLinearGradient(0, 0, 0, 500);
+    linear_gradient.addColorStop(0.3, '#fff');
+    linear_gradient.addColorStop(0, 'rgb(15, 141, 232)');
+
+    chart.area().position('update_time*kp_rating')
+      .color(linear_gradient)
+      .style({
+        opacity: 0.6
+      });
+
+    
+    chart.line().position('update_time*kp_rating').size(2);
+    chart.render();
   }
 
   renderKpAbility(){
-    const {capatity,ladder} = this.props;
-    return (
-      <Flex justify="center">
-          <Flex.Item>
-            <div style={{
-              textAlign: 'center',
-              height: '3rem',
-              lineHeight: '3rem',
-              width: '100%',
-              fontWeight: 'bold',
-              fontSize: '1rem',
-            }} >掌握度</div>
-            <div style={{
-                  textAlign: 'center',
-                  height: '4rem',
-                  lineHeight: '4rem',
-                  width: '100%',
-                  color: '#1890ff',
-                  fontSize: '1.5rem',
-                }} >461</div>  
-            </Flex.Item>
-            <Flex.Item><div style={{
-              textAlign: 'center',
-              height: '3rem',
-              lineHeight: '3rem',
-              width: '100%',
-              fontWeight: 'bold',
-              fontSize: '1rem',
-            }} >正确率</div>
-            <div style={{
-                  textAlign: 'center',
-                  height: '4rem',
-                  lineHeight: '4rem',
-                  width: '100%',
-                  fontSize: '1rem',
-                }}><Circle type="circle" percent={52} width={60} format={(percent) => `${percent}%`}/></div>
-            </Flex.Item>
-            <Flex.Item><div style={{
-              textAlign: 'center',
-              height: '3rem',
-              lineHeight: '3rem',
-              width: '100%',
-              fontWeight: 'bold',
-              fontSize: '1rem',
-            }} >练习次数</div>
-            <div style={{
-                  textAlign: 'center',
-                  height: '4rem',
-                  lineHeight: '4rem',
-                  width: '100%',
-                  color: '#1890ff',
-                  fontSize: '1.5rem',
-                }} >106</div>  
-            </Flex.Item>
-      </Flex>
-    );
+    const {kpcapatity} = this.props;
+    if(kpcapatity.length){
+      return (
+        <Flex justify="center" style={{marginBottom:"1rem"}}> 
+            <Flex.Item>
+              <div style={{
+                textAlign: 'center',
+                height: '3rem',
+                lineHeight: '3rem',
+                width: '100%',
+                fontWeight: 'bold',
+                fontSize: '1rem',
+              }} >掌握度</div>
+              <div style={{
+                    textAlign: 'center',
+                    height: '4rem',
+                    lineHeight: '4rem',
+                    width: '100%',
+                    color: '#1890ff',
+                    fontSize: '1.5rem',
+                  }} >{kpcapatity[0].kp_rating}</div>  
+              </Flex.Item>
+              <Flex.Item><div style={{
+                textAlign: 'center',
+                height: '3rem',
+                lineHeight: '3rem',
+                width: '100%',
+                fontWeight: 'bold',
+                fontSize: '1rem',
+              }} >正确率</div>
+              <div style={{
+                    textAlign: 'center',
+                    height: '4rem',
+                    lineHeight: '4rem',
+                    width: '100%',
+                    fontSize: '1rem',
+                  }}><Circle type="circle" percent={((kpcapatity[0].correct/kpcapatity[0].practice)*100).toFixed(0)} width={60} format={(percent) => `${percent}%`}/></div>
+              </Flex.Item>
+              <Flex.Item><div style={{
+                textAlign: 'center',
+                height: '3rem',
+                lineHeight: '3rem',
+                width: '100%',
+                fontWeight: 'bold',
+                fontSize: '1rem',
+              }} >练习次数</div>
+              <div style={{
+                    textAlign: 'center',
+                    height: '4rem',
+                    lineHeight: '4rem',
+                    width: '100%',
+                    color: '#1890ff',
+                    fontSize: '1.5rem',
+                  }} >{kpcapatity[0].practice}</div>  
+              </Flex.Item>
+        </Flex>
+      );
+    }
   }
 
   renderKpContent(){
-      return(    
+      const {kpcapatity} = this.props;
+      if(kpcapatity.length){
+        return(    
           <List>
             <Item>
               <div style={{fontWeight: 'bold'}}>知识点攻略</div>
@@ -142,16 +183,19 @@ class StudentStatus extends React.Component {
               <Brief>两个音程的音响相同，记法和意义不同，就称为等音程。等音程是由于等音变化而来的，其重要特点是音数相等。可以只改变一个音的记谱，也可以两个音同时变换记谱。</Brief>
             </Item>
           </List>
-      ) 
+        ); 
+      }
   }
   
   render() {
-    console.log('this.props 1:'+JSON.stringify(this.props));
+    const {kpcapatity} = this.props;
     return (
       <div>
         <NavBar
           mode="light"
-        >等音程</NavBar>
+          icon={<Icon type="left" />}
+          onLeftClick={e => this.props.router.push("/mobile-zq/root/my_book_chapter")}
+        >{kpcapatity.length ? kpcapatity[0].kpname : ''}</NavBar>
         <div>
           <div style={{backgroundColor: '#1890ff', paddingTop: '2rem', paddingBottom: '0.5rem', color: 'white'}}>
             <div style={{
@@ -161,7 +205,7 @@ class StudentStatus extends React.Component {
               lineHeight: '3rem',
               fontSize: '2rem'
             }}>
-              等音程
+              {kpcapatity.length? kpcapatity[0].kpname : ''}
             </div>
           
           <div style={{
@@ -170,17 +214,21 @@ class StudentStatus extends React.Component {
             marginLeft: '2rem',
             lineHeight: '3rem',
             fontSize: '1rem'
-            }}>音程 ></div>
+            }}>{kpcapatity.length? kpcapatity[0].chaptername : ''} ></div>
           </div>
           <List>
-            <Item extra='查看详细' arrow='horizontal'>
-              <div style={{fontWeight: 'bold'}}>知识点情况</div>
+            <Item>
+              <div style={{fontWeight: 'bold'}}>知识点概况</div>
             </Item>
           </List> 
           {this.renderKpAbility()}
-          <canvas id="c1" style={{width: "90%", height: "40%"}}></canvas>
-          
-          <WhiteSpace size='xl'/>
+          <List>
+            <Item>
+              <div style={{fontWeight: 'bold'}}>掌握度变化情况</div>
+            </Item>
+          </List> 
+          <canvas id="c1" style={{width: "95%", height: "60%"}}></canvas>
+          <WhiteSpace size='lg'/>
           <WingBlank>
           <Button style={{marginTop: '0.5rem'}} type="primary"
             onClick={ e => this.props.router.push("/mobile-zq/mytest/")} >
@@ -199,32 +247,17 @@ class StudentStatus extends React.Component {
 export default connect(state => {
   const student_status = state.stuStatus.toJS();
   console.log('student_status'+JSON.stringify(student_status));
-  const {capatity , ladder, comusedkp} = student_status;
-  const default_capatity = [{
-      key: '1',
-      exercount: 560,
-      rate: 89.4,
-      ladderscore: 1800,
-    }, {
-      key: '2',
-      exercount: 20,
-      rate: 88,
-      ladderscore: 1780,
-    }, {
-      key: '3',
-      exercount: 50,
-      rate: 91,
-      ladderscore: 1884,
-    }, 
-  ];
-  const default_ladder = [{procount:10,score:1600},{procount:11,score:1605},{procount:12,score:1608}
-       ,{procount:13,score:1615},{procount:14,score:1611},{procount:15,score:1609}];
+  const {kpladder,kpcapatity} = student_status;
+  const default_kpcapatity = [{
+      kp_rating: 500,
+      practice: 2,
+      correct: 1,
+    }];
   const default_comusedkp = [{kpid:'1',kpname:'二次函数',usedcount:'5',rate : 56}];
   return {
     isFetching : student_status.isFetching,
-    capatity : capatity.length > 0 ? capatity : default_capatity,
-    ladder : ladder.length > 0 ? ladder : default_ladder,
-    comusedkp : comusedkp.length > 0 ? comusedkp : default_comusedkp,
+    kpcapatity : kpcapatity ? kpcapatity : default_kpcapatity,
+    kpladder : kpladder ? kpladder : [],
     student_id: state.AuthData.get('userid'), 
   }
-}, action)(StudentStatus);
+}, action)(StudentKp);

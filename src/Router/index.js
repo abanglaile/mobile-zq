@@ -11,6 +11,7 @@ import MyChapter from '../Component/MyChapter.js'
 import my_chapter_kp from '../Component/my_chapter_kp.js'
 import login from '../Component/login.js'
 import StudentStatus from '../Component/StudentStatus.js'
+import StudentKp from '../Component/StudentKp.js'
 import Invite from '../Component/invite.js'
 import perCenter from '../Component/me.js'
 import { Route, IndexRoute } from 'react-router';
@@ -43,6 +44,7 @@ export default (
         <Route path="mytest" component={MyTest} />
         <Route path="question" component={Question} />
         <Route path="studentstatus" component={StudentStatus} />
+        <Route path="student_kp/:kpid" component={StudentKp} />
 
         <Route path="kp_test_result/:test_id" component={KpTestResult} />
         <Route path="test_result/:test_id" component={TestResult} />

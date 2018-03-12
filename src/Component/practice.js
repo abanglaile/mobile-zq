@@ -59,6 +59,7 @@ class MyTest extends React.Component {
             multipleLine 
             extra='开始练习' 
             onClick={e => this.props.getTestData(student_id, item.test_type, entry: "mytest")}
+            style = {{border:"1px solid",bordeRadius: "5px"}}
           >
             {item.test_name}
             <Brief>
@@ -93,7 +94,12 @@ class MyTest extends React.Component {
       <WhiteSpace />
       <div>
       	<List>
-          <Item arrow="horizontal" onClick={e => this.props.router.push("/mobile-zq/mytest/")} extra='做题历史'>待完成作业</Item>
+          <Item arrow="horizontal" 
+            onClick={e => this.props.router.push("/mobile-zq/mytest/")} 
+            extra='做题历史'
+          >
+            待完成作业
+          </Item>
         	{not_finish_item}
       	</List>
       </div>
