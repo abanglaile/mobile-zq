@@ -249,11 +249,12 @@ class Question extends React.Component {
       ) 
   }
 
-  renderBreakdown(){
+  renderAnswerTest(){
     const {exercise, exindex, exercise_log, modalOpen} = this.props;
     const {breakdown, title} = exercise[exindex];
-    const {exercise_state, answer_test, breakdown_sn} = exercise_log[exindex];
-    if(answer_test){
+    const {exercise_state, exercise_status, answer_test, breakdown_sn} = exercise_log[exindex];
+    console.log(exercise[exindex]);
+    if(exercise_status == 1){
       
       return (
       <List renderHeader='请选择你做对的步骤'>
@@ -271,34 +272,59 @@ class Question extends React.Component {
         })}
       </List>
       );
-    }else if(!modalOpen && exercise_log[exindex].exercise_state >= 0){
-      var kpids = [];
-      return (
-        <List renderHeader={() => '相关知识点情况'} >
-          {
-            breakdown_sn.map((item) => {
-              if(!kpids[item.kpid]){
-                kpids[item.kpid] = 1;
-                return (
-                  <Item style={item.sn_state == 0 ? {backgroundColor: "#fcdbc9"} : {backgroundColor: "white"}}
-                    extra={item.kp_old_rating}>
-                    {item.kpname}
+    }
+    // else if(!modalOpen && exercise_log[exindex].exercise_state >= 0){
+    //   var kpids = [];
+    //   return (
+    //     <List renderHeader={() => '相关知识点情况'} >
+    //       {
+    //         breakdown_sn.map((item) => {
+    //           if(!kpids[item.kpid]){
+    //             kpids[item.kpid] = 1;
+    //             return (
+    //               <Item style={item.sn_state == 0 ? {backgroundColor: "#fcdbc9"} : {backgroundColor: "white"}}
+    //                 extra={item.kp_old_rating}>
+    //                 {item.kpname}
                     
+    //               </Item>
+    //             )
+    //           }
+    //         })
+    //       }
+    //     </List>
+    //   )
+    // }
+    
+  }
+
+  renderBreakdown(){
+    const {exercise, exindex, exercise_log, modalOpen} = this.props;
+    const {breakdown, title} = exercise[exindex];
+    const {exercise_state, exercise_status, answer_test, breakdown_sn} = exercise_log[exindex];
+    
+    if(exercise_status == 2){
+      return (
+        <List renderHeader={() => '答案解析'} >
+          {
+            breakdown_sn.map((item, i) => {
+                return (
+                  <Item arrow="horizontal" multipleLine wrap onClick={() => this.props.router.push("/mobile-zq/studentkp/" + item.kpid)}
+                    style={item.sn_state == 0 ? {backgroundColor: "#fcdbc9"} : {backgroundColor: "white"}}>
+                    <Tex content = {breakdown[i].content} />
+                    <Item.Brief>{item.kpname}</Item.Brief>
                   </Item>
                 )
-              }
             })
           }
         </List>
       )
     }
-    
   }
 
   renderSubmitFooter(){
     const {exindex, exercise_log, exercise, student_rating} = this.props;
-    const { exercise_state} = exercise_log[exindex];
-    if(exercise_log[exindex].answer_test){
+    const { exercise_state, exercise_status} = exercise_log[exindex];
+    if(exercise_status == 1){
       return(
       <div style={{
         position: 'fixed',
@@ -327,7 +353,7 @@ class Question extends React.Component {
         </WingBlank>
       </div>
       )
-    }else if(exercise_state < 0){
+    }else if(exercise_status == 0){
       return(
       <div style={{
         position: 'fixed',
@@ -365,10 +391,12 @@ class Question extends React.Component {
     const {sheetmodal} = this.state;
       return (
           <div style={{
-                  position: 'absolute',
+                  position: 'fixed',
                   bottom: '0',
                   width: '100%',
                   height: "3rem",
+                  zIndex: 100,
+                  background: "#fff",
                   borderTop: "solid 1px #CCC",
                   }}>
                 <WingBlank>
@@ -427,11 +455,24 @@ class Question extends React.Component {
       )
   }
 
+  onLeftClick(){
+    const {finish_time, entry} = this.props;
+    if(finish_time){
+      //测试已结束
+      this.props.router.goBack();  
+    }else{
+      alert('退出练习？', '退出后将不保存本次练习记录', 
+          [
+            { text: '取消', onPress: () => console.log('cancel') },
+            { text: '退出练习', onPress: () => this.props.router.goBack()},
+          ])
+    }
+  }
 
   render() {
-    const {exercise, exindex, exercise_log, record, feedbackToast, answer_test, isFetching} = this.props;
+    const {exercise, exindex, exercise_log, record, feedbackToast, isFetching} = this.props;
     console.log(exindex);
-    const { title, options } = exercise[exindex];
+    const { exercise_status } = exercise_log[exindex];
     
     if(feedbackToast){
       Toast.success("谢谢你的反馈", 1, () => {
@@ -440,21 +481,6 @@ class Question extends React.Component {
         this.props.jumpNext(true);
       })
     }
-    /*
-    // <div style={{ margin: '0 0.30rem', width: '1.6rem!important', margin: '0.18rem 0.18rem 0.18rem 0'}}>
-    //     <Flex>
-    //       <Flex.Item><Icon type="cross" size="lg" color="red" /></Flex.Item>
-    //       <Flex.Item><div style={{textAlign: 'center', width: '100%', color: '#bbb', fontSize: '0.3rem'}}>02:33</div></Flex.Item>
-    //       <Flex.Item>
-    //         <div>
-    //           <Icon type="check" size="xs" color="blue" />{record.correct}
-    //           <Icon type="cross" size="xs" color="red" />{record.wrong}
-    //         </div>
-    //       </Flex.Item>
-    //     </Flex>
-        
-    //   </div>
-    */
    
     return (
       isFetching ?
@@ -466,24 +492,21 @@ class Question extends React.Component {
         <NavBar
         mode="light"
         icon={<Icon type="cross" />}
-        onLeftClick={exindex > 0 ?
-          () => alert('退出练习？', '退出后将不保存本次练习记录', 
-          [
-            { text: '取消', onPress: () => console.log('cancel') },
-            { text: '退出练习', onPress: () => this.props.router.push("/mobile-zq/mytest")},
-          ])
-          :
-          () => this.props.router.push("/mobile-zq/mytest")
-        }
+        onLeftClick={() => this.onLeftClick()}
         rightContent={[
           <div><span style={{fontSize: '2rem'}}>{exindex + 1}</span><span>{'/' + exercise.length}</span></div>
         ]}
         ></NavBar>
         <WingBlank>
-        {this.renderBreakdown()}
+        {this.renderAnswerTest()}
         {this.renderTitle()}
         </WingBlank>
         {this.renderAnswer()}
+        {this.renderBreakdown()}
+        <div style={{
+                  width: '100%',
+                  height: "3rem",}}>
+        </div>
         {this.renderSubmitFooter()}
         {this.renderFooter()}
         {this.renderModal()}
@@ -495,11 +518,12 @@ class Question extends React.Component {
 export default connect(state => {
   const test_state = state.testData.toJS();
   console.log(test_state);
-  const {exercise, exindex, exercise_log, test_status, modalOpen, feedbackToast, record, exercise_st, start_time, answer_test , isFetching, student_rating} = test_state;
+  const {exercise, exindex, exercise_log, test_status, modalOpen, feedbackToast, record, exercise_st, start_time, finish_time, answer_test , isFetching, student_rating} = test_state;
   return {
     test_status: test_status,
     //整个测试以同一个开始时间
     start_time: start_time,
+    finish_time: finish_time,
     //跳转题目页面开始时间
     exercise_st: exercise_st,
     exercise: exercise,
@@ -509,7 +533,6 @@ export default connect(state => {
     student_rating : student_rating,
     record: record,
     feedbackToast: feedbackToast,
-    answer_test: answer_test,
     isFetching : isFetching,
   }; 
 }, action)(Question);

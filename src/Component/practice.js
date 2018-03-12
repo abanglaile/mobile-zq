@@ -58,7 +58,7 @@ class MyTest extends React.Component {
             arrow="horizontal" 
             multipleLine 
             extra='开始练习' 
-            onClick={e => this.props.getTestData(student_id, item.test_id)}
+            onClick={e => this.props.getTestData(student_id, item.test_type, entry: "mytest")}
           >
             {item.test_name}
             <Brief>
