@@ -55,11 +55,10 @@ class MyTest extends React.Component {
         var time = item.enable_time;
         return(
           <Item 
-            arrow="horizontal" 
             multipleLine 
-            extra='开始练习' 
+            extra={<Button type="primary" size='small' inline>开始</Button>}
             onClick={e => this.props.getTestData(student_id, item.test_id)}
-            style = {{border:"1px solid",bordeRadius: "5px"}}
+            style = {{border:"1px solid",borderRadius: "5px",margin :"1rem 1rem"}}
           >
             {item.test_name}
             <Brief>
