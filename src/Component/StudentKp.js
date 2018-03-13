@@ -122,7 +122,7 @@ class StudentKp extends React.Component {
                 width: '100%',
                 fontWeight: 'bold',
                 fontSize: '1rem',
-              }} >掌握度</div>
+              }} >能力值</div>
               <div style={{
                     textAlign: 'center',
                     height: '4rem',
@@ -224,7 +224,7 @@ class StudentKp extends React.Component {
           {this.renderKpAbility()}
           <List>
             <Item>
-              <div style={{fontWeight: 'bold'}}>掌握度变化情况</div>
+              <div style={{fontWeight: 'bold'}}>能力值变化情况</div>
             </Item>
           </List> 
           <canvas id="c1" style={{width: "95%", height: "60%"}}></canvas>

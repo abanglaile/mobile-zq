@@ -131,7 +131,7 @@ export default connect(state => {
     delta_points: [{}],
   }
   return {
-    student_id: 1,
+    student_id: state.AuthData.get('userid'), 
     test_id: test_id,
     test_reward: test_reward,
     student_rating: delta_result.student_rating,

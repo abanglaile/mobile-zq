@@ -24,7 +24,8 @@ const defaulatStudentData = Immutable.fromJS({
             chaptername : null,
             status: {practice: 0, correct:0},
             kp: [],
-        }
+        },
+        tab: '',
     });
 
 const defaulatStuStatus = Immutable.fromJS({
@@ -41,6 +42,7 @@ const defaulatAuthData = Immutable.fromJS({
         nickname: null,
         imgurl:null,
         userid: null,
+        student_name:null,
         hascode: null, 
         isAuthenticated: false,
         isAuthenticating: false,
@@ -119,6 +121,7 @@ export const AuthData = (state = defaulatAuthData, action = {}) => {
                 nickname: jwtDecode(action.payload.token).nickname,
                 userid: jwtDecode(action.payload.token).userid,
                 imgurl:jwtDecode(action.payload.token).imgurl,
+                student_name:jwtDecode(action.payload.token).name,
                 hascode: -1,
                 statusText: 'You have been successfully logged in by wx.'
             };
@@ -151,7 +154,7 @@ export const testData = (state = defaulatTestData, action = {}) => {
                         .set('student_rating', action.json.student_rating);
         //获取全新测试数据
         case 'GET_TEST_SUCCESS':
-            const exercise = action.exercises;
+            const exercise = action.exercise;
             //初始化测试开始时间
             const start_time = new Date();
             //构造exercise_log
@@ -287,6 +290,8 @@ export const studentData = (state = defaulatStudentData, action = {}) => {
             return state.set('my_test_list', action.json).set('isFetching', false);
         case 'GET_MY_UNCOMPLETEDTEST_SUCCESS':
             return state.set('my_uncompleted_test', action.json).set('isFetching', false);
+        case 'GET_SELECTED_TAB':
+            return state.set('tab', action.tab);
         default:
             return state;
     }

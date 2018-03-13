@@ -332,7 +332,7 @@ class TestResult extends React.Component {
         <NavBar
           mode="light"
           icon={<Icon type="left" />}
-          onLeftClick={() => onLeftClick()}
+          onLeftClick={() => this.onLeftClick()}
         >
         {this.navBarContent()}          
         </NavBar>
