@@ -34,6 +34,7 @@ class MyTest extends React.Component {
 
   componentDidMount(){
     this.loadTest();
+    this.props.updateEntry("root");
   }
 
   loadTest(){
@@ -58,7 +59,7 @@ class MyTest extends React.Component {
             arrow="horizontal" 
             multipleLine 
             extra='开始练习' 
-            onClick={e => this.props.getTestData(student_id, item.test_type, entry: "mytest")}
+            onClick={e => this.props.getTestData(student_id, item.test_id, item.test_type, {entry: "practice"})}
             style = {{border:"1px solid",bordeRadius: "5px"}}
           >
             {item.test_name}

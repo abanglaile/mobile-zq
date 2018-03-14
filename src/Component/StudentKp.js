@@ -188,7 +188,7 @@ class StudentKp extends React.Component {
   }
   
   render() {
-    const {kpcapatity} = this.props;
+    const {kpcapatity, student_id, kpid, kp} = this.props;
     return (
       <div>
         <NavBar
@@ -231,7 +231,7 @@ class StudentKp extends React.Component {
           <WhiteSpace size='lg'/>
           <WingBlank>
           <Button style={{marginTop: '0.5rem'}} type="primary"
-            onClick={ e => this.props.router.push("/mobile-zq/mytest/")} >
+            onClick={ e => this.props.getTestDataByKp(student_id, kpcapatity[0].kpid, kpcapatity[0].kpname)} >
               继续修炼
           </Button>
           </WingBlank>

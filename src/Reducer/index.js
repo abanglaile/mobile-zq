@@ -12,7 +12,12 @@ const defaulatTestData = Immutable.fromJS({
         ranking_list: [{}],
         test_log: {finish_time: '', correct_exercise: 0},
         record: {correct: 0, new_rating: 0},
-        test_reward: {credit: 30},
+        test_reward: {
+            credit: {
+                    delta_credit: 5,
+                    old_credit: 30,
+                    new_credit: 35,
+            }, rating:{old_student_rating: 0, delta_student_rating: 0}, kp_rating: []},
     });
 const defaulatStudentData = Immutable.fromJS({
         isFetching: false,
@@ -151,7 +156,7 @@ export const testData = (state = defaulatTestData, action = {}) => {
                         .set('student_rating', action.json.student_rating);
         //获取全新测试数据
         case 'GET_TEST_SUCCESS':
-            const exercise = action.exercises;
+            const exercise = action.exercise;
             //初始化测试开始时间
             const start_time = new Date();
             //构造exercise_log
@@ -181,13 +186,12 @@ export const testData = (state = defaulatTestData, action = {}) => {
                     ac_time: 0,
                 }
             }
+            var test_log = {test_id: test_id, start_time: start_time, test_type: action.test_type}
             var newState = {
                 exercise: exercise, 
                 exindex: 0, 
                 record: {correct: 0, wrong: 0, new_rating: action.student_rating, combo_correct: 0, max_combo: 0},
-                start_time: start_time, 
-                test_id: action.test_id, 
-                test_type: action.test_type,
+                test_log: test_log,
                 entry: action.entry,//0: 从测试列表进入, 1: 从知识点修炼进入 
                 exercise_log: exercise_log,
                 isFetching: false,//to do
@@ -199,9 +203,9 @@ export const testData = (state = defaulatTestData, action = {}) => {
 
         case 'GET_TEST_EXERCISE_SUCCESS':
             return state.set('exercise', Immutable.fromJS(action.json));
-        case 'GET_TEST_STU_REWARD_SUCCESS':
-            console.log(action.json.credit);
-            return state.setIn(['test_reward', 'credit'], action.json.credit);
+        case 'GET_TEST_RATING_REWARD_SUCCESS':
+            console.log(action.json);
+            return state.set('test_reward', Immutable.fromJS(action.json));
         case 'GET_TEST_RESULT_SUCCESS':
             return state.set('exercise_log', Immutable.fromJS(action.json.exercise_log))
                 .set('test_kp', Immutable.fromJS(action.json.test_kp))

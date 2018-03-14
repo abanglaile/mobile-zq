@@ -2,7 +2,7 @@ import React from 'react';
 import *as action from '../Action/';
 import {connect} from 'react-redux';
 
-import { List, Result, Icon, WhiteSpace, Progress, Badge, WingBlank, Button } from 'antd-mobile';
+import { List, Result, Icon, WhiteSpace, NavBar, Progress, Badge, WingBlank, Button } from 'antd-mobile';
 import { Rate, Progress as Circle } from 'antd';
 
 const Item = List.Item;
@@ -16,10 +16,9 @@ class KpTestResult extends React.Component {
   componentDidMount(){
     const {student_id, params} = this.props;
     const test_id = params.test_id;
-    console.log("student_id params:"+student_id+' '+params);
     if(test_id){
       setTimeout(() => {
-        this.props.getTestStuReward(student_id, test_id)
+        this.props.getTestRatingReward(student_id, test_id)
       }, 2000);
       
       // this.props.getTestRankingList(test_id);
@@ -30,17 +29,20 @@ class KpTestResult extends React.Component {
   }
 
   renderKpRating(){
-    const { delta_kp } = this.props;
+    const { test_reward } = this.props;
+    const {kp_rating} = test_reward;
+    console.log(kp_rating);
     return (
       <List className="my-list">
-        <Item>相关知识点</Item>
+        <Item style={{fontWeight:"bold"}}>相关知识点</Item>
         {
-
-          delta_kp.map((item) => {
+          kp_rating.map((item) => {
             const t = item.kp_delta_rating >= 0 ? '+' + item.kp_delta_rating : item.kp_delta_rating;
             return (
-              <Item extra={<Badge text={'+12'} />}>{item.kpname}
-   
+              <Item extra={
+                <div>{item.kp_old_rating + "(" + t + ")"}</div>
+
+              }>{item.kpname}   
               </Item>
             )
           })
@@ -49,28 +51,28 @@ class KpTestResult extends React.Component {
     )
   }
 
-  getResult(){
-    const {test_id, exercise_id} = this.props;
-    if(test_id > 0){
-      this.props.getTestResult('1', test_id);
-    }
-  }
-
   render() {
-    var { delta_kp, delta_student_rating, student_rating, test_reward } = this.props;
-    const {credit} = test_reward;
-    const delta_student_rating_str = delta_student_rating > 0 ? '+' + delta_student_rating : delta_student_rating;
-
+    var { test_reward } = this.props;
+    const {credit, rating, kp_rating} = test_reward;
+    console.log(test_reward);
+    const student_rating = rating.old_student_rating + rating.delta_student_rating;
     return (
       <div>
-      <div style={{backgroundColor: '#1890ff', paddingTop: '3rem',}}>
+      <div>
+        <NavBar
+          mode="light"
+        >
+        成就奖励         
+        </NavBar>
+      </div>
+      <div style={{backgroundColor: '#1890ff', paddingTop: '2rem',}}>
         <div style={{
               textAlign: 'center',
               height: '3rem',
               lineHeight: '3rem',
               color: 'white',
             }}>
-              <span style={{fontSize: '3rem'}} >{student_rating}</span>
+            <span style={{fontSize: '3rem'}} >{student_rating}</span>
         
         </div>
         <div style={{
@@ -79,7 +81,7 @@ class KpTestResult extends React.Component {
               lineHeight: '2rem',
               color: 'white',
               fontSize: '1.1rem'
-            }}><span>{'荣耀战力'}</span><Badge text={delta_student_rating_str} size='large'  style={{
+            }}><span>{'我的天梯'}</span><Badge text={rating.delta_student_rating} size='large'  style={{
               marginLeft: 6, padding: '0 3px', backgroundColor: '#21b68a', borderRadius: 2}} /></div>
         <div style={{
         textAlign: 'center',
@@ -92,16 +94,20 @@ class KpTestResult extends React.Component {
 
       <List>
         <Item>
-          <div>倔强青铜<Rate count = {3} disabled defaultValue={2} /></div>
-          <Brief><div style={{ width: '85%' }}><Circle size="small" type="line" percent={credit} format={() => '800/3400'}/></div> </Brief> 
-          
+          <div><span style={{fontWeight: "1.2rem"}}>{"经验 +15"} </span><span style={{color: "#1890ff", fontSize: "1rem"}}>{'105/500'}</span></div>
+          <Brief>
+            <div style={{ width: '85%' }}>
+              <span style={{color: "#1890ff", fontSize: "1rem", marginRight: "0.5rem"}}>LV.1</span>
+              <Circle size="small" type="line" percent={105/500 * 100}/>
+            </div> 
+          </Brief> 
+
         </Item>
       </List>
-      <WhiteSpace />
       <List>
-        <Item extra={'规则'}><div>学科积分+8</div></Item>
-        <Item
-          thumb={<Circle width={100} type="dashboard" percent={credit} format={() => credit + '/ 200'}/>} >
+        <Item extra={'规则'}><div>{"学科积分 +" + credit.delta_credit}</div></Item>
+        <Item style={{marginTop: "0.5rem"}}
+          thumb={<Circle width={100} type="dashboard" percent={credit.new_credit} format={() => '50 / 200'}/>} >
           
           <Brief><div>全对 +3</div><div>击破5题 +5</div></Brief>    
         </Item>
@@ -111,7 +117,7 @@ class KpTestResult extends React.Component {
       <WingBlank>
         <div style={{ margin: '18px 0 18px 0'}}>
           <Button className="btn" 
-          onClick={e => this.getResult()} 
+          onClick={e => this.props.router.push("/mobile-zq/test_result/" + this.props.params.test_id)} 
           type="primary">
            继续
           </Button>
@@ -124,6 +130,7 @@ class KpTestResult extends React.Component {
 export default connect(state => {
   const test_state = state.testData.toJS();
   var {delta_result, test_id, test_reward} = test_state;
+  console.log(test_reward);
   delta_result = {
     delta_kp: [{kpname: "二次函数标准式与定义", kp_delta_rating: +12}],
     delta_student_rating: 39,

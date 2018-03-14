@@ -456,7 +456,9 @@ class Question extends React.Component {
   }
 
   onLeftClick(){
-    const {finish_time, entry} = this.props;
+    const {test_log, entry} = this.props;
+    const {finish_time} = test_log;
+    console.log(finish_time);
     if(finish_time){
       //测试已结束
       this.props.router.goBack();  
@@ -518,12 +520,10 @@ class Question extends React.Component {
 export default connect(state => {
   const test_state = state.testData.toJS();
   console.log(test_state);
-  const {exercise, exindex, exercise_log, test_status, modalOpen, feedbackToast, record, exercise_st, start_time, finish_time, answer_test , isFetching, student_rating} = test_state;
+  const {exercise, exindex, exercise_log, test_log, test_status, modalOpen, feedbackToast, record, exercise_st, isFetching, student_rating} = test_state;
   return {
     test_status: test_status,
-    //整个测试以同一个开始时间
-    start_time: start_time,
-    finish_time: finish_time,
+    test_log: test_log,
     //跳转题目页面开始时间
     exercise_st: exercise_st,
     exercise: exercise,

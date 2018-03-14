@@ -208,6 +208,7 @@ const getMyUncompletedTestSuccess = (json) => {
 
 //获取测试数据成功
 const getTestSuccess = (json, test_type, entry) => {
+
   return {
     type: 'GET_TEST_SUCCESS',
     exercise: json.exercise,
@@ -317,9 +318,9 @@ const getMyScoreSuccess = (json) => {
   }
 }
 
-const getTestStuRewardSuccess = (json) => {
+const getTestRatingRewardSuccess = (json) => {
     return {
-        type: 'GET_TEST_STU_REWARD_SUCCESS',
+        type: 'GET_TEST_RATING_REWARD_SUCCESS',
         json,
     }
 }
@@ -650,14 +651,14 @@ export const getTestKpReward = (student_id, test_id) => {
     }
 }
 
-export const getTestStuReward = (student_id, test_id) => {
-    let url = target + "/getTestStuReward";
+export const getTestRatingReward = (student_id, test_id) => {
+    let url = target + "/getTestRatingReward";
     return (dispatch) => {
         dispatch(getDataStart());
         return axios.get(url, {
             params: {student_id, test_id}
         }).then(function (response) {
-            dispatch(getTestStuRewardSuccess(response.data));
+            dispatch(getTestRatingRewardSuccess(response.data));
         })
         .catch(function (error) {
             console.log(error);
@@ -994,7 +995,7 @@ export const getStuKpLadder = (student_id,kpid) => {
     }
 }
 //获取学生某知识点天能力概况
-export const getStuKpAbility = (student_id,kpid) => {
+export const getStuKpAbility = (student_id, kpid) => {
     let url = target + "/getStuKpAbility";
     return (dispatch) => {
         dispatch(getStatusStart());

@@ -127,6 +127,31 @@ class TestResult extends React.Component {
     return (Array(n).join(0) + num).slice(-n);
   }
 
+  renderPractice(){
+    var {student_id, test_log} = this.props;
+    var test_config = JSON.parse(test_log.test_config);
+    if(test_log.test_type == 2){
+      return (
+        <div style={{
+            position: 'fixed',
+            bottom: '0',
+            width: '100%',
+            height: "3.8rem",
+            zIndex: 100,
+            borderTop: "solid 1px #d9d9d9",
+            background: "#fff",
+            }}>
+          <WingBlank>
+          <Button  type="primary"
+            onClick={ e => this.props.getTestDataByKp(student_id, test_config.kpid, test_config.kpname)} >
+              继续修炼
+          </Button>
+          </WingBlank>
+        </div>
+      )
+    }
+  }
+
   renderMyResult(){
     var {isFetching, test_log, exercise_log, test_kp} = this.props;
     var test_time = '';
@@ -168,23 +193,6 @@ class TestResult extends React.Component {
         {this.renderKpList()}
         <WhiteSpace/>
         {this.renderExerciseList2()}
-        <div style={{
-            position: 'fixed',
-            bottom: '0',
-            width: '100%',
-            height: "3.8rem",
-            zIndex: 100,
-            borderTop: "solid 1px #d9d9d9",
-            background: "#fff",
-            }}>
-          <WhiteSpace />
-          <WingBlank>
-          <Button  type="primary"
-            onClick={ e => this.props.router.push("/mobile-zq/mytest/")} >
-              继续修炼
-          </Button>
-          </WingBlank>
-        </div>
         <ActivityIndicator animating = {isFetching}/>
 
         <Modal
@@ -303,10 +311,11 @@ class TestResult extends React.Component {
   }
 
   onLeftClick(){
-    if(entry == "test_result"){
-      this.props.router.push("/mobile-zq/root/");
-    }else {
+    const {entry} = this.props;
+    if(entry){
       this.props.router.push("/mobile-zq/" + entry);
+    }else{
+      this.props.router.push("/mobile-zq/root");
     }
   }
 
@@ -332,7 +341,7 @@ class TestResult extends React.Component {
         <NavBar
           mode="light"
           icon={<Icon type="left" />}
-          onLeftClick={() => onLeftClick()}
+          onLeftClick={() => this.onLeftClick()}
         >
         {this.navBarContent()}          
         </NavBar>
