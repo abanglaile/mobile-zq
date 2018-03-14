@@ -37,6 +37,7 @@ class MyTest extends React.Component {
 
   componentDidMount(){
     this.loadTest();
+    this.props.updateEntry("root");
   }
 
   loadTest(){

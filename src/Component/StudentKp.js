@@ -25,11 +25,9 @@ class StudentKp extends React.Component {
     // const kpid = "167772686";
     console.log("student_id params:"+student_id+' '+params);
     if(kpid){
-      setTimeout(() => {
         this.props.getStuKpLadder(student_id, kpid);
         this.props.getStuKpAbility(student_id, kpid);
-      }, 2000);
-      
+        this.props.updateEntry("root");
       // this.props.getTestRankingList(test_id);
       // this.props.getStuTestInfo(student_id,test_id);
     }else{
