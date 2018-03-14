@@ -326,6 +326,15 @@ const getTestRatingRewardSuccess = (json) => {
 }
 
 
+//记录底部标签栏 selected bar 的状态(blueTab RedTab..)
+export const setSelectedTab = (tab) => {
+     return {
+        type: 'GET_SELECTED_TAB',
+        tab,
+    }
+}
+
+
 /*-------------------------------------------------*/
 //获取我的天梯总分
 export const getMyLadderScore = (student_id) => {
@@ -470,6 +479,7 @@ export const getTestExercise = (student_id, test_id) => {
         });
     }
 }
+
 
 //获取指定测试的数据
 export const getTestData = (student_id, test_id, test_type, entry) => {

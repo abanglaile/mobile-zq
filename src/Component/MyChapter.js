@@ -137,7 +137,7 @@ class MyChapter extends React.Component {
         <div>
           <NavBar
             style = {{position:'relative',color: '#FFF' ,backgroundColor: '#1890ff',zIndex: '90'}}
-            mode="light"
+            mode="dark"
             rightContent={<div onClick={(e) => this.handleClick(e)} >基本乐理<Icon type={show ? "up" : "down"} /></div>}
           >
             学习情况
@@ -151,19 +151,23 @@ class MyChapter extends React.Component {
             onClick={ () => this.onMaskClick() } 
           /> : null
         }
-        <WhiteSpace size='lg' />
-        <List >
-          <Item 
-            arrow="horizontal" 
-            extra={'查看我的能力'}
-            onClick={e => this.props.router.push("/mobile-zq/studentstatus")}
-          >
-            <div style={{display: 'flex', marginTop: '1.2rem',marginBottom: '1.2rem', alignItems: 'center'}}>
-              总天梯分:<div style={{margin:'0 0 0.2rem 0.5rem',fontWeight: 'bold',fontSize: '1.5rem'}}>{ladderscore}</div>
-            </div>
-          </Item>
-        </List>
-        <WhiteSpace size='lg' />
+        <div style = {{padding:"1.2rem 1rem"}}>
+          <List >
+            <Item 
+              arrow="horizontal" 
+              extra={'查看我的能力'}
+              onClick={e => this.props.router.push("/mobile-zq/studentstatus")}
+              style = {{border:"1px solid #1890ff",borderRadius: "5px",overflow:"hidden"}}
+            >
+              <div 
+                style={{display: 'flex', alignItems: 'center'}}
+              >
+                总天梯分:<div style={{margin:'0 0 0.2rem 0.5rem',fontWeight: 'bold',fontSize: '1.5rem',color:"#1890ff"}}>{ladderscore}</div>
+              </div>
+            </Item>
+          </List>
+        </div>
+        <WhiteSpace size='lg' style={{backgroundColor:"#f5f5f5"}}/>
         {this.renderChapterList()}
 
         <Modal
@@ -176,17 +180,18 @@ class MyChapter extends React.Component {
           <List>
           {
             kp.map((item) => {
-              var correct_rate = item.practice ? item.correct/item.practice : 0;
+              var correct_rate = item.practice ? Math.round((item.correct/item.practice)*100) : 0;
               return (
                 <Item 
+                  arrow="horizontal"
                   multipleLine
                   onClick={e => this.props.router.push("/mobile-zq/student_kp/"+item.kpid)}
                 > 
                     {item.kpname}
                     <Brief>
                       <div>
-                        <span>掌握度： </span>
-                        <span style={{color: '#1890ff', fontSize: '1.5rem'}}>{item.kp_rating}</span>
+                        <span>正确率： </span>
+                        <span style={{color: '#1890ff', fontSize: '1.2rem'}}>{correct_rate}%</span>
                       </div>
                     </Brief>
                 </Item>

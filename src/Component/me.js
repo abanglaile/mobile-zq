@@ -17,15 +17,13 @@ class perCenter extends React.Component {
 
 
   render() {
-    const {nickname,imgurl} = this.props; 
+    const {nickname,imgurl,student_name} = this.props; 
     return (
       <div>
         <NavBar
-          mode="light"
-          // icon={<Icon type="left" />}
-          // onLeftClick={() => this.props.router.push("/mobile-zq/question")}
+          mode="dark"
+          style = {{backgroundColor:"#1890ff"}}
           >我</NavBar>
-        <WhiteSpace />
         <List>
           <Item
             arrow="horizontal"
@@ -39,6 +37,7 @@ class perCenter extends React.Component {
           </Item>
           <Item
             arrow="horizontal"
+            extra={student_name}
           >
             姓名
           </Item>
@@ -69,9 +68,10 @@ class perCenter extends React.Component {
 
 export default connect(state => {
   const auth_state = state.AuthData.toJS();
-  const {nickname, imgurl} = auth_state;
+  const {nickname, imgurl,student_name} = auth_state;
   return {
     nickname: nickname,
     imgurl: imgurl,
+    student_name: student_name,
   }; 
 }, action)(perCenter);

@@ -232,14 +232,8 @@ class StudentStatus extends React.Component {
     if(capatity.length > 0){
       return(
         <div style={{backgroundColor:"white"}}>
-          <div>
-            <List>
-              <Item>
-                <div style={{color: '#108ee9',fontSize:'1rem'}}>综合概况</div>
-              </Item>
-            </List> 
-          </div>
-          <div style={{marginTop:"10px"}}>
+          <div style={{color: '#108ee9',fontSize:'1rem',margin:"15px 15px"}}>综合概况</div>
+          <div style={{marginTop:"10px",marginBottom:"1rem"}}>
             <SegmentedControl
               values={['全部', '近20题', '近50题']}
               selectedIndex = {this.state.selectedIndex}
@@ -249,7 +243,7 @@ class StudentStatus extends React.Component {
             <WhiteSpace />
             {this.renderOneAbility()}
           </div>
-          <WhiteSpace />
+          <WhiteSpace style={{backgroundColor:"#f5f5f5"}}/>
         </div>
       ); 
     }
@@ -261,7 +255,7 @@ class StudentStatus extends React.Component {
       return(
           <div>
             <div>
-              <List renderHeader={() => '最近练习知识点'}>
+              <List renderHeader={<div style={{color: '#108ee9',fontSize:'1rem'}}>最近练习知识点</div>}>
                 {
                   comusedkp.map((item) => {
                     return (
@@ -283,21 +277,6 @@ class StudentStatus extends React.Component {
         ); 
       }
   }
-
-  renderLadderChart(){
-    const {ladder} = this.props;
-    return(
-      <div>
-        <List>
-          <Item>
-            <div style={{color: '#108ee9',fontSize:'1rem'}}>总掌握度变化情况</div>
-          </Item>
-        </List> 
-        <canvas id="c1" style={{width: "95%", height: "60%"}}></canvas>
-        {ladder.length > 0 ? this.renderF2() : null}
-      </div>
-    )
-  }
   
   render() {
     return (
@@ -308,16 +287,12 @@ class StudentStatus extends React.Component {
           onLeftClick={e => this.props.router.push("/mobile-zq/root/my_book_chapter")}
         >我的能力</NavBar>
         <div>
+          <WhiteSpace style={{backgroundColor:"#f5f5f5"}}/>
           {this.renderOverallAbility()}
           <div>
-            <List>
-              <Item>
-                <div style={{color: '#108ee9',fontSize:'1rem'}}>总掌握度变化情况</div>
-              </Item>
-            </List> 
+            <div style={{color: '#108ee9',fontSize:'1rem',margin:"15px 15px"}}>总天梯分变化情况</div> 
             <canvas id="c1" style={{width: "95%", height: "60%"}}></canvas>
           </div>
-          {this.renderComUsedKp()}
         </div>
         <WhiteSpace />
       </div>
