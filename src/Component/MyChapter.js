@@ -160,7 +160,7 @@ class MyChapter extends React.Component {
               style = {{border:"1px solid #1890ff",borderRadius: "5px",overflow:"hidden"}}
             >
               <div 
-                style={{display: 'flex', alignItems: 'center'}}
+                style={{display: 'flex', alignItems: 'center',margin:"0.5rem 0 0.5rem 0"}}
               >
                 总天梯分:<div style={{margin:'0 0 0.2rem 0.5rem',fontWeight: 'bold',fontSize: '1.5rem',color:"#1890ff"}}>{ladderscore}</div>
               </div>
