@@ -31,6 +31,7 @@ class MyTest extends React.Component {
   constructor(props) { 
   	super(props);
     console.log(this.props);
+    this.props.updateEntry("mytest");
     // alert(window.innerWidth);
   }
 
