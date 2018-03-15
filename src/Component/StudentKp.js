@@ -144,7 +144,7 @@ class StudentKp extends React.Component {
                     lineHeight: '4rem',
                     width: '100%',
                     fontSize: '1rem',
-                  }}><Circle type="circle" percent={((kpcapatity[0].correct/kpcapatity[0].practice)*100).toFixed(0)} width={60} format={(percent) => `${percent}%`}/></div>
+                  }}><Circle type="circle" percent={kpcapatity[0].practice ? ((kpcapatity[0].correct/kpcapatity[0].practice)*100).toFixed(0) : 0} width={60} format={(percent) => `${percent}%`}/></div>
               </Flex.Item>
               <Flex.Item><div style={{
                 textAlign: 'center',

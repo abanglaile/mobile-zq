@@ -12,6 +12,7 @@ const defaulatTestData = Immutable.fromJS({
         ranking_list: [{}],
         test_log: {finish_time: '', correct_exercise: 0},
         record: {correct: 0, new_rating: 0},
+        test_status:{},
         test_reward: {
             credit: {
                     delta_credit: 5,
@@ -189,7 +190,7 @@ export const testData = (state = defaulatTestData, action = {}) => {
                     ac_time: 0,
                 }
             }
-            var test_log = {test_id: test_id, start_time: start_time, test_type: action.test_type}
+            var test_log = {test_id: action.test_id, start_time: start_time, test_type: action.test_type}
             var newState = {
                 exercise: exercise, 
                 exindex: 0, 
