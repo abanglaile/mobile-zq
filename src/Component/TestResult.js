@@ -34,7 +34,8 @@ function formatTime(seconds) {
         hour = Math.floor(min / 60);
         newMin = min % 60;
     }
-
+    if (hour < 10 && hour) { hour = '0' + hour;}
+    if (newMin < 10) { newMin = '0' + newMin;}
     if (second < 10) { second = '0' + second;}
     if (min < 10) { min = '0' + min;}
 
