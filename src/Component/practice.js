@@ -33,8 +33,10 @@ class MyTest extends React.Component {
   }
 
   componentDidMount(){
+    const {student_id} = this.props;
     this.loadTest();
     this.props.updateEntry("root");
+    this.props.getMyLadderScore(student_id);
   }
 
   loadTest(){

@@ -70,6 +70,7 @@ class Question extends React.Component {
   }
 
   onContinue(){
+    this.props.closeModal();
     this.accExerciseTime();
     this.props.jumpNext(false);
   }
@@ -222,14 +223,10 @@ class Question extends React.Component {
   }
 
   renderModal(){
-    const defaultLog = {
-      delta_student_rating: 0,
-      exercise_state: 0,
-    };
-    const {modalOpen, record, exindex, exercise, exercise_log} = this.props;
-    const {breakdown} = exercise[exindex];
-    const {delta_student_rating, exercise_state} = (exercise_log && exercise_log[exindex]) ? exercise_log[exindex] : defaultLog;
-    var title = '很遗憾，错了！';
+    const {modalOpen, exindex, exercise_log} = this.props;
+    var {delta_student_rating, exercise_state} = exercise_log[exindex];
+    var title = 'Sorry!';
+    delta_student_rating = delta_student_rating ? delta_student_rating : 0;
     var delta_tip = delta_student_rating < 0 ? delta_student_rating : '+' + delta_student_rating;  
     if(exercise_state){
         title = 'Bingo!';
@@ -237,14 +234,14 @@ class Question extends React.Component {
     return (
       <Modal
           transparent
-          title={title}
+          title={<span style={{fontSize: "2rem", color: "#1890ff"}}>{title}</span>}
           maskClosable={false}
           visible={modalOpen}
           footer={[{ 
             text: 'OK', 
             onPress: () => this.onContinue()}]}
         > 
-        天梯分: {delta_tip}<br />
+        <span style={{fontSize: "1.1rem", fontWeight: "BOLD"}}>天梯分 {delta_tip}</span><br />
       </Modal>
       ) 
   }
@@ -332,6 +329,8 @@ class Question extends React.Component {
                     width: '100%',
                     height: "2.2rem",
                     borderTop: "solid 1px #CCC",
+                    zIndex: 100,
+                    background: "#fff",
               }}>
         <WingBlank>
         <Flex>
@@ -386,8 +385,7 @@ class Question extends React.Component {
   }
 
   renderFooter(){
-    const {exindex, exercise, exercise_log, test_status} = this.props;
-    console.log("exercise_log:"+JSON.stringify(exercise_log));
+    const {exindex, exercise, exercise_log} = this.props;
     const {sheetmodal} = this.state;
       return (
           <div style={{
@@ -519,10 +517,10 @@ class Question extends React.Component {
 
 export default connect(state => {
   const test_state = state.testData.toJS();
-  console.log(test_state);
-  const {exercise, exindex, exercise_log, test_log, test_status, modalOpen, feedbackToast, record, exercise_st, isFetching, student_rating} = test_state;
+  const student_rating = state.studentData.get("student_rating");
+  console.log(student_rating);
+  const {exercise, exindex, exercise_log, test_log, modalOpen, feedbackToast, exercise_st, isFetching} = test_state;
   return {
-    test_status: test_status,
     test_log: test_log,
     //跳转题目页面开始时间
     exercise_st: exercise_st,
@@ -530,8 +528,7 @@ export default connect(state => {
     exindex: exindex,
     exercise_log: exercise_log,
     modalOpen: modalOpen,
-    student_rating : student_rating,
-    record: record,
+    student_rating: student_rating,
     feedbackToast: feedbackToast,
     isFetching : isFetching,
   }; 

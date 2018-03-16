@@ -208,7 +208,7 @@ const getMyUncompletedTestSuccess = (json) => {
 
 //获取测试数据成功
 const getTestSuccess = (json, test_type, entry) => {
-
+    console.log(json.test_id);
   return {
     type: 'GET_TEST_SUCCESS',
     exercise: json.exercise,
@@ -507,9 +507,10 @@ export const getTestData = (student_id, test_id, test_type, entry) => {
 //根据kpid获得该主测点下的试题
 export const getTestDataByKp = (student_id, kpid, kpname) => {
     let url = target + "/getExerciseByKpid";
+    console.log(student_id, kpid, kpname);
     return (dispatch) => {
         dispatch(getTestStart());
-        return axios.post(url,{
+        return axios.get(url,{
                 params:{
                    student_id,
                    kpid,
@@ -517,7 +518,7 @@ export const getTestDataByKp = (student_id, kpid, kpname) => {
                 }
         })
         .then(function (response) {
-            dispatch(getTestSuccess(response.data, {test_type: 2}, entry));
+            dispatch(getTestSuccess(response.data, {test_type: 2}));
             dispatch(push("/mobile-zq/question"));
             dispatch(updateExerciseST());
         })
@@ -603,7 +604,7 @@ export const jumpNext = (exercise_status) => {
             //还有未完成的题目
             if(next >= 0){
                 console.log('update');
-                dispatch(closeModal());
+                
                 dispatch(updateExindex(next));
                 dispatch(updateExerciseST());
                 //dispatch(push("/mobile-zq/question"));
@@ -621,17 +622,17 @@ export const jumpNext = (exercise_status) => {
                  * [提交后台测试数据]
                  */
                 const test_result = {
-                    test_id: testData.test_id,
+                    test_id: testData.test_log.test_id,
                     exercise_log: testData.exercise_log,
-                    start_time: testData.start_time,
-                    finish_time: testData.finish_time,
+                    start_time: testData.test_log.start_time,
+                    finish_time: testData.test_log.finish_time,
                 }
-                console.log(test_result.exercise_log);
+                console.log(test_result);
                 return axios.post(url,{student_id: student_id, student_rating: 500, test_result: test_result})
                 .then(function (response) {
                     console.log(response.data);
                     dispatch(submitTestSuccess(response.data));
-                    dispatch(push("/mobile-zq/kp_test_result/"+testData.test_id));
+                    dispatch(push("/mobile-zq/kp_test_result/"+testData.test_log.test_id));
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -788,7 +789,7 @@ const checkAnswer = (exercise_type, log_answer) => {
             break;
         case 1:
             for(var i = 0; i < log_answer.length; i++){
-                if(log_answer[i].correct != log_answer[i].select){
+                if(log_answer[i].correct != (log_answer[i].select ? true :false)){
                     return 0;
                 }
             }
@@ -845,8 +846,8 @@ export const breakdownSelectChange = (exindex, index) => {
  */
 export const submitExerciseLog = (exercise, log_answer, student_rating) => {
     const {exercise_id, answer, exercise_type, exercise_rating, breakdown} = exercise;
+    console.log(exercise_rating, student_rating);
     const result = checkAnswer(exercise_type, log_answer);
-    // student_rating = 500;
 
     //计算学生、题目得分
     const st_delta = elo_rating(student_rating, exercise_rating);

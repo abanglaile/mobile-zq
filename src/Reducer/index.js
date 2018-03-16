@@ -3,15 +3,12 @@ import jwtDecode from 'jwt-decode';
 
 const defaulatTestData = Immutable.fromJS({
         isFetching: false,
-        isFinish : 0,
-        student_rating : 0,
         exindex: 0, 
         exercise: [{title: '', answer: '[]', type: 0, breakdown: []}],
         modalOpen: false,
         exercise_log: [{}],
         ranking_list: [{}],
         test_log: {finish_time: '', correct_exercise: 0},
-        record: {correct: 0, new_rating: 0},
         test_reward: {
             credit: {
                     delta_credit: 5,
@@ -189,27 +186,30 @@ export const testData = (state = defaulatTestData, action = {}) => {
                     ac_time: 0,
                 }
             }
-            var test_log = {test_id: test_id, start_time: start_time, test_type: action.test_type}
-            var newState = {
-                exercise: exercise, 
-                exindex: 0, 
-                record: {correct: 0, wrong: 0, new_rating: action.student_rating, combo_correct: 0, max_combo: 0},
-                test_log: test_log,
-                entry: action.entry,//0: 从测试列表进入, 1: 从知识点修炼进入 
-                exercise_log: exercise_log,
-                isFetching: false,//to do
-                modalOpen: false,//to do
-            };
+            var test_log = {test_id: action.test_id, start_time: start_time, test_type: action.test_type}
+            // var newState = {
+            //     exercise: exercise, 
+            //     exindex: 0, 
+            //     test_log: test_log,
+            //     exercise_log: exercise_log,
+            //     isFetching: false,//to do
+            //     modalOpen: false,//to do
+            // };
             
-            return state.mergeDeep(Immutable.fromJS(newState));
+            // return state.mergeDeep(Immutable.fromJS(newState));
+            return state.set('exercise', Immutable.fromJS(exercise)).set('exindex', 0)
+                .set('test_log', Immutable.fromJS(test_log))
+                .set('exercise_log', Immutable.fromJS(exercise_log))
+                .set('isFetching', false);
             break;
 
         case 'GET_TEST_EXERCISE_SUCCESS':
-            return state.set('exercise', Immutable.fromJS(action.json));
+            return state.set('exercise', Immutable.fromJS(action.json)).set('isFetching', false);
         case 'GET_TEST_RATING_REWARD_SUCCESS':
             console.log(action.json);
             return state.set('test_reward', Immutable.fromJS(action.json));
         case 'GET_TEST_RESULT_SUCCESS':
+            console.log(action.json.test_log);
             return state.set('exercise_log', Immutable.fromJS(action.json.exercise_log))
                 .set('test_kp', Immutable.fromJS(action.json.test_kp))
                 .set('test_log', Immutable.fromJS(action.json.test_log))
@@ -225,7 +225,7 @@ export const testData = (state = defaulatTestData, action = {}) => {
         case 'UPDATE_EXERCISE_TIME':
             return state.updateIn(['exercise_log', action.i, 'ac_time'], ac_time => ac_time + action.ac_time);
         case 'UPDATE_FINISH_TIME':
-            return state.set("finish_time", new Date());
+            return state.setIn(['test_log', "finish_time"], new Date());
         case 'SHOW_ANSWER_TEST':
             return state.setIn(["exercise_log", action.exindex, 'exercise_status'], 1);
         case 'HIDE_FEEDBACK_TOAST':
@@ -248,6 +248,7 @@ export const testData = (state = defaulatTestData, action = {}) => {
             //     combo_correct 
             // }
         case 'EXERCISE_SELECT_CHANGE':
+            console.log(action.index);
             return state.updateIn(['exercise_log', action.exindex, 'answer', action.index, 'select'], select => !select)
         case 'BREAKDOWN_SN_SELECT_CHANGE':
             const val = action.index;
@@ -280,7 +281,7 @@ export const studentData = (state = defaulatStudentData, action = {}) => {
         case 'GET_DATA_START':
             return state.set('isFetching', true);
         case 'GET_MY_SCORE_SUCCESS':
-            return state.set('ladderscore', action.json.student_rating);
+            return state.set('student_rating', action.json.student_rating);
         case 'GET_CHAPTER_SUCCESS':
             return state.set('book', action.json).set('isFetching', false);
         case 'GET_CHAPTER_NAME_SUCCESS':

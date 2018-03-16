@@ -129,8 +129,10 @@ class TestResult extends React.Component {
 
   renderPractice(){
     var {student_id, test_log} = this.props;
-    var test_config = JSON.parse(test_log.test_config);
+    console.log(test_log);
     if(test_log.test_type == 2){
+      var test_config = JSON.parse(test_log.test_config);
+      console.log(test_config.kp[0]);
       return (
         <div style={{
             position: 'fixed',
@@ -142,8 +144,9 @@ class TestResult extends React.Component {
             background: "#fff",
             }}>
           <WingBlank>
+          <WhiteSpace />
           <Button  type="primary"
-            onClick={ e => this.props.getTestDataByKp(student_id, test_config.kpid, test_config.kpname)} >
+            onClick={ e => this.props.getTestDataByKp(student_id, test_config.kp[0].kpid, test_config.kp[0].kpname)} >
               继续修炼
           </Button>
           </WingBlank>
@@ -157,7 +160,6 @@ class TestResult extends React.Component {
     var test_time = '';
     var finish_time = '';
     if(test_log.finish_time && test_log.start_time){
-      console.log(test_log.finish_time, test_log.start_time);
       var time = (Date.parse(test_log.finish_time) - Date.parse(test_log.start_time)) /1000;
       // var hour = parseInt(time/3600);
       // var mini = parseInt(time%3600/60);
@@ -166,7 +168,6 @@ class TestResult extends React.Component {
       test_time = new Date(time).Format("hh:mm:ss");
 
       finish_time = new Date(Date.parse(test_log.finish_time)).Format('MM月dd日 hh:mm');
-      console.log(exercise_log);
     }
     return(
       <div>
@@ -194,7 +195,7 @@ class TestResult extends React.Component {
         <WhiteSpace/>
         {this.renderExerciseList2()}
         <ActivityIndicator animating = {isFetching}/>
-
+        {this.renderPractice()}
         <Modal
           title='相关知识点'
           transparent
@@ -211,7 +212,7 @@ class TestResult extends React.Component {
                     {item.kpname}
                     <Brief>
                       <div>
-                        <span>掌握度： </span>
+                        <span>能力值： </span>
                         <span style={{color: '#1890ff', fontSize: '1.5rem'}}>{item.kp_rating}</span>
                       </div>
                     </Brief>
@@ -327,7 +328,7 @@ class TestResult extends React.Component {
       return (<SegmentedControl values={['我的', '排行']} style={{width: '6rem'}} onChange={e => this.SegmentedChange(e)} />)
     }else if(test_log.test_type == 2){
       //自主练习
-      return test_name;
+      return test_log.test_name;
     }
   }
 
