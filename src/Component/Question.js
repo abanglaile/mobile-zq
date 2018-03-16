@@ -306,7 +306,7 @@ class Question extends React.Component {
             breakdown_sn.map((item, i) => {
                 return (
                   <Item arrow="horizontal" multipleLine wrap onClick={() => this.props.router.push("/mobile-zq/studentkp/" + item.kpid)}
-                    style={item.sn_state == 0 ? {backgroundColor: "#fcdbc9"} : {backgroundColor: "white"}}>
+                    style={item.sn_state == 0 ? {backgroundColor: "#ffccc7"} : {backgroundColor: "white"}}>
                     <Tex content = {breakdown[i].content} />
                     <Item.Brief>{item.kpname}</Item.Brief>
                   </Item>

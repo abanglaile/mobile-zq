@@ -28,6 +28,7 @@ class StudentKp extends React.Component {
         this.props.getStuKpLadder(student_id, kpid);
         this.props.getStuKpAbility(student_id, kpid);
         this.props.updateEntry("root");
+        this.props.getMyLadderScore(student_id);
       // this.props.getTestRankingList(test_id);
       // this.props.getStuTestInfo(student_id,test_id);
     }else{
@@ -186,7 +187,8 @@ class StudentKp extends React.Component {
   }
   
   render() {
-    const {kpcapatity, student_id, kpid, kp} = this.props;
+    const {kpcapatity, student_id, params} = this.props;
+    const kpid = params.kpid;
     return (
       <div>
         <NavBar
@@ -229,7 +231,7 @@ class StudentKp extends React.Component {
           <WhiteSpace size='lg'/>
           <WingBlank>
           <Button style={{marginTop: '0.5rem'}} type="primary"
-            onClick={ e => this.props.getTestDataByKp(student_id, kpcapatity[0].kpid, kpcapatity[0].kpname)} >
+            onClick={ e => this.props.getTestDataByKp(student_id, kpid, kpcapatity[0].kpname)} >
               继续修炼
           </Button>
           </WingBlank>
