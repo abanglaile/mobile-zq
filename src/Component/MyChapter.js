@@ -177,28 +177,30 @@ class MyChapter extends React.Component {
           onClose
           footer={[{ text: '确定', onPress: () => { this.setState({modal: false})} }]}
         >
-          <List>
-          {
-            kp.map((item) => {
-              var correct_rate = item.practice ? Math.round((item.correct/item.practice)*100) : 0;
-              return (
-                <Item 
-                  arrow="horizontal"
-                  multipleLine
-                  onClick={e => this.props.router.push("/mobile-zq/student_kp/"+item.kpid)}
-                > 
-                    {item.kpname}
-                    <Brief>
-                      <div>
-                        <span>正确率： </span>
-                        <span style={{color: '#1890ff', fontSize: '1.2rem'}}>{correct_rate}%</span>
-                      </div>
-                    </Brief>
-                </Item>
-              )
-            })
-          }
-          </List>
+          <div style={{ height: 400, overflow: 'scroll' }}>
+            <List>
+            {
+              kp.map((item) => {
+                var correct_rate = item.practice ? Math.round((item.correct/item.practice)*100) : 0;
+                return (
+                  <Item 
+                    arrow="horizontal"
+                    multipleLine
+                    onClick={e => this.props.router.push("/mobile-zq/student_kp/"+item.kpid)}
+                  > 
+                      {item.kpname}
+                      <Brief>
+                        <div>
+                          <span>正确率： </span>
+                          <span style={{color: '#1890ff', fontSize: '1.2rem'}}>{correct_rate}%</span>
+                        </div>
+                      </Brief>
+                  </Item>
+                )
+              })
+            }
+            </List>
+          </div>
         </Modal>
       </div>
     );

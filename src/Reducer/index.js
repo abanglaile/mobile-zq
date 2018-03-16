@@ -194,8 +194,7 @@ export const testData = (state = defaulatTestData, action = {}) => {
             //     exercise_log: exercise_log,
             //     isFetching: false,//to do
             //     modalOpen: false,//to do
-            // };
-            
+            // };     
             // return state.mergeDeep(Immutable.fromJS(newState));
             return state.set('exercise', Immutable.fromJS(exercise)).set('exindex', 0)
                 .set('test_log', Immutable.fromJS(test_log))

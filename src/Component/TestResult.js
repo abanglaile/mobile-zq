@@ -25,6 +25,22 @@ Date.prototype.Format = function (fmt) { //author: meizz
     return fmt;
 }
 
+function formatTime(seconds) {
+    var min = Math.floor(seconds / 60),
+        second = seconds % 60,
+        hour, newMin, time;
+
+    if (min > 60) {
+        hour = Math.floor(min / 60);
+        newMin = min % 60;
+    }
+
+    if (second < 10) { second = '0' + second;}
+    if (min < 10) { min = '0' + min;}
+
+    return time = hour? (hour + ':' + newMin + ':' + second) : (min + ':' + second);
+}
+
 class TestResult extends React.Component {
   constructor(props) {
     super(props);
@@ -59,7 +75,7 @@ class TestResult extends React.Component {
             <div>{test_kp[0] ? test_kp[0].kpname : ''}</div>
             <Brief>
               <div>
-                <span>掌握度： </span>
+                <span>能力值： </span>
                 <span style={{color: '#1890ff', fontSize: '1.5rem'}}>{test_kp[0] ? test_kp[0].kp_rating : ''}</span>
               </div>
             </Brief>
@@ -165,7 +181,7 @@ class TestResult extends React.Component {
       // var mini = parseInt(time%3600/60);
       // var sec = parseInt(time%60);
       // test_time = hour ? hour+ '小时' : ''  + mini ? mini : '' + '分' + sec ? sec : 00+ '秒'
-      test_time = new Date(time).Format("hh:mm:ss");
+      test_time = formatTime(time);
 
       finish_time = new Date(Date.parse(test_log.finish_time)).Format('MM月dd日 hh:mm');
     }
@@ -228,7 +244,7 @@ class TestResult extends React.Component {
 
   renderRanking(){
     var {ranking_list} = this.props;
-    
+    var timeconsuming = '';
     return (
       <List>
           <Item style={{
@@ -238,13 +254,12 @@ class TestResult extends React.Component {
           {
             ranking_list.map((item, i) => {
               console.log("item:"+JSON.stringify(item));
-              var t = (Date.parse(item.finish_time) - Date.parse(item.start_time))/1000;
-              var min = this.PrefixInteger(parseInt(t/60), 2);
-              var sec = this.PrefixInteger(t%60, 2);
+              timeconsuming = formatTime(item.time_consuming);
+              console.log("timeconsuming:"+timeconsuming);
               return (
                 <Item arrow="horizontal">
                   {item.student_name}
-                  <Brief>{'正确率：' + item.correct_exercise + '/6 | 耗时' + min + ':' + sec}</Brief>
+                  <Brief>{'正确率：' + item.correct_exercise + '/'+item.total_exercise+' | 耗时 ' + timeconsuming}</Brief>
                 </Item>
               )
             })
@@ -254,61 +269,71 @@ class TestResult extends React.Component {
   }
 
   renderGlobalResult(){
-
-    return(
-      <div>
-      <div style={{backgroundColor: '#1890ff', paddingTop: '2.5rem', paddingBottom: '0.5rem', color: 'white'}}>
-        <Flex>
-          <Flex.Item><div style={{
-                  color: 'white',
-                  textAlign: 'center',
-                  height: '1.5rem',
-                  lineHeight: '1.5rem',
-                  width: '100%',
-                  fontSize: '2rem',
-                }} >8/10</div>
-                <div style={{
-                  textAlign: 'center',
-                  height: '3rem',
-                  lineHeight: '3rem',
-                  width: '100%',
-                  fontSize: '1rem'}}>已提交(人)</div>
-          </Flex.Item>
-          <Flex.Item>
-                <div style={{
-                  color: 'white',
-                  textAlign: 'center',
-                  height: '1.5rem',
-                  lineHeight: '1.5rem',
-                  width: '100%',
-                  fontSize: '2rem',
-                }} >3.5/7</div>
-                <div style={{
-                  textAlign: 'center',
-                  height: '3rem',
-                  lineHeight: '3rem',
-                  width: '100%',
-                  fontSize: '1rem'}}>平均答对(题)</div>
-          </Flex.Item>
-          <Flex.Item><div style={{
-                  textAlign: 'center',
-                  height: '1.5rem',
-                  lineHeight: '1.5rem',
-                  width: '100%',
-                  fontSize: '2rem',
-                }} >05:36</div>
-                <div style={{
-                  textAlign: 'center',
-                  height: '3rem',
-                  lineHeight: '3rem',
-                  width: '100%',
-                  fontSize: '1rem'}}>平均耗时</div>
-          </Flex.Item>
-        </Flex>
-      </div>
-      {this.renderRanking()}
-      </div>
-    )
+    const {test_status} = this.props;
+    var avg_time = '';
+    console.log("test_status"+JSON.stringify(test_status));
+    if(test_status){
+      avg_time = formatTime(test_status.avg_timeconsuming);
+      return(
+        <div>
+          <div style={{backgroundColor: '#1890ff', paddingTop: '2.5rem', paddingBottom: '0.5rem', color: 'white'}}>
+            <Flex>
+              <Flex.Item><div style={{
+                      color: 'white',
+                      textAlign: 'center',
+                      height: '1.5rem',
+                      lineHeight: '1.5rem',
+                      width: '100%',
+                      fontSize: '2rem',
+                    }} >{test_status.test_submit}/
+                      <span style={{fontSize:'1.5rem'}}>{test_status.test_students}</span>
+                    </div>
+                    <div style={{
+                      textAlign: 'center',
+                      height: '3rem',
+                      lineHeight: '3rem',
+                      width: '100%',
+                      fontSize: '1rem'}}>已提交(人)</div>
+              </Flex.Item>
+              <Flex.Item>
+                    <div style={{
+                      color: 'white',
+                      textAlign: 'center',
+                      height: '1.5rem',
+                      lineHeight: '1.5rem',
+                      width: '100%',
+                      fontSize: '2rem',
+                    }} >{test_status.avg_accurracy}/
+                      <span style={{fontSize:'1.5rem'}}>{test_status.test_size}</span>
+                    </div>
+                    <div style={{
+                      textAlign: 'center',
+                      height: '3rem',
+                      lineHeight: '3rem',
+                      width: '100%',
+                      fontSize: '1rem'}}>平均答对(题)</div>
+              </Flex.Item>
+              <Flex.Item><div style={{
+                      textAlign: 'center',
+                      height: '1.5rem',
+                      lineHeight: '1.5rem',
+                      width: '100%',
+                      fontSize: '1.5rem',
+                    }} >{avg_time}</div>
+                    <div style={{
+                      textAlign: 'center',
+                      height: '3rem',
+                      lineHeight: '3rem',
+                      width: '100%',
+                      fontSize: '1rem'}}>平均耗时</div>
+              </Flex.Item>
+            </Flex>
+          </div>
+          {this.renderRanking()}
+        </div>
+      )
+    }
+    
   }
 
   onLeftClick(){
@@ -354,10 +379,11 @@ class TestResult extends React.Component {
 
 export default connect(state => {
   const test_state = state.testData.toJS();
-  const {exercise_log, test_kp, test_log, isFetching, modalOpen, ranking_list, exercise, entry, exindex} = test_state;
+  const {test_status, exercise_log, test_kp, test_log, isFetching, modalOpen, ranking_list, exercise, entry, exindex} = test_state;
   return {
     exindex: exindex,
     exercise: exercise,
+    test_status: test_status,
     exercise_log: exercise_log ? exercise_log : [],
     test_kp: test_kp ? test_kp : [],
     test_log: test_log,
