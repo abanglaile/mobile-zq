@@ -1056,19 +1056,19 @@ export const getTestResult = (student_id, test_id) => {
     }
 }
 
-export const getChapter = (student_id, course_id) => {
-    let url = target + "/getChapter";
-    return (dispatch) => {
-        dispatch(getDataStart());
-        return axios.post(url,{student_id,course_id})
-        .then(function (response) {
-            dispatch(getChapterSuccess(response.data));
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-    }
-}
+// export const getChapter = (student_id, course_id) => {
+//     let url = target + "/getChapter";
+//     return (dispatch) => {
+//         dispatch(getDataStart());
+//         return axios.post(url,{student_id,course_id})
+//         .then(function (response) {
+//             dispatch(getChapterSuccess(response.data));
+//         })
+//         .catch(function (error) {
+//             console.log(error);
+//         });
+//     }
+// }
 
 //根据sample_id获取题目信息
 export const getExerciseSample = (exercise_id) => {

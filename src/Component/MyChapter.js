@@ -82,15 +82,18 @@ class MyChapter extends React.Component {
           {
             book[m_index].chapters.map((chapteritem) => {
               return (
-                <Item 
-                  extra={'开始练习'}
-                  thumb={<Circle width={50} type="circle" percent={chapteritem.chapterrate} format={(percent) => `${percent}%`}/>} 
-                  onClick={() => this.getKpByChapterid(chapteritem.chapterid)}
-                >
-                  <div style={{display: 'flex', marginTop: '1.5rem',marginBottom: '1.5rem', alignItems: 'center'}}>
-                    {chapteritem.chaptername}
-                  </div>
-                </Item>
+                <div>
+                  <Item 
+                    extra={'开始练习'}
+                    thumb={<Circle width={50} type="circle" percent={chapteritem.chapterrate} format={(percent) => `${percent}%`}/>} 
+                    onClick={() => this.getKpByChapterid(chapteritem.chapterid)}
+                  >
+                    <div style={{display: 'flex', marginTop: '1.5rem',marginBottom: '1.5rem', alignItems: 'center'}}>
+                      {chapteritem.chaptername}
+                    </div>
+                  </Item>
+                  <WhiteSpace style={{backgroundColor:"#f5f5f5"}}/>
+                </div>
               )
             })
           }
@@ -104,7 +107,7 @@ class MyChapter extends React.Component {
 
   render(){
     const { show } = this.state;
-    const {book,ladderscore,chapter} = this.props;
+    const {book,student_rating,chapter} = this.props;
     const {kp} = chapter
     var initData = [];
     if(book.length > 0){
@@ -113,7 +116,7 @@ class MyChapter extends React.Component {
       }
     }
     console.log('book:'+JSON.stringify(book));
-    console.log('ladderscore:'+JSON.stringify(ladderscore));
+    console.log('student_rating:'+JSON.stringify(student_rating));
 
     const menuEl = (
       <Menu
@@ -162,7 +165,7 @@ class MyChapter extends React.Component {
               <div 
                 style={{display: 'flex', alignItems: 'center',margin:"0.5rem 0 0.5rem 0"}}
               >
-                总天梯分:<div style={{margin:'0 0 0.2rem 0.5rem',fontWeight: 'bold',fontSize: '1.5rem',color:"#1890ff"}}>{ladderscore}</div>
+                总天梯分:<div style={{margin:'0 0 0.2rem 0.5rem',fontWeight: 'bold',fontSize: '1.5rem',color:"#1890ff"}}>{student_rating}</div>
               </div>
             </Item>
           </List>
@@ -210,11 +213,11 @@ class MyChapter extends React.Component {
 
 export default connect((state, ownProps) => {
   const studentData = state.studentData.toJS();
-  const {book, course_id,ladderscore,chapter} = studentData;
+  const {book, course_id,student_rating,chapter} = studentData;
   return {
     book: book,
     course_id: 3,
-    ladderscore : ladderscore,
+    student_rating : student_rating,
     chapter: chapter ? chapter : [],
     student_id: state.AuthData.get('userid'),
   };
