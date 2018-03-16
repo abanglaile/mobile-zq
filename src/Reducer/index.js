@@ -18,7 +18,7 @@ const defaulatTestData = Immutable.fromJS({
     });
 const defaulatStudentData = Immutable.fromJS({
         isFetching: false,
-        ladderscore: 0,
+        student_rating: 0,
         book: [],
         my_test_list: [],
         my_uncompleted_test: [],
