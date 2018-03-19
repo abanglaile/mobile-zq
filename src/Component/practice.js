@@ -39,7 +39,7 @@ class MyTest extends React.Component {
     const {student_id} = this.props;
     this.loadTest();
     this.props.updateEntry("root");
-    this.props.getMyLadderScore(student_id);
+    this.props.getStuComUsedKp(student_id);
   }
 
   loadTest(){
@@ -62,7 +62,7 @@ class MyTest extends React.Component {
           <Item 
             multipleLine 
             extra={<Button type="primary" size='small' inline>开始</Button>}
-            onClick={e => this.props.getTestData(student_id,item.test_id,item.test_type, {entry: "mytest"})}
+            onClick={e => this.props.getTestData(student_id,item.test_id,item.test_type)}
             style = {{border:"1px solid #888",borderRadius: "5px",margin :"1rem 1rem"}}
           >
             {item.test_name}
@@ -110,11 +110,11 @@ class MyTest extends React.Component {
           </Item>
           <Item 
             extra={<Button type='ghost' size='small' inline>继续</Button>}
-            onClick={() => this.getMyComUsedKp()}
+            onClick={() => this.setState({modal: true})}
             style = {{border:"1px solid #888",borderRadius: "5px",margin :"1rem 1rem"}}
           >
             薄弱知识点
-            <Brief>已掌握0/4</Brief>
+            <Brief>{"已掌握0/" + comusedkp.length}</Brief>
           </Item>
         </List>
       </div>
@@ -129,7 +129,10 @@ class MyTest extends React.Component {
             {
               comusedkp.map((item) => {
                 return (
-                  <Item multipleLine>
+                  <Item 
+                    arrow="horizontal"
+                    multipleLine
+                    onClick={e => this.props.router.push("/mobile-zq/student_kp/"+item.kpid)}>
                     {item.kpname}
                     <div style={{display: 'flex', marginTop: '0.5rem', alignItems: 'center'}}>
                       <Progress style={{width: '60%'}} percent={item.rate} position="normal" />
@@ -170,6 +173,6 @@ export default connect(state => {
     my_uncompleted_test: student_state.my_uncompleted_test, 
     isFetching: student_state.isFetching,
     comusedkp : comusedkp ? comusedkp : [],
-    student_id: state.AuthData.get('userid'), 
+    student_id: state.AuthData.get('userid'),
   }
 }, action)(MyTest);

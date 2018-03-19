@@ -132,12 +132,13 @@ class Question extends React.Component {
   renderTitle(){
     const {exercise, exindex} = this.props;
     const {title, title_img_url, title_audio_url} = exercise[exindex]; 
+    console.log(title_img_url);
     return (
       <div style={{ margin: '30px 0 18px 0', fontSize: '1.0rem'}}>
         <Tex content={title} />
         {
           title_img_url? 
-          <img src={title_img_url} height="3rem" />
+          <img src={title_img_url} style={{width: "100%", height:"auto"}} />
           :
           null
         }
@@ -155,11 +156,10 @@ class Question extends React.Component {
 
   renderAnswer(){
     const {exercise, exindex, exercise_log} = this.props;
-    const {exercise_type} = exercise[exindex];
+    const {exercise_type, answer} = exercise[exindex];
     console.log(exercise_log, exindex);
-    const {answer, exercise_state} = exercise_log[exindex];
+    const {exercise_state} = exercise_log[exindex];
     const answerjson = answer;
-    console.log(answer);
     
     switch(exercise_type){
       case 0:
@@ -184,7 +184,8 @@ class Question extends React.Component {
           );
         }
         //未做完
-        return (
+        else {
+          return (
             <List key={'answer'+ exindex}>
               {answerjson.map((i,index) => (
                 <CheckboxItem key={index} defaultChecked = {i.select} 
@@ -194,6 +195,7 @@ class Question extends React.Component {
               ))}
             </List>
           );
+        }
       case 2:
         if(exercise_state >= 0){
           return (
@@ -206,7 +208,7 @@ class Question extends React.Component {
               ))}
             </List>
           );  
-        }
+        }else{
         return (
             <List key={'answer'+ exindex}>
               {answerjson.map((i,index) => (
@@ -216,7 +218,8 @@ class Question extends React.Component {
                 </CheckboxItem>
               ))}
             </List>
-          );  
+          );
+        }  
       default:
         return;
     }
@@ -256,7 +259,7 @@ class Question extends React.Component {
       return (
       <List renderHeader='请选择你做对的步骤'>
         {breakdown.map((item,i) => {
-          console.log(breakdown_sn[i].sn_state);
+          console.log(item.content);
           const presn = item.presn;
           //显示第一个或前置已经被选择（最后答案不显示）
           if((i != breakdown.length - 1) && (breakdown_sn[i].sn_state >= 0 || (presn > 0 && breakdown_sn[presn - 1].sn_state > 0))){
@@ -298,12 +301,12 @@ class Question extends React.Component {
     const {exercise, exindex, exercise_log, modalOpen} = this.props;
     const {breakdown, title} = exercise[exindex];
     const {exercise_state, exercise_status, answer_test, breakdown_sn} = exercise_log[exindex];
-    
     if(exercise_status == 2){
       return (
         <List renderHeader={() => '答案解析'} >
           {
             breakdown_sn.map((item, i) => {
+                console.log(i, breakdown[i].content);
                 return (
                   <Item arrow="horizontal" multipleLine wrap onClick={() => this.props.router.push("/mobile-zq/studentkp/" + item.kpid)}
                     style={item.sn_state == 0 ? {backgroundColor: "#ffccc7"} : {backgroundColor: "white"}}>
