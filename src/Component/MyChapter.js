@@ -30,6 +30,7 @@ class MyChapter extends React.Component {
 
   componentDidMount(){
     const {student_id, course_id} = this.props;
+    this.props.setSelectedTab("redTab");
     this.props.getMyLadderScore(student_id);
     this.props.getMyBookChapter(student_id, course_id);
   }

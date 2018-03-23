@@ -334,6 +334,14 @@ export const setSelectedTab = (tab) => {
     }
 }
 
+//记录mytest 做题历史被选中的tab状态(0 or 1)
+export const setMyTestTab = (test_tab) => {
+     return {
+        type: 'GET_MY_TEST_TAB',
+        test_tab,
+    }
+}
+
 
 /*-------------------------------------------------*/
 //获取我的天梯总分

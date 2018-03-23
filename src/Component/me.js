@@ -4,6 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import config from '../utils/Config'
 import *as action from '../Action/reg_action';
+// import *as action from '../Action/';
 import {connect} from 'react-redux';
 
 const Item = List.Item;
@@ -13,6 +14,10 @@ const alert = Modal.alert;
 class perCenter extends React.Component {
   constructor(props) { 
     super(props);
+  }
+
+  componentDidMount(){
+    this.props.setSelectedTab("yellowTab");
   }
 
 
