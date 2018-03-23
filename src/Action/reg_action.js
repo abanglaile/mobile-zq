@@ -43,6 +43,14 @@ const checkCodeFailure = () => {
     }
 }
 
+//记录底部标签栏 selected bar 的状态(blueTab RedTab..)
+export const setSelectedTab = (tab) => {
+     return {
+        type: 'GET_SELECTED_TAB',
+        tab,
+    }
+}
+
 export const hideHascodeToast = () => {
     return {
         type: 'HIDE_HASCODE_TOAST',

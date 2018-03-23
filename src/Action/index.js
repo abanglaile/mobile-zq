@@ -334,6 +334,14 @@ export const setSelectedTab = (tab) => {
     }
 }
 
+//记录mytest 做题历史被选中的tab状态(0 or 1)
+export const setMyTestTab = (test_tab) => {
+     return {
+        type: 'GET_MY_TEST_TAB',
+        test_tab,
+    }
+}
+
 
 /*-------------------------------------------------*/
 //获取我的天梯总分
@@ -806,7 +814,7 @@ const checkAnswer = (exercise_type, log_answer) => {
             break;
         case 2:
             for(var i = 0; i < log_answer.length; i++){
-                if(log_answer[i].correct != log_answer[i].select){
+                if(log_answer[i].correct != (log_answer[i].select ? true :false)){
                     return 0;
                 }
             }

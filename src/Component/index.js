@@ -13,6 +13,12 @@ class App extends React.Component {
     };
   }
 
+  componentWillReceiveProps(nextProps){
+    if(nextProps.tab != this.props.tab){
+      this.setState({selectedTab : nextProps.tab});
+    }
+  }
+
 
   render() {
     return (

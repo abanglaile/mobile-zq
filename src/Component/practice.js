@@ -38,6 +38,7 @@ class MyTest extends React.Component {
   componentDidMount(){
     const {student_id} = this.props;
     this.loadTest();
+    this.props.setSelectedTab("blueTab");
     this.props.updateEntry("root");
     this.props.getMyLadderScore(student_id);
   }
@@ -114,7 +115,7 @@ class MyTest extends React.Component {
             style = {{border:"1px solid #888",borderRadius: "5px",margin :"1rem 1rem"}}
           >
             薄弱知识点
-            <Brief>已掌握0/4</Brief>
+            <Brief>已掌握0/3</Brief>
           </Item>
         </List>
       </div>

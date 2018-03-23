@@ -137,7 +137,7 @@ class Question extends React.Component {
         <Tex content={title} />
         {
           title_img_url? 
-          <img src={title_img_url} height="3rem" />
+          <img src={title_img_url} style={{height: "4rem", width: "90%"}}/>
           :
           null
         }

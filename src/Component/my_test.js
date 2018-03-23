@@ -46,6 +46,7 @@ class MyTest extends React.Component {
   }
 
   render() {
+    console.log("this.props.test_tab:"+this.props.test_tab);
     var {isFetching, my_test_list} = this.props;
     var teacher_test = [], auto_test = [];
     if(my_test_list){
@@ -104,11 +105,17 @@ class MyTest extends React.Component {
       <NavBar
           mode="light"
           icon={<Icon type="left" />}
-          onLeftClick={e => this.props.router.push("/mobile-zq/root")}
+          onLeftClick={e => {
+            this.props.setMyTestTab(0);
+            this.props.router.push("/mobile-zq/root")}
+          }
         >做题历史</NavBar>
       <ActivityIndicator toast animating={this.props.isFetching} />
       <Tabs tabs={tabs}
-         initialPage={0}>
+         // initialPage={0}
+         onTabClick= {(tab,index) => this.props.setMyTestTab(index)}
+         initialPage={this.props.test_tab ?  this.props.test_tab : 0}
+         >
         <div>
           <List className="my-list">
             {teacher_test_item}
@@ -132,6 +139,7 @@ export default connect(state => {
   return {
     my_test_list: student_state.my_test_list, 
     isFetching: student_state.isFetching,
+    test_tab: student_state.test_tab,
     student_id: state.AuthData.get('userid'), 
   }
 }, action)(MyTest);

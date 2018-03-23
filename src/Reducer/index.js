@@ -28,6 +28,7 @@ const defaulatStudentData = Immutable.fromJS({
             kp: [],
         },
         tab: '',
+        test_tab:'',
     });
 
 const defaulatStuStatus = Immutable.fromJS({
@@ -158,7 +159,8 @@ export const testData = (state = defaulatTestData, action = {}) => {
         case 'GET_TEST_SUCCESS':
             const exercise = action.exercise;
             //初始化测试开始时间
-            const start_time = new Date();
+            var start_time = new Date();
+            console.log("start_time:"+start_time);
             //构造exercise_log
             var exercise_log = [];
             for(var i = 0; i < exercise.length; i++){
@@ -296,6 +298,8 @@ export const studentData = (state = defaulatStudentData, action = {}) => {
             return state.set('my_uncompleted_test', action.json).set('isFetching', false);
         case 'GET_SELECTED_TAB':
             return state.set('tab', action.tab);
+        case 'GET_MY_TEST_TAB':
+            return state.set('test_tab', action.test_tab);   
         default:
             return state;
     }
