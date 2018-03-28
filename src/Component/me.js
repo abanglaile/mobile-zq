@@ -22,7 +22,7 @@ class perCenter extends React.Component {
 
 
   render() {
-    const {nickname,imgurl,student_name} = this.props; 
+    const {nickname,imgurl,student_name,class_name} = this.props; 
     return (
       <div>
         <NavBar
@@ -48,7 +48,7 @@ class perCenter extends React.Component {
           </Item>
           <Item
             arrow="horizontal"
-            extra={'未绑定'}
+            extra={class_name? class_name:'未绑定'}
           >
             班级
           </Item>
@@ -73,10 +73,12 @@ class perCenter extends React.Component {
 
 export default connect(state => {
   const auth_state = state.AuthData.toJS();
-  const {nickname, imgurl,student_name} = auth_state;
+  console.log("auth_state:"+JSON.stringify(auth_state));
+  const {nickname, imgurl,student_name,class_name} = auth_state;
   return {
     nickname: nickname,
     imgurl: imgurl,
     student_name: student_name,
+    class_name:class_name,
   }; 
 }, action)(perCenter);
