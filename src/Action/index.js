@@ -207,14 +207,14 @@ const getMyUncompletedTestSuccess = (json) => {
 }
 
 //获取测试数据成功
-const getTestSuccess = (json, test_type, entry) => {
+const getTestSuccess = (json, test_type) => {
     console.log(json.test_id);
   return {
     type: 'GET_TEST_SUCCESS',
     exercise: json.exercise,
     test_id: json.test_id,
     test_type,
-    entry,
+    student_rating: json.student_rating,
   }
 }
 
@@ -293,14 +293,13 @@ const getTestResultSuccess = (json) => {
     }
 }
 
-//成功获取题目样本
-const getExerciseSampleSuccess = (json) => {
-    console.log(json);
-    return {
-        type: 'GET_EXERCISE_SAMPLE_SUCCESS',
-        json,
-    }
-}
+// //成功获取题目样本
+// const getExerciseSampleSuccess = (json) => {
+//     return {
+//         type: 'GET_EXERCISE_SAMPLE_SUCCESS',
+//         json,
+//     }
+// }
 
 //获取测试数据成功
 const getChapterSuccess = (json) => {
@@ -312,6 +311,7 @@ const getChapterSuccess = (json) => {
 
 //获取我的天梯分数成功
 const getMyScoreSuccess = (json) => {
+    console.log(json);
   return {
     type: 'GET_MY_SCORE_SUCCESS',
     json,
@@ -501,7 +501,8 @@ export const getTestData = (student_id, test_id, test_type, entry) => {
                 }
         })
         .then(function (response) {
-            dispatch(getTestSuccess(response.data, test_type, entry));
+            dispatch(getTestSuccess(response.data, test_type));
+            dispatch(getMyScoreSuccess(response.data));
             dispatch(push("/mobile-zq/question"));
             dispatch(updateExerciseST());
         })
@@ -515,7 +516,6 @@ export const getTestData = (student_id, test_id, test_type, entry) => {
 //根据kpid获得该主测点下的试题
 export const getTestDataByKp = (student_id, kpid, kpname) => {
     let url = target + "/getExerciseByKpid";
-    console.log(student_id, kpid, kpname);
     return (dispatch) => {
         dispatch(getTestStart());
         return axios.get(url,{
@@ -526,7 +526,8 @@ export const getTestDataByKp = (student_id, kpid, kpname) => {
                 }
         })
         .then(function (response) {
-            dispatch(getTestSuccess(response.data, {test_type: 2}));
+            dispatch(getTestSuccess(response.data, 2));
+            dispatch(getMyScoreSuccess(response.data));
             dispatch(push("/mobile-zq/question"));
             dispatch(updateExerciseST());
         })
@@ -722,6 +723,7 @@ export const closeModal = () => {
 
 //更新题目数
 export const updateExindex = (exindex) => {
+    console.log(exindex);
     return {
         type: 'UPDATE_EXINDEX',
         exindex,

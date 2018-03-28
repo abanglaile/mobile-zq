@@ -204,6 +204,7 @@ export const testData = (state = defaulatTestData, action = {}) => {
             return state.set('exercise', Immutable.fromJS(exercise)).set('exindex', 0)
                 .set('test_log', Immutable.fromJS(test_log))
                 .set('exercise_log', Immutable.fromJS(exercise_log))
+                .set('studentrating')
                 .set('isFetching', false);
             break;
 
@@ -285,13 +286,13 @@ export const studentData = (state = defaulatStudentData, action = {}) => {
         case 'GET_DATA_START':
             return state.set('isFetching', true);
         case 'GET_MY_SCORE_SUCCESS':
+            console.log(action.json.student_rating);
             return state.set('student_rating', action.json.student_rating);
         case 'GET_CHAPTER_SUCCESS':
             return state.set('book', action.json).set('isFetching', false);
         case 'GET_CHAPTER_NAME_SUCCESS':
             return state.setIn(['chapter', 'chaptername'], action.json.chaptername).set('isFetching', false);
         case 'GET_CHAPTER_STATUS_SUCCESS':
-            console.log(action.json);
             return state.setIn(['chapter', 'status'], action.json).set('isFetching', false);
         case 'GET_CHAPTER_KP_SUCCESS':
             return state.setIn(['chapter', 'kp'], action.json).set('isFetching', false);
