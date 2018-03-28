@@ -1,9 +1,9 @@
 import { Tabs, WhiteSpace, List, Icon, Button, NavBar,Modal,Progress,ActivityIndicator } from 'antd-mobile';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Tex from './renderer.js';
+// import Tex from './renderer.js';
 
-import *as action from '../Action/';
+import *as action from '../Action/index';
 import {connect} from 'react-redux';
 
 const Item = List.Item;
@@ -167,12 +167,11 @@ class MyTest extends React.Component {
 
 export default connect(state => {
   console.log(state);
-  const student_state = state.studentData.toJS();
-  const student_status = state.stuStatus.toJS();
-  const {comusedkp} = student_status;
+  const student_data = state.studentData.toJS();
+  const {isFetching, comusedkp, my_uncompleted_test} = student_data;
   return {
-    my_uncompleted_test: student_state.my_uncompleted_test, 
-    isFetching: student_state.isFetching,
+    my_uncompleted_test: my_uncompleted_test, 
+    isFetching: isFetching,
     comusedkp : comusedkp ? comusedkp : [],
     student_id: state.AuthData.get('userid'),
   }

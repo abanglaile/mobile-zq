@@ -29,118 +29,12 @@ const defaulatStudentData = Immutable.fromJS({
         },
         tab: '',
         test_tab:'',
-    });
-
-const defaulatStuStatus = Immutable.fromJS({
-        isFetching: false,
         capatity: [],
         ladder : [],
         kpladder : [],
         kpcapatity: [],
         comusedkp : [],
     });
-
-const defaulatAuthData = Immutable.fromJS({
-        token: null,
-        nickname: null,
-        imgurl:null,
-        userid: null,
-        student_name:null,
-        hascode: null, 
-        isAuthenticated: false,
-        isAuthenticating: false,
-        statusText: null,
-        wx_info : null,
-    });
-
-//获取鉴权数据
-export const AuthData = (state = defaulatAuthData, action = {}) => {
-    switch(action.type){
-        case 'LOGIN_USER_REQUEST':
-            return state.set('isAuthenticating', true);
-        case 'REG_USER_REQUEST':
-            return state.set('isAuthenticating', true);
-        case 'LOGIN_USER_SUCCESS':
-            var sucState = {
-                isAuthenticating: false,
-                isAuthenticated: true,
-                token: action.payload.token,
-                userName: jwtDecode(action.payload.token).username,
-                userid: jwtDecode(action.payload.token).userid,
-                statusText: 'You have been successfully logged in.'
-            };
-            return Immutable.fromJS(sucState);
-        case 'REG_USER_SUCCESS':
-            var sucRegState = {
-                isAuthenticating: false,
-                isAuthenticated: true,
-                token: action.payload.token,
-                userName: jwtDecode(action.payload.token).username,
-                userid: jwtDecode(action.payload.token).userid,
-                statusText: 'You have been successfully registered.'
-            };
-            return Immutable.fromJS(sucRegState);
-        case 'LOGIN_USER_FAILURE':
-            var failState = {
-                isAuthenticating: false,
-                isAuthenticated: false,
-                token: null,
-                userName: null,
-                userid: null,
-                statusText: `Authentication Error: ${action.payload.status} ${action.payload.statusText}`
-            };
-            return Immutable.fromJS(failState);
-        case 'REG_USER_FAILURE':
-            var failRegState = {
-                isAuthenticating: false,
-                isAuthenticated: false,
-                token: null,
-                userName: null,
-                userid: null,
-                statusText: `Authentication Error: ${action.payload.status} ${action.payload.statusText}`
-            };
-            return Immutable.fromJS(failRegState);
-        case 'LOGOUT_USER':
-            return state.set('isAuthenticated', false)
-                    .set('token',null)
-                    .set('userName',null)
-                    .set('userid',null)
-                    .set('statusText','You have been successfully logged out.');
-                    
-        case 'LOGOUT_WX_USER':
-            return state.set('isAuthenticated', false)
-                    .set('token',null)
-                    .set('nickname',null)
-                    .set('userid',null)
-                    .set('imgurl',null)
-                    .set('hascode',null)
-                    .set('statusText','You have been successfully logged out.');
-
-        case 'GET_WX_USERINFO_SUCCESS':
-            var sucState = {
-                isAuthenticating: false,
-                isAuthenticated: true,
-                token: action.payload.token,
-                nickname: jwtDecode(action.payload.token).nickname,
-                userid: jwtDecode(action.payload.token).userid,
-                imgurl:jwtDecode(action.payload.token).imgurl,
-                student_name:jwtDecode(action.payload.token).name,
-                hascode: -1,
-                statusText: 'You have been successfully logged in by wx.'
-            };
-            return Immutable.fromJS(sucState);
-        case 'CHECK_CODE_SUCCESS':
-            return state.set('hascode',1);
-        case 'CHECK_CODE_FAILURE':
-            return state.set('hascode',0);
-        case 'HIDE_HASCODE_TOAST':
-            return state.set('hascode',-1);
-        case 'SAVE_TEMP_WX_INFO':
-            return state.set('wx_info',Immutable.fromJS(action.wx_info));
-        default:
-            return state;
-    }
-} 
 
 //手动获取数据
 export const testData = (state = defaulatTestData, action = {}) => {
@@ -152,9 +46,6 @@ export const testData = (state = defaulatTestData, action = {}) => {
                 .set('test_id', action.test_id);
         case 'GET_TEST_RANKLIST_SUCCESS':
             return state.set('ranking_list', Immutable.fromJS(action.json));
-        case 'GET_STU_TESTINFO_SUCCESS':
-            return state.set('isFinish', action.json.isFinish)
-                        .set('student_rating', action.json.student_rating);
         //获取全新测试数据
         case 'GET_TEST_SUCCESS':
             const exercise = action.exercise;
@@ -189,15 +80,6 @@ export const testData = (state = defaulatTestData, action = {}) => {
                 }
             }
             var test_log = {test_id: action.test_id, start_time: start_time, test_type: action.test_type}
-            // var newState = {
-            //     exercise: exercise, 
-            //     exindex: 0, 
-            //     test_log: test_log,
-            //     exercise_log: exercise_log,
-            //     isFetching: false,//to do
-            //     modalOpen: false,//to do
-            // };     
-            // return state.mergeDeep(Immutable.fromJS(newState));
             return state.set('exercise', Immutable.fromJS(exercise)).set('exindex', 0)
                 .set('test_log', Immutable.fromJS(test_log))
                 .set('exercise_log', Immutable.fromJS(exercise_log))
@@ -216,14 +98,12 @@ export const testData = (state = defaulatTestData, action = {}) => {
                 .set('test_kp', Immutable.fromJS(action.json.test_kp))
                 .set('test_log', Immutable.fromJS(action.json.test_log))
                 .set('isFetching', false);
-        case 'GET_EXERCISE_SAMPLE_SUCCESS':
-            return state.set('exercise_sample', Immutable.fromJS(action.json)).set('isFetching', false).set('modalOpen', true);
         case 'UPDATE_ENTRY': 
             return state.set('entry', action.entry);
         case 'UPDATE_EXINDEX':
-            return state.set('exindex', action.exindex);
-        case 'UPDATE_EXERCISE_ST':
-            return state.set('exercise_st', new Date());
+            return state.set('exindex', action.exindex).set('exercise_st', new Date());
+        case 'UPDATE_EXERCISE_STATUS':
+            return state.setIn(['exercise_log', action.i, 'exercise_status'], action.exercise_status);
         case 'UPDATE_EXERCISE_TIME':
             return state.updateIn(['exercise_log', action.i, 'ac_time'], ac_time => ac_time + action.ac_time);
         case 'UPDATE_FINISH_TIME':
@@ -237,18 +117,6 @@ export const testData = (state = defaulatTestData, action = {}) => {
         case 'SUBMIT_EXERCISE_LOG':
             const exindex = state.get('exindex');
             return state.mergeDeepIn(['exercise_log', exindex], Immutable.fromJS(action.exercise_log)).set("modalOpen", true);
-        case 'UPDATE_RECORD':
-            // const exercise_state = action.exercise_log.exercise_state;
-            // const combo_correct = state.getIn(['record', 'combo_correct']);
-            // var combo_max = state.getIn(['record', 'combo_max']);
-            // if(exercise_state){
-            //     return state.updateIn(['record', 'combo_correct'], num => num + 1)
-            //     .updateIn(['record', 'correct'], num => num + 1);
-            //     combo_correct
-            // }
-            // if(combo_correct > combo_max){
-            //     combo_correct 
-            // }
         case 'EXERCISE_SELECT_CHANGE':
             console.log(action.index);
             return state.updateIn(['exercise_log', action.exindex, 'answer', action.index, 'select'], select => !select)
@@ -300,17 +168,7 @@ export const studentData = (state = defaulatStudentData, action = {}) => {
         case 'GET_SELECTED_TAB':
             return state.set('tab', action.tab);
         case 'GET_MY_TEST_TAB':
-            return state.set('test_tab', action.test_tab);   
-        default:
-            return state;
-    }
-}
-
-//获取学生学情数据
-export const stuStatus = (state = defaulatStuStatus, action = {}) => {
-    switch(action.type){
-        case 'GET_STATUS_START':
-            return state.set('isFetching', true);
+            return state.set('test_tab', action.test_tab);
         case 'GET_ABILITY_STATUS_SUCCESS':
             return state.set('capatity', Immutable.fromJS(action.json)).set('isFetching', false);
         case 'GET_LADDER_STATUS_SUCCESS':
@@ -320,7 +178,7 @@ export const stuStatus = (state = defaulatStuStatus, action = {}) => {
         case 'GET_KP_LADDER_STATUS_SUCCESS':
             return state.set('kpladder', Immutable.fromJS(action.json)).set('isFetching', false);
         case 'GET_KP_ABILITY_STATUS_SUCCESS':
-            return state.set('kpcapatity', Immutable.fromJS(action.json)).set('isFetching', false);
+            return state.set('kpcapatity', Immutable.fromJS(action.json)).set('isFetching', false);   
         default:
             return state;
     }

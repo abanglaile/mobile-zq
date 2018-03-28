@@ -1,7 +1,7 @@
-import { Progress, WhiteSpace, WingBlank, List, Button, NavBar, ActivityIndicator, Flex,Icon } from 'antd-mobile';
+import { WhiteSpace, WingBlank, List, Button, NavBar, ActivityIndicator, Flex, Icon } from 'antd-mobile';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Tex from './renderer.js';
+// import Tex from './renderer.js';
 import { Progress as Circle} from 'antd';
 
 
@@ -27,7 +27,7 @@ class StudentKp extends React.Component {
     if(kpid){
         this.props.getStuKpLadder(student_id, kpid);
         this.props.getStuKpAbility(student_id, kpid);
-        this.props.updateEntry("root");
+        this.props.updateEntry("/student_kp/");
         this.props.getMyLadderScore(student_id);
       // this.props.getTestRankingList(test_id);
       // this.props.getStuTestInfo(student_id,test_id);
@@ -129,7 +129,7 @@ class StudentKp extends React.Component {
                     width: '100%',
                     color: '#1890ff',
                     fontSize: '1.5rem',
-                  }} >{kpcapatity[0].kp_rating}</div>  
+                  }} >{kpcapatity.kp_rating ? kpcapatity.kp_rating : '未开始'}</div>  
               </Flex.Item>
               <Flex.Item><div style={{
                 textAlign: 'center',
@@ -145,7 +145,7 @@ class StudentKp extends React.Component {
                     lineHeight: '4rem',
                     width: '100%',
                     fontSize: '1rem',
-                  }}><Circle type="circle" percent={kpcapatity[0].practice ? ((kpcapatity[0].correct/kpcapatity[0].practice)*100).toFixed(0) : 0} width={60} format={(percent) => `${percent}%`}/></div>
+                  }}><Circle type="circle" percent={kpcapatity.practice ? ((kpcapatity.correct/kpcapatity.practice)*100).toFixed(0) : 0} width={60} format={(percent) => `${percent}%`}/></div>
               </Flex.Item>
               <Flex.Item><div style={{
                 textAlign: 'center',
@@ -162,7 +162,7 @@ class StudentKp extends React.Component {
                     width: '100%',
                     color: '#1890ff',
                     fontSize: '1.5rem',
-                  }} >{kpcapatity[0].practice}</div>  
+                  }} >{kpcapatity.practice}</div>  
               </Flex.Item>
         </Flex>
       );
@@ -171,7 +171,7 @@ class StudentKp extends React.Component {
 
   renderKpContent(){
       const {kpcapatity} = this.props;
-      if(kpcapatity.length){
+      if(kpcapatity){
         return(    
           <List>
             <Item>
@@ -195,7 +195,7 @@ class StudentKp extends React.Component {
           mode="light"
           icon={<Icon type="left" />}
           onLeftClick={e => this.props.router.push("/mobile-zq/root/my_book_chapter")}
-        >{kpcapatity.length ? kpcapatity[0].kpname : ''}</NavBar>
+        >{kpcapatity ? kpcapatity.kpname : ''}</NavBar>
         <div>
           <div style={{backgroundColor: '#1890ff', paddingTop: '2rem', paddingBottom: '0.5rem', color: 'white'}}>
             <div style={{
@@ -205,7 +205,7 @@ class StudentKp extends React.Component {
               lineHeight: '3rem',
               fontSize: '2rem'
             }}>
-              {kpcapatity.length? kpcapatity[0].kpname : ''}
+              {kpcapatity ? kpcapatity.kpname : ''}
             </div>
           
           <div style={{
@@ -214,7 +214,7 @@ class StudentKp extends React.Component {
             marginLeft: '2rem',
             lineHeight: '3rem',
             fontSize: '1rem'
-            }}>{kpcapatity.length? kpcapatity[0].chaptername : ''} ></div>
+            }}>{kpcapatity? kpcapatity.chaptername : ''} ></div>
           </div>
           <List>
             <Item>
@@ -231,8 +231,8 @@ class StudentKp extends React.Component {
           <WhiteSpace size='lg'/>
           <WingBlank>
           <Button style={{marginTop: '0.5rem'}} type="primary"
-            onClick={ e => this.props.getTestDataByKp(student_id, kpid, kpcapatity[0].kpname)} >
-              继续修炼
+            onClick={ e => this.props.getTestDataByKp(student_id, kpid, kpcapatity.kpname)} >
+              kpcapatity ? 继续修炼 : 开始修炼
           </Button>
           </WingBlank>
           <WhiteSpace size='lg'/>
@@ -245,18 +245,16 @@ class StudentKp extends React.Component {
 }
 
 export default connect(state => {
-  const student_status = state.stuStatus.toJS();
-  console.log('student_status'+JSON.stringify(student_status));
+  const student_status = state.studengData.toJS();
   const {kpladder,kpcapatity} = student_status;
   const default_kpcapatity = [{
       kp_rating: 500,
       practice: 2,
       correct: 1,
     }];
-  const default_comusedkp = [{kpid:'1',kpname:'二次函数',usedcount:'5',rate : 56}];
   return {
     isFetching : student_status.isFetching,
-    kpcapatity : kpcapatity ? kpcapatity : default_kpcapatity,
+    kpcapatity : kpcapatity,
     kpladder : kpladder ? kpladder : [],
     student_id: state.AuthData.get('userid'), 
   }

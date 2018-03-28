@@ -1,14 +1,11 @@
 import React from 'react';
 // import Question from 'bundle-loader?lazy&name=Question!../Component/Question.js'
 import Question from '../Component/Question.js'
-import AnswerSheet from '../Component/AnswerSheet.js'
-import TestStatus from '../Component/TestStatus.js'
 import TestResult from '../Component/TestResult.js'
 import KpTestResult from '../Component/KpTestResult.js'
 import practice from '../Component/practice.js'
 import MyTest from '../Component/my_test.js'
 import MyChapter from '../Component/MyChapter.js'
-import my_chapter_kp from '../Component/my_chapter_kp.js'
 import login from '../Component/login.js'
 import StudentStatus from '../Component/StudentStatus.js'
 import StudentKp from '../Component/StudentKp.js'
@@ -39,7 +36,6 @@ export default (
           <Route path="percenter" component={perCenter} />
         </Route>
         <Route path="login" component={login} />
-        <Route path="my_chapter_kp/:chapter_id" component={my_chapter_kp} />
         
         <Route path="mytest" component={MyTest} />
         <Route path="question" component={Question} />

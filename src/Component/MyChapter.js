@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {List,NavBar,Icon,ActivityIndicator,Menu,Result,WhiteSpace,Modal} from 'antd-mobile';
-import Tex from './renderer.js'
+import {List,NavBar,Icon,ActivityIndicator,Menu,WhiteSpace,Modal} from 'antd-mobile';
+// import Tex from './renderer.js'
 import { Progress as Circle} from 'antd';
 
 import *as action from '../Action/';

@@ -8,160 +8,160 @@ import axios from 'axios';
 
 let target = config.server_url;
 
-/*-------------------------------------------------*/
-//登录注册相关action
-export const loginUserSuccess = (token) => {
-  localStorage.setItem('token', token);
-  return {
-    type: 'LOGIN_USER_SUCCESS',
-    payload: {
-      token: token
-    }
-  }
-}
-
-export const regUserSuccess = (token) =>  {
-  localStorage.setItem('token', token);
-  return {
-    type: 'REG_USER_SUCCESS',
-    payload: {
-      token: token
-    }
-  }
-}
-
-export const loginUserFailure = (error) => {
-  localStorage.removeItem('token');
-  return {
-    type: 'LOGIN_USER_FAILURE',
-    payload: {
-      status: error.response.status,
-      statusText: error.response.statusText
-    }
-  }
-}
-
-export const regUserFailure = (error) => {
-  localStorage.removeItem('token');
-  return {
-    type: 'REG_USER_FAILURE',
-    payload: {
-      status: error.response.status,
-      statusText: error.response.statusText
-    }
-  }
-}
-
-export const loginUserRequest = () => {
-  return {
-    type: 'LOGIN_USER_REQUEST',
-  }
-}
-
-export const regUserRequest = () => {
-  return {
-    type: 'REG_USER_REQUEST',
-  }
-}
-// export function getTestCenter() {
+// /*-------------------------------------------------*/
+// //登录注册相关action
+// export const loginUserSuccess = (token) => {
+//   localStorage.setItem('token', token);
 //   return {
-//     type: GET_TESTCENTER_DATA
-    
+//     type: 'LOGIN_USER_SUCCESS',
+//     payload: {
+//       token: token
+//     }
 //   }
 // }
 
-export const logout = () => {
-    localStorage.removeItem('token');
-    return {
-        type: 'LOGOUT_USER',
-    }
-}
+// export const regUserSuccess = (token) =>  {
+//   localStorage.setItem('token', token);
+//   return {
+//     type: 'REG_USER_SUCCESS',
+//     payload: {
+//       token: token
+//     }
+//   }
+// }
 
-export const logoutAndRedirect = () => {
-    return (dispatch, state) => {
-        dispatch(logout());
-        dispatch(push('/mobile-zq/login'));
-    }
-}
+// export const loginUserFailure = (error) => {
+//   localStorage.removeItem('token');
+//   return {
+//     type: 'LOGIN_USER_FAILURE',
+//     payload: {
+//       status: error.response.status,
+//       statusText: error.response.statusText
+//     }
+//   }
+// }
 
-export const loginUser = (username, password, redirect) => {
-    return function(dispatch) {
-        let path = '/login';
-        let url = target + path;
+// export const regUserFailure = (error) => {
+//   localStorage.removeItem('token');
+//   return {
+//     type: 'REG_USER_FAILURE',
+//     payload: {
+//       status: error.response.status,
+//       statusText: error.response.statusText
+//     }
+//   }
+// }
 
-        dispatch(loginUserRequest());
-        return fetch(url, {
-            method: 'post',
-            mode: "cors",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-                body: JSON.stringify({username: username, password: password})
-            })
-            .then(checkHttpStatus)
-            .then(parseJSON)
-            .then(response => {
-                try {
-                    let decoded = jwtDecode(response.token);
-                    console.log('decoded:'+JSON.stringify(decoded));
-                    console.log('response.token:'+response.token);
-                    dispatch(loginUserSuccess(response.token));
-                    dispatch(push(redirect));
-                } catch (e) {
-                    console.log('response.json():'+response.json());
-                    dispatch(loginUserFailure({
-                        response: {
-                            status: 403,
-                            statusText: response.json()
-                        }
-                    }));
-                }
-            })
-            .catch(error => {
-                console.log('error:'+error);
-                dispatch(loginUserFailure(error));
-            })
-    }
-}
+// export const loginUserRequest = () => {
+//   return {
+//     type: 'LOGIN_USER_REQUEST',
+//   }
+// }
 
-export const regUser = (username, password, redirect) => {
-    return function(dispatch) {
-        let path = '/newuser';
-        let url = target + path;
-        dispatch(regUserRequest());
-        return fetch(url, {
-            method: 'post',
-            mode: "cors",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-                body: JSON.stringify({username: username, password: password})
-            })
-            .then(checkHttpStatus)
-            .then(parseJSON)
-            .then(response => {
-                try {
-                    let decoded = jwtDecode(response.token);
-                    dispatch(regUserSuccess(response.token));
-                    dispatch(push(redirect));
-                } catch (e) {
-                    dispatch(regUserFailure({
-                        response: {
-                            status: 403,
-                            statusText: response.json()
-                        }
-                    }));
-                }
-            })
-            .catch(error => {
-                dispatch(loginUserFailure(error));
-            })
-    }
-}
-//登录注册相关结束
-/*-------------------------------------------------*/
+// export const regUserRequest = () => {
+//   return {
+//     type: 'REG_USER_REQUEST',
+//   }
+// }
+// // export function getTestCenter() {
+// //   return {
+// //     type: GET_TESTCENTER_DATA
+    
+// //   }
+// // }
+
+// export const logout = () => {
+//     localStorage.removeItem('token');
+//     return {
+//         type: 'LOGOUT_USER',
+//     }
+// }
+
+// export const logoutAndRedirect = () => {
+//     return (dispatch, state) => {
+//         dispatch(logout());
+//         dispatch(push('/mobile-zq/login'));
+//     }
+// }
+
+// export const loginUser = (username, password, redirect) => {
+//     return function(dispatch) {
+//         let path = '/login';
+//         let url = target + path;
+
+//         dispatch(loginUserRequest());
+//         return fetch(url, {
+//             method: 'post',
+//             mode: "cors",
+//             headers: {
+//                 'Accept': 'application/json',
+//                 'Content-Type': 'application/json'
+//             },
+//                 body: JSON.stringify({username: username, password: password})
+//             })
+//             .then(checkHttpStatus)
+//             .then(parseJSON)
+//             .then(response => {
+//                 try {
+//                     let decoded = jwtDecode(response.token);
+//                     console.log('decoded:'+JSON.stringify(decoded));
+//                     console.log('response.token:'+response.token);
+//                     dispatch(loginUserSuccess(response.token));
+//                     dispatch(push(redirect));
+//                 } catch (e) {
+//                     console.log('response.json():'+response.json());
+//                     dispatch(loginUserFailure({
+//                         response: {
+//                             status: 403,
+//                             statusText: response.json()
+//                         }
+//                     }));
+//                 }
+//             })
+//             .catch(error => {
+//                 console.log('error:'+error);
+//                 dispatch(loginUserFailure(error));
+//             })
+//     }
+// }
+
+// export const regUser = (username, password, redirect) => {
+//     return function(dispatch) {
+//         let path = '/newuser';
+//         let url = target + path;
+//         dispatch(regUserRequest());
+//         return fetch(url, {
+//             method: 'post',
+//             mode: "cors",
+//             headers: {
+//                 'Accept': 'application/json',
+//                 'Content-Type': 'application/json'
+//             },
+//                 body: JSON.stringify({username: username, password: password})
+//             })
+//             .then(checkHttpStatus)
+//             .then(parseJSON)
+//             .then(response => {
+//                 try {
+//                     let decoded = jwtDecode(response.token);
+//                     dispatch(regUserSuccess(response.token));
+//                     dispatch(push(redirect));
+//                 } catch (e) {
+//                     dispatch(regUserFailure({
+//                         response: {
+//                             status: 403,
+//                             statusText: response.json()
+//                         }
+//                     }));
+//                 }
+//             })
+//             .catch(error => {
+//                 dispatch(loginUserFailure(error));
+//             })
+//     }
+// }
+// //登录注册相关结束
+// /*-------------------------------------------------*/
 
 
 //利用elo_rating方法更新rating
@@ -293,14 +293,6 @@ const getTestResultSuccess = (json) => {
     }
 }
 
-// //成功获取题目样本
-// const getExerciseSampleSuccess = (json) => {
-//     return {
-//         type: 'GET_EXERCISE_SAMPLE_SUCCESS',
-//         json,
-//     }
-// }
-
 //获取测试数据成功
 const getChapterSuccess = (json) => {
   return {
@@ -325,6 +317,48 @@ const getTestRatingRewardSuccess = (json) => {
     }
 }
 
+//开始提交测试结果
+const submitTestStart = () => {
+  return {
+    type: 'SUBMIT_TEST_START',
+  }
+}
+
+//提交测试结果成功
+const submitTestSuccess = (json) => {
+  return {
+    type: 'SUBMIT_TEST_SUCCESS',
+    json,
+  }
+}
+
+//获取章节名称成功
+const getChapterNameSuccess = (json) => {
+  return {
+    type: 'GET_CHAPTER_NAME_SUCCESS',
+    json,
+  }
+}
+
+//获取章节状态成功
+const getChapterStatusSuccess = (json) => {
+  return {
+    type: 'GET_CHAPTER_STATUS_SUCCESS',
+    json,
+  }
+}
+
+//获取章节知识点状态成功
+const getChapterKpStatusSuccess = (json) => {
+  return {
+    type: 'GET_CHAPTER_KP_SUCCESS',
+    json,
+  }
+}
+
+/*-------------------------------------------------*/
+
+
 
 //记录底部标签栏 selected bar 的状态(blueTab RedTab..)
 export const setSelectedTab = (tab) => {
@@ -342,8 +376,6 @@ export const setMyTestTab = (test_tab) => {
     }
 }
 
-
-/*-------------------------------------------------*/
 //获取我的天梯总分
 export const getMyLadderScore = (student_id) => {
     let url = target + "/getMyLadderScore";
@@ -442,29 +474,6 @@ export const getChapterKpStatus = (student_id, chapter_id) => {
     }
 }
 
-//获取章节名称成功
-const getChapterNameSuccess = (json) => {
-  return {
-    type: 'GET_CHAPTER_NAME_SUCCESS',
-    json,
-  }
-}
-
-//获取章节状态成功
-const getChapterStatusSuccess = (json) => {
-  return {
-    type: 'GET_CHAPTER_STATUS_SUCCESS',
-    json,
-  }
-}
-
-//获取章节知识点状态成功
-const getChapterKpStatusSuccess = (json) => {
-  return {
-    type: 'GET_CHAPTER_KP_SUCCESS',
-    json,
-  }
-}
 
 /*----------------------个人中心--------------------*/
 
@@ -512,6 +521,35 @@ export const getTestData = (student_id, test_id, test_type, entry) => {
     }
 }
 
+export const getTestKpReward = (student_id, test_id) => {
+    let url = target + "/getTestKpReward";
+    return (dispatch) => {
+        dispatch(getDataStart());
+        return axios.get(url,{
+            params: {student_id, test_id}
+        }).then(function (response) {
+            dispatch(getTestKpRewardSuccess(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+}
+
+export const getTestRatingReward = (student_id, test_id) => {
+    let url = target + "/getTestRatingReward";
+    return (dispatch) => {
+        dispatch(getDataStart());
+        return axios.get(url, {
+            params: {student_id, test_id}
+        }).then(function (response) {
+            dispatch(getTestRatingRewardSuccess(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+}
 
 //根据kpid获得该主测点下的试题
 export const getTestDataByKp = (student_id, kpid, kpname) => {
@@ -575,6 +613,8 @@ export const getUncompletedTest = (student_id) => {
     }
 }
 
+//-------------------------------做题交互-------------------------------//
+
 export const submitFeedBack = (exindex) => {
     console.log(exindex);
     return {
@@ -595,11 +635,15 @@ export const jumpNext = (exercise_status) => {
         const exindex = testData.get("exindex");
         const exercise_log = testData.get("exercise_log").toJS();
         const exercise = testData.get("exercise").toJS();
-        const {exercise_state} = exercise_log[exindex];
+        const {exercise_state, exercise_status} = exercise_log[exindex];
         const blength = exercise[exindex].breakdown.length;
 
-        if(exercise_status == 1 || exercise_state || blength == 1){
-            
+        if(exercise_status > 0 || exercise_state || blength == 1){
+            //跳过导学页面
+            if(exercise_status == 0){
+                updateExerciseStatus(exindex, 2);
+            }
+
             var next = -1;
             var i = (exindex + 1)%exercise.length;
             while(i != exindex){
@@ -615,7 +659,7 @@ export const jumpNext = (exercise_status) => {
                 console.log('update');
                 
                 dispatch(updateExindex(next));
-                dispatch(updateExerciseST());
+                // dispatch(updateExerciseST());
                 //dispatch(push("/mobile-zq/question"));
             }
             //题目全部完成
@@ -656,35 +700,6 @@ export const jumpNext = (exercise_status) => {
     }
 }
 
-export const getTestKpReward = (student_id, test_id) => {
-    let url = target + "/getTestKpReward";
-    return (dispatch) => {
-        dispatch(getDataStart());
-        return axios.get(url,{
-            params: {student_id, test_id}
-        }).then(function (response) {
-            dispatch(getTestKpRewardSuccess(response.data));
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-    }
-}
-
-export const getTestRatingReward = (student_id, test_id) => {
-    let url = target + "/getTestRatingReward";
-    return (dispatch) => {
-        dispatch(getDataStart());
-        return axios.get(url, {
-            params: {student_id, test_id}
-        }).then(function (response) {
-            dispatch(getTestRatingRewardSuccess(response.data));
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-    }
-}
 
 export const showAnswerTest = (exindex) => {
     console.log(exindex);
@@ -700,13 +715,6 @@ export const updateEntry = (entry) => {
         entry,
     }
 }
-
-// export const hideAnswerTest = (exindex) => {
-//     return {
-//         type: 'HIDE_ANSWER_TEST',
-//         exindex,
-//     }
-// }
 
 export const hideFeedbackToast = () => {
     console.log('hideFeedbackToast');
@@ -745,10 +753,12 @@ export const updateExerciseTime = (i, ac_time) => {
     }
 }
 
-//更新题目开始时间
-export const updateExerciseST = () => {
+//更新题目页面状态
+export const updateExerciseStatus = (i, exercise_status) => {
     return {
-        type: 'UPDATE_EXERCISE_ST',
+        type: 'UPDATE_EXERCISE_STATUS',
+        i,
+        exercise_status,
     }
 }
 
@@ -758,21 +768,6 @@ export const updateTestLog = (exercise_log) => {
         type: 'UPDATE_exercise_log',
         exercise_log,
     }
-}
-
-//开始提交测试结果
-const submitTestStart = () => {
-  return {
-    type: 'SUBMIT_TEST_START',
-  }
-}
-
-//提交测试结果成功
-const submitTestSuccess = (json) => {
-  return {
-    type: 'SUBMIT_TEST_SUCCESS',
-    json,
-  }
 }
 
 const checkAnswer = (exercise_type, log_answer) => {
@@ -906,19 +901,7 @@ export const submitExerciseLog = (exercise, log_answer, student_rating) => {
     }
 }
 
-export const getStudentData = (student_id) => {
-    let url = target + "/getStudentData";
-    return (dispatch) => {
-        dispatch(getDataStart());
-        return axios.post(url,{test_id,student_id})
-        .then(function (response) {
-            dispatch(getStudentDataSuccess(response.data));
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-    }
-}
+//--------------------------------------------------//
 
 export const getTestStatus = (student_id, test_id) => {
     let url = target + "/getTestStatus";
@@ -948,18 +931,20 @@ export const getTestRankingList = (test_id) => {
     }
 }
 
-export const getStuTestInfo = (student_id,test_id) => {
-    let url = target + "/getStuTestInfo";
+export const getTestResult = (student_id, test_id) => {
+    let url = target + "/getTestResult";
     return (dispatch) => {
+        dispatch(getDataStart());
         return axios.post(url,{student_id,test_id})
         .then(function (response) {
-            dispatch(getStuTestInfoSuccess(response.data));
+            dispatch(getTestResultSuccess(response.data));
         })
         .catch(function (error) {
             console.log(error);
         });
     }
 }
+
 //获取学生综合能力情况
 export const getStuAbility = (student_id) => {
     let url = target + "/getStuAbility";
@@ -1046,53 +1031,6 @@ export const getStuComUsedKp = (student_id) => {
         })
         .then(function (response) {
             dispatch(getStuComUsedKpSuccess(response.data));
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-    }
-}
-
-export const getTestResult = (student_id, test_id) => {
-    let url = target + "/getTestResult";
-    return (dispatch) => {
-        dispatch(getDataStart());
-        return axios.post(url,{student_id,test_id})
-        .then(function (response) {
-            dispatch(getTestResultSuccess(response.data));
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-    }
-}
-
-// export const getChapter = (student_id, course_id) => {
-//     let url = target + "/getChapter";
-//     return (dispatch) => {
-//         dispatch(getDataStart());
-//         return axios.post(url,{student_id,course_id})
-//         .then(function (response) {
-//             dispatch(getChapterSuccess(response.data));
-//         })
-//         .catch(function (error) {
-//             console.log(error);
-//         });
-//     }
-// }
-
-//根据sample_id获取题目信息
-export const getExerciseSample = (exercise_id) => {
-    let url = target + "/getExerciseSample";
-    return (dispatch) => {
-        dispatch(getDataStart());
-        return axios.get(url,{
-            params:{
-                exercise_id,
-            }
-        })
-        .then(function (response) {
-            dispatch(getExerciseSampleSuccess(response.data));
         })
         .catch(function (error) {
             console.log(error);

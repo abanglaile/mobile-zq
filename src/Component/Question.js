@@ -17,7 +17,6 @@ class Question extends React.Component {
     this.state = {
       sheetmodal: false,
     };
-  	this.onSelectChange = this.onSelectChange.bind(this);
   }
 
   showModal(e){
@@ -79,55 +78,25 @@ class Question extends React.Component {
     this.userAnswer = val;
   }
 
-  onSelectChange(val){
-    const xornum = [1, 2, 4, 8];
-  	//通过异或修改选项结果
-    this.userAnswer = this.userAnswer ^ xornum[val];
-  }
-
-  // onMaskClose(e){
-  //   Popup.hide();
-  // }
-
   accExerciseTime(){
-    //累加页面停留时间
-    const {exercise_st, exindex} = this.props;
-    const ac_time = Date.parse(new Date()) - Date.parse(exercise_st);
-    this.props.updateExerciseTime(exindex, ac_time/1000);
+    const {exercise_st, exindex, exercise_log} = this.props;
+    const {exercise_status} = exercise_log[exindex];
+    //做题页面累加页面停留时间
+    if(exercise_status == 0){
+      const ac_time = Date.parse(new Date()) - Date.parse(exercise_st);
+      this.props.updateExerciseTime(exindex, ac_time/1000);
+    }
   }
 
   jumpToExercise(i){
     this.setState({
       sheetmodal: ! this.state.sheetmodal,
     });
+    this.accExerciseTime();
     this.props.updateExindex(i);
-    this.props.updateExerciseST();
+    // this.props.updateExerciseST();
     this.props.router.push("/mobile-zq/question/");
   }
-
-  // jumpToExercise(e, i){
-  //   this.accExerciseTime();
-  //   this.props.updateExindex(i);
-  //   Popup.hide();
-  // }
-
-  // onPopup(e){
-  //   const {exercise, exercise_log} = this.props;
-  //   e.preventDefault();
-  //   Popup.show(
-  //   <div>
-  //     <List renderHeader={this.renderHeader}
-  //         style={{height: "4.2rem", overflow: "auto"}}
-  //     >
-  //       {exercise.map((item, i) => (
-  //         exercise_log[i].delta_student_rating
-  //         ? <List.Item onClick={e => this.jumpToExercise(e, i)} extra={<Icon type={exercise_log[i].exercise_state ? 'check' : 'cross'} />} key={i}>{i+1}</List.Item>
-  //         : <List.Item arrow="horizontal" onClick={e => this.jumpToExercise(e, i)} key={i} >{i+1}</List.Item>
-  //       ))}
-  //     </List>
-  //   </div>, 
-  //     { animationType: 'slide-up', onMaskClose: e => this.onMaskClose()});
-  // }
 
   renderTitle(){
     const {exercise, exindex} = this.props;
@@ -273,28 +242,6 @@ class Question extends React.Component {
       </List>
       );
     }
-    // else if(!modalOpen && exercise_log[exindex].exercise_state >= 0){
-    //   var kpids = [];
-    //   return (
-    //     <List renderHeader={() => '相关知识点情况'} >
-    //       {
-    //         breakdown_sn.map((item) => {
-    //           if(!kpids[item.kpid]){
-    //             kpids[item.kpid] = 1;
-    //             return (
-    //               <Item style={item.sn_state == 0 ? {backgroundColor: "#fcdbc9"} : {backgroundColor: "white"}}
-    //                 extra={item.kp_old_rating}>
-    //                 {item.kpname}
-                    
-    //               </Item>
-    //             )
-    //           }
-    //         })
-    //       }
-    //     </List>
-    //   )
-    // }
-    
   }
 
   renderBreakdown(){

@@ -301,8 +301,7 @@ class StudentStatus extends React.Component {
 }
 
 export default connect(state => {
-  const student_status = state.stuStatus.toJS();
-  console.log('student_status'+JSON.stringify(student_status));
+  const student_status = state.studentData.toJS();
   const {capatity , ladder, comusedkp} = student_status;
   const default_capatity = [{
       key: '1',

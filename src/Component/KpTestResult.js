@@ -2,8 +2,8 @@ import React from 'react';
 import *as action from '../Action/';
 import {connect} from 'react-redux';
 
-import { List, Result, Icon, WhiteSpace, NavBar, Progress, Badge, WingBlank, Button } from 'antd-mobile';
-import { Rate, Progress as Circle } from 'antd';
+import { List, Icon, WhiteSpace, NavBar, Progress, Badge, WingBlank, Button } from 'antd-mobile';
+import { Progress as Circle } from 'antd';
 
 const Item = List.Item;
 const Brief = Item.Brief;

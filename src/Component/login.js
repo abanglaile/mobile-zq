@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { createForm } from 'rc-form';
 import config from '../utils/Config'
-import *as action from '../Action/';
+import *as action from '../Action/reg_action';
 import {connect} from 'react-redux';
 
 let appid = config.appid;

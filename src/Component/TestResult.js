@@ -1,10 +1,9 @@
 ﻿import React from 'react';
 import *as action from '../Action/';
 import {connect} from 'react-redux';
-import { List, Result, Icon, WhiteSpace, WingBlank, Badge, ActivityIndicator, Button, Modal, NavBar, Grid, Flex, Progress, SegmentedControl } from 'antd-mobile';
-import { Progress as Circle} from 'antd';
+import { List, Icon, WhiteSpace, WingBlank, ActivityIndicator, Button, Modal, NavBar, Grid, Flex, SegmentedControl } from 'antd-mobile';
 
-import Tex from './renderer.js';
+//import Tex from './renderer.js';
 
 const Item = List.Item;
 const Brief = Item.Brief;
