@@ -5,6 +5,7 @@ import { TabBar } from 'antd-mobile';
 import *as action from '../Action/';
 import {connect} from 'react-redux';
 
+const project_address = "/mobile-zq";
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -21,6 +22,7 @@ class App extends React.Component {
 
 
   render() {
+
     return (
       <div style={{ position: 'fixed', height: '100%', width: '100%', top: 0 }}>
         <TabBar
@@ -34,13 +36,13 @@ class App extends React.Component {
             icon={<div style={{
               width: '25px',
               height: '25px',
-              background: 'url(/mobile-zq/img/tarbar_icon/up.png) center center /  21px 21px no-repeat' }}
+              background: 'url(' + project_address + '/img/tarbar_icon/up.png) center center /  21px 21px no-repeat' }}
             />
             }
             selectedIcon={<div style={{
               width: '25px',
               height: '25px',
-              background: 'url(/mobile-zq/img/tarbar_icon_selected/up.png) center center /  21px 21px no-repeat' }}
+              background: 'url(' + project_address + '/img/tarbar_icon_selected/up.png) center center /  21px 21px no-repeat' }}
             />
             }
             selected={this.state.selectedTab === 'blueTab'}
@@ -60,14 +62,14 @@ class App extends React.Component {
               <div style={{
                 width: '25px',
                 height: '25px',
-                background: 'url(/mobile-zq/img/tarbar_icon/record.png) center center /  21px 21px no-repeat' }}
+                background: 'url(' + project_address + '/img/tarbar_icon/record.png) center center /  21px 21px no-repeat' }}
               />
             }
             selectedIcon={
               <div style={{
                 width: '25px',
                 height: '25px',
-                background: 'url(/mobile-zq/img/tarbar_icon_selected/record.png) center center /  21px 21px no-repeat' }}
+                background: 'url(' + project_address + '/img/tarbar_icon_selected/record.png) center center /  21px 21px no-repeat' }}
               />
             }
             title="学情"
@@ -89,14 +91,14 @@ class App extends React.Component {
               <div style={{
                 width: '25px',
                 height: '25px',
-                background: 'url(/mobile-zq/img/tarbar_icon/course.png) center center /  21px 21px no-repeat' }}
+                background: 'url(' + project_address + '/img/tarbar_icon/course.png) center center /  21px 21px no-repeat' }}
               />
             }
             selectedIcon={
               <div style={{
                 width: '25px',
                 height: '25px',
-                background: 'url(/mobile-zq/img/tarbar_icon_selected/course.png) center center /  21px 21px no-repeat' }}
+                background: 'url(' + project_address + '/img/tarbar_icon_selected/course.png) center center /  21px 21px no-repeat' }}
               />
             }
             title="课程"
@@ -115,14 +117,14 @@ class App extends React.Component {
               <div style={{
                 width: '25px',
                 height: '25px',
-                background: 'url(/img/tarbar_icon/my.png) center center /  21px 21px no-repeat' }}
+                background: 'url(' + project_address + '/img/tarbar_icon/my.png) center center /  21px 21px no-repeat' }}
               />
             }
             selectedIcon={
               <div style={{
                 width: '25px',
                 height: '25px',
-                background: 'url(/img/tarbar_icon_selected/my.png) center center /  21px 21px no-repeat' }}
+                background: 'url(' + project_address + '/img/tarbar_icon_selected/my.png) center center /  21px 21px no-repeat' }}
               />
             }
             title="我"
