@@ -3,9 +3,11 @@ import {Avatar} from 'antd';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import config from '../utils/Config'
-import *as action from '../Action/reg_action';
-// import *as action from '../Action/';
+import *as reg_action from '../Action/reg_action';
+import *as inreg_action from '../Action/';
 import {connect} from 'react-redux';
+
+const action =Object.assign({},reg_action,inreg_action);
 
 const Item = List.Item;
 const Brief = Item.Brief;
@@ -17,7 +19,9 @@ class perCenter extends React.Component {
   }
 
   componentDidMount(){
+    const {student_id} = this.props;
     this.props.setSelectedTab("yellowTab");
+    this.props.getStudentInfo(student_id);
   }
 
 
@@ -36,7 +40,7 @@ class perCenter extends React.Component {
             onClick={() => {}}
           >
             <div style={{width:'40px', height:'40px', borderRadius:'50%',overflow:"hidden", margin:"1.6rem 1rem 1.6rem 0",float:'left',display:'inline'}}>
-             <img src={imgurl} style={{width:'40px',height:'40px'}}/>
+             <img src="../../img/temp_header.jpg" style={{width:'40px',height:'40px'}}/>
             </div>
             <div style={{float:'left',display:'inline',marginTop:"2rem"}}>{nickname}</div>
           </Item>
@@ -73,9 +77,12 @@ class perCenter extends React.Component {
 
 export default connect(state => {
   const auth_state = state.AuthData.toJS();
-  console.log("auth_state:"+JSON.stringify(auth_state));
-  const {nickname, imgurl,student_name,class_name} = auth_state;
+  const {userid,nickname, imgurl} = auth_state;
+  const student_data = state.studentData.toJS();
+  const {student_name,class_name} = student_data;
+  console.log("student_name,class_name:"+student_name+' '+class_name);
   return {
+    student_id:userid,
     nickname: nickname,
     imgurl: imgurl,
     student_name: student_name,

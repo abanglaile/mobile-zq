@@ -9,7 +9,7 @@ import thunk from 'redux-thunk';
 import { Router, browserHistory } from 'react-router'
 import { syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-router-redux'
 
-import * as auth_reducer from './Reducer/reducer_auth';
+import * as auth_data from './Reducer/auth_data';
 import * as reducer from './Reducer';
 import {loginUserSuccess} from './Action';
 import {getWxUserInfoSuccess} from './Action/reg_action';
@@ -24,7 +24,7 @@ const middleware = routerMiddleware(browserHistory)
 const store = createStore(
   combineReducers({
     ...reducer,
-    ...auth_reducer,
+    ...auth_data,
     routing: routerReducer
   }),
   applyMiddleware(middleware, thunk)

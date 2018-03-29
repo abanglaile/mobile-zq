@@ -18,6 +18,8 @@ const defaulatTestData = Immutable.fromJS({
     });
 const defaulatStudentData = Immutable.fromJS({
         isFetching: false,
+        student_name:null,
+        class_name:null,
         student_rating: 0,
         book: [],
         my_test_list: [],
@@ -258,6 +260,8 @@ export const studentData = (state = defaulatStudentData, action = {}) => {
     switch(action.type){
         case 'GET_DATA_START':
             return state.set('isFetching', true);
+        case 'GET_STUDENT_INFO_SUCCESS':
+            return state.set('student_name', action.json.student_name).set('class_name', action.json.group_name);
         case 'GET_MY_SCORE_SUCCESS':
             console.log(action.json.student_rating);
             return state.set('student_rating', action.json.student_rating);

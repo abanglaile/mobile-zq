@@ -7,6 +7,7 @@ const defaulatAuthData = Immutable.fromJS({
         imgurl:null,
         userid: null,
         student_name:null,
+        class_name:null,
         hascode: null, 
         isAuthenticated: false,
         isAuthenticating: false,
@@ -26,8 +27,10 @@ export const AuthData = (state = defaulatAuthData, action = {}) => {
                 isAuthenticating: false,
                 isAuthenticated: true,
                 token: action.payload.token,
-                userName: jwtDecode(action.payload.token).username,
+                username: jwtDecode(action.payload.token).username,
                 userid: jwtDecode(action.payload.token).userid,
+                student_name:jwtDecode(action.payload.token).student_name,
+                class_name:jwtDecode(action.payload.token).class_name,
                 statusText: 'You have been successfully logged in.'
             };
             return Immutable.fromJS(sucState);

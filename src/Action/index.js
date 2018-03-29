@@ -293,6 +293,14 @@ const getTestResultSuccess = (json) => {
     }
 }
 
+//成功获取学生个人情况信息
+const getStudentInfoSuccess = (json) => {
+    return {
+        type: 'GET_STUDENT_INFO_SUCCESS',
+        json,
+    }
+}
+
 //获取测试数据成功
 const getChapterSuccess = (json) => {
   return {
@@ -938,6 +946,20 @@ export const getTestResult = (student_id, test_id) => {
         return axios.post(url,{student_id,test_id})
         .then(function (response) {
             dispatch(getTestResultSuccess(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+}
+
+export const getStudentInfo = (student_id) => {
+    let url = target + "/getStudentInfo";
+    return (dispatch) => {
+        dispatch(getDataStart());
+        return axios.post(url,{student_id})
+        .then(function (response) {
+            dispatch(getStudentInfoSuccess(response.data));
         })
         .catch(function (error) {
             console.log(error);
