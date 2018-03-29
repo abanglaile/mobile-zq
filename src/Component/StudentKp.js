@@ -232,7 +232,7 @@ class StudentKp extends React.Component {
           <WingBlank>
           <Button style={{marginTop: '0.5rem'}} type="primary"
             onClick={ e => this.props.getTestDataByKp(student_id, kpid, kpcapatity.kpname)} >
-              kpcapatity ? 继续修炼 : 开始修炼
+              {kpcapatity ? "继续修炼" : "开始修炼"}
           </Button>
           </WingBlank>
           <WhiteSpace size='lg'/>
@@ -245,15 +245,15 @@ class StudentKp extends React.Component {
 }
 
 export default connect(state => {
-  const student_status = state.studengData.toJS();
-  const {kpladder,kpcapatity} = student_status;
+  const student_data = state.studentData.toJS();
+  const {kpladder,kpcapatity} = student_data;
   const default_kpcapatity = [{
       kp_rating: 500,
       practice: 2,
       correct: 1,
     }];
   return {
-    isFetching : student_status.isFetching,
+    isFetching : student_data.isFetching,
     kpcapatity : kpcapatity,
     kpladder : kpladder ? kpladder : [],
     student_id: state.AuthData.get('userid'), 

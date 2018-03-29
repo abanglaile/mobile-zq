@@ -148,7 +148,7 @@ class TestResult extends React.Component {
     console.log(test_log);
     if(test_log.test_type == 2){
       var test_config = JSON.parse(test_log.test_config);
-      console.log(test_config.kp[0]);
+      console.log("test_config.kp[0]:"+JSON.stringify(test_config.kp[0]));
       return (
         <div style={{
             position: 'fixed',

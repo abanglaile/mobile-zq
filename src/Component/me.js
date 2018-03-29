@@ -40,7 +40,7 @@ class perCenter extends React.Component {
             onClick={() => {}}
           >
             <div style={{width:'40px', height:'40px', borderRadius:'50%',overflow:"hidden", margin:"1.6rem 1rem 1.6rem 0",float:'left',display:'inline'}}>
-             <img src="../../img/temp_header.jpg" style={{width:'40px',height:'40px'}}/>
+             <img src={imgurl} style={{width:'40px',height:'40px'}}/>
             </div>
             <div style={{float:'left',display:'inline',marginTop:"2rem"}}>{nickname}</div>
           </Item>
@@ -77,14 +77,14 @@ class perCenter extends React.Component {
 
 export default connect(state => {
   const auth_state = state.AuthData.toJS();
-  const {userid,nickname, imgurl} = auth_state;
+  const {userid,nickname} = auth_state;
   const student_data = state.studentData.toJS();
-  const {student_name,class_name} = student_data;
+  const {student_name,class_name,imgurl} = student_data;
   console.log("student_name,class_name:"+student_name+' '+class_name);
   return {
     student_id:userid,
-    nickname: nickname,
     imgurl: imgurl,
+    nickname: nickname,
     student_name: student_name,
     class_name:class_name,
   }; 

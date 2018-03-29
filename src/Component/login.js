@@ -14,7 +14,7 @@ class LoginView extends React.Component {
   constructor(props) { 
     super(props);
     // alert(this.props.location.query.redirect);
-    const redirectRoute = this.props.location.query.redirect || '/mobile-zq/mytest';
+    const redirectRoute = this.props.location.query.redirect || '/mobile-zq/root';
     this.state = {
       confirmDirty: false,
       username: '',
