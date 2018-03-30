@@ -41,6 +41,12 @@ function formatTime(seconds) {
     return time = hour? (hour + ':' + newMin + ':' + second) : (min + ':' + second);
 }
 
+function GetDateParse(time) {  
+    //将xxxx-xx-xx的时间格式，转换为 xxxx/xx/xx的格式   
+    var paraTime = time.replace(/\-/g, "/");  
+    return Date.parse(paraTime);
+};  
+
 class TestResult extends React.Component {
   constructor(props) {
     super(props);
@@ -176,14 +182,14 @@ class TestResult extends React.Component {
     var test_time = '';
     var finish_time = '';
     if(test_log.finish_time && test_log.start_time){
-      var time = (Date.parse(test_log.finish_time) - Date.parse(test_log.start_time)) /1000;
+      var time = (GetDateParse(test_log.finish_time) - GetDateParse(test_log.start_time)) /1000;
       // var hour = parseInt(time/3600);
       // var mini = parseInt(time%3600/60);
       // var sec = parseInt(time%60);
       // test_time = hour ? hour+ '小时' : ''  + mini ? mini : '' + '分' + sec ? sec : 00+ '秒'
       test_time = formatTime(time);
 
-      finish_time = new Date(Date.parse(test_log.finish_time)).Format('MM月dd日 hh:mm');
+      finish_time = new Date(GetDateParse(test_log.finish_time)).Format('MM月dd日 hh:mm');
     }
     return(
       <div>
