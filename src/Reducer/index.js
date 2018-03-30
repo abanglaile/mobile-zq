@@ -194,7 +194,7 @@ export const testData = (state = defaulatTestData, action = {}) => {
             return state.set('exercise', Immutable.fromJS(exercise)).set('exindex', 0)
                 .set('test_log', Immutable.fromJS(test_log))
                 .set('exercise_log', Immutable.fromJS(exercise_log))
-                .set('studentrating')
+                .set('exercise_st', new Date())
                 .set('isFetching', false);
             break;
 
