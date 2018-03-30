@@ -95,7 +95,7 @@ class Question extends React.Component {
     this.accExerciseTime();
     this.props.updateExindex(i);
     // this.props.updateExerciseST();
-    this.props.router.push("/mobile-zq/question/");
+    // this.props.router.push("/mobile-zq/question/");
   }
 
   renderTitle(){
@@ -107,7 +107,7 @@ class Question extends React.Component {
         <Tex content={title} />
         {
           title_img_url? 
-          <img src={title_img_url} style={{width: "100%", height:"auto"}} />
+          <img src={title_img_url} style={{width: "auto", height:"4rem"}} />
           :
           null
         }
@@ -275,9 +275,9 @@ class Question extends React.Component {
       return(
       <div style={{
         position: 'fixed',
-                    bottom: '3.8rem',
+                    bottom: '3rem',
                     width: '100%',
-                    height: "2.2rem",
+                    height: "3.1rem",
                     borderTop: "solid 1px #CCC",
                     zIndex: 100,
                     background: "#fff",
@@ -306,10 +306,12 @@ class Question extends React.Component {
       return(
       <div style={{
         position: 'fixed',
-                    bottom: '3.8rem',
+                    bottom: '3rem',
                     width: '100%',
-                    height: "2.2rem",
+                    height: "3.1rem",
                     borderTop: "solid 1px #CCC",
+                    zIndex: 100,
+                    background:"#fff",
               }}>
         <WingBlank>
         <Flex>
@@ -350,7 +352,7 @@ class Question extends React.Component {
                 <WingBlank>
                 <div height="3rem" style={{marginTop: '0.5rem'}}>
                 <Button inline 
-                  style={{margin: '0 25% 0 0rem'}} 
+                  style={{margin: '0 18% 0 0rem'}} 
                   type="ghost"                
                   size="small"
                   onClick={(e) => this.showModal(e)}
@@ -358,7 +360,7 @@ class Question extends React.Component {
                   题目列表
                 </Button>
                 <Button inline 
-                  style={{margin: '0 1rem 0 0'}} 
+                  style={{margin: '0 5% 0 0'}} 
                   type="ghost"
                   size="small"
                   disabled = {exindex == 0}
@@ -455,7 +457,7 @@ class Question extends React.Component {
         {this.renderBreakdown()}
         <div style={{
                   width: '100%',
-                  height: "3rem",}}>
+                  height: "6rem",}}>
         </div>
         {this.renderSubmitFooter()}
         {this.renderFooter()}
