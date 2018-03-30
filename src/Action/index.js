@@ -518,10 +518,9 @@ export const getTestData = (student_id, test_id, test_type, entry) => {
                 }
         })
         .then(function (response) {
-            dispatch(getTestSuccess(response.data, test_type));
             dispatch(getMyScoreSuccess(response.data));
+            dispatch(getTestSuccess(response.data, test_type));
             dispatch(push("/mobile-zq/question"));
-            dispatch(updateExerciseST());
         })
         .catch(function (error) {
             console.log(error);
@@ -563,6 +562,7 @@ export const getTestRatingReward = (student_id, test_id) => {
 export const getTestDataByKp = (student_id, kpid, kpname) => {
     let url = target + "/getExerciseByKpid";
     return (dispatch) => {
+        console.log(kpid, kpname);
         dispatch(getTestStart());
         return axios.get(url,{
                 params:{
@@ -572,10 +572,9 @@ export const getTestDataByKp = (student_id, kpid, kpname) => {
                 }
         })
         .then(function (response) {
-            dispatch(getTestSuccess(response.data, 2));
             dispatch(getMyScoreSuccess(response.data));
+            dispatch(getTestSuccess(response.data, 2));
             dispatch(push("/mobile-zq/question"));
-            dispatch(updateExerciseST());
         })
         .catch(function (error) {
             console.log(error);
