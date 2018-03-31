@@ -466,7 +466,7 @@ export const getChapterStatus = (student_id, chapter_id) => {
 export const getChapterKpStatus = (student_id, chapter_id) => {
     let url = target + "/getChapterKpStatus";
     return (dispatch) => {
-        dispatch(getDataStart());
+        // dispatch(getDataStart());
         return axios.get(url,{
                 params:{
                    student_id,

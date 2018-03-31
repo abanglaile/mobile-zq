@@ -97,13 +97,16 @@ class MyTest extends React.Component {
       );
     }
     
+    if(isFetching){  
+        return (<ActivityIndicator toast animating={isFetching} /> );  
+    }
+    
     return (
     <div>
       <NavBar
           mode="dark"
           style = {{backgroundColor:"#1890ff"}}
         >提分</NavBar>
-      <ActivityIndicator toast animating={this.props.isFetching} /> 
       <div>
         <List>
           <Item>

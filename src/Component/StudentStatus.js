@@ -279,6 +279,11 @@ class StudentStatus extends React.Component {
   }
   
   render() {
+    const {isFetching} = this.props;
+
+    if(isFetching){  
+        return (<ActivityIndicator toast animating={isFetching} /> );  
+    }
     return (
       <div>
         <NavBar
@@ -302,7 +307,7 @@ class StudentStatus extends React.Component {
 
 export default connect(state => {
   const student_status = state.studentData.toJS();
-  const {capatity , ladder, comusedkp} = student_status;
+  const {capatity , ladder, comusedkp, isFetching} = student_status;
   const default_capatity = [{
       key: '1',
       exercount: 560,
@@ -323,7 +328,7 @@ export default connect(state => {
 
   const default_comusedkp = [{kpid:'1',kpname:'二次函数',usedcount:'5',rate : 56}];
   return {
-    isFetching : student_status.isFetching,
+    isFetching : isFetching,
     capatity : capatity.length > 0 ? capatity : default_capatity,
     ladder : ladder ? ladder : [],
     comusedkp : comusedkp.length > 0 ? comusedkp : default_comusedkp,

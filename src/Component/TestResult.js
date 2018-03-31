@@ -191,6 +191,11 @@ class TestResult extends React.Component {
 
       finish_time = new Date(GetDateParse(test_log.finish_time)).Format('MM月dd日 hh:mm');
     }
+
+    if(isFetching){  
+        return (<ActivityIndicator toast animating={isFetching} /> );  
+    }
+    
     return(
       <div>
       <div style={{backgroundColor: '#1890ff', paddingTop: '2rem'}}>          
@@ -216,7 +221,6 @@ class TestResult extends React.Component {
         {this.renderKpList()}
         <WhiteSpace/>
         {this.renderExerciseList2()}
-        <ActivityIndicator animating = {isFetching}/>
         {this.renderPractice()}
         <Modal
           title='相关知识点'

@@ -261,6 +261,8 @@ export const studentData = (state = defaulatStudentData, action = {}) => {
     switch(action.type){
         case 'GET_DATA_START':
             return state.set('isFetching', true);
+        case 'GET_STATUS_START':
+            return state.set('isFetching', true);
         case 'GET_STUDENT_INFO_SUCCESS':
             return state.set('student_name', action.json.nickname)
                         .set('class_name', action.json.group_name)
