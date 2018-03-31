@@ -41,10 +41,8 @@ export default (
         <Route path="question" component={Question} />
         <Route path="studentstatus" component={StudentStatus} />
         <Route path="student_kp/:kpid" component={StudentKp} />
-
         <Route path="kp_test_result/:test_id" component={KpTestResult} />
         <Route path="test_result/:test_id" component={TestResult} />
-        <Route path="percenter" component={perCenter} />
         <Route path="invite" component={Invite} />
     </Route>
 );

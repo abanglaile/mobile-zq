@@ -22,7 +22,7 @@ class StudentStatus extends React.Component {
   componentDidMount(){
      this.props.getStuAbility(this.props.student_id);
      this.props.getStuLadderWithTime(this.props.student_id);
-     this.props.getStuComUsedKp(this.props.student_id);
+     // this.props.getStuComUsedKp(this.props.student_id);
   }
 
   componentWillReceiveProps(nextProps){
