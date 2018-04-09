@@ -108,7 +108,7 @@ class MyChapter extends React.Component {
 
   render(){
     const { show } = this.state;
-    const {book,student_rating,chapter} = this.props;
+    const {book,student_rating,chapter,isFetching} = this.props;
     const {kp} = chapter
     var initData = [];
     if(book.length > 0){
@@ -135,6 +135,10 @@ class MyChapter extends React.Component {
         <ActivityIndicator size="large" />
       </div>
     );
+
+    if(isFetching){  
+        return (<ActivityIndicator toast animating={isFetching} /> );  
+    }
 
     return (
       <div>
@@ -214,10 +218,11 @@ class MyChapter extends React.Component {
 
 export default connect((state, ownProps) => {
   const studentData = state.studentData.toJS();
-  const {book, course_id,student_rating,chapter} = studentData;
+  const {book, course_id,student_rating,chapter,isFetching} = studentData;
   return {
     book: book,
     course_id: 3,
+    isFetching: isFetching,
     student_rating : student_rating,
     chapter: chapter ? chapter : [],
     student_id: state.AuthData.get('userid'),

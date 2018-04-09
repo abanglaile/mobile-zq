@@ -246,7 +246,7 @@ class StudentKp extends React.Component {
 
 export default connect(state => {
   const student_data = state.studentData.toJS();
-  const {kpladder,kpcapatity} = student_data;
+  const {isFetching,kpladder,kpcapatity} = student_data;
   const default_kpcapatity = [{
       kp_rating: 500,
       practice: 2,

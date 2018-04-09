@@ -6,8 +6,9 @@ import config from '../utils/Config'
 import *as reg_action from '../Action/reg_action';
 import *as inreg_action from '../Action/';
 import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-const action =Object.assign({},reg_action,inreg_action);
+// const action =Object.assign({},reg_action,inreg_action);
 
 const Item = List.Item;
 const Brief = Item.Brief;
@@ -20,8 +21,8 @@ class perCenter extends React.Component {
 
   componentDidMount(){
     const {student_id} = this.props;
-    this.props.setSelectedTab("yellowTab");
-    this.props.getStudentInfo(student_id);
+    this.props.inreg_action.setSelectedTab("yellowTab");
+    this.props.inreg_action.getStudentInfo(student_id);
   }
 
 
@@ -63,7 +64,7 @@ class perCenter extends React.Component {
             arrow="horizontal"
              onClick={() => alert('确定退出该账号吗？','', [
               { text: '取消', onPress: () => console.log('cancel') },
-              { text: '确定', onPress: () => this.props.logoutwxAndRedirect() },
+              { text: '确定', onPress: () => this.props.reg_action.logoutwxAndRedirect() },
             ])}
             align="middle"
           >
@@ -88,4 +89,9 @@ export default connect(state => {
     student_name: student_name,
     class_name:class_name,
   }; 
-}, action)(perCenter);
+},  (dispatch, ownProps) => {
+  return{
+       reg_action : bindActionCreators(reg_action,dispatch),
+       inreg_action : bindActionCreators(inreg_action,dispatch)
+  };
+})(perCenter);
