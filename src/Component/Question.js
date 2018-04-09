@@ -176,6 +176,7 @@ class Question extends React.Component {
                 }
                 return(
                   <CheckboxItem key={index} disabled defaultChecked = {i.select} 
+                    style={borderStyle}
                     onChange={() => this.props.selectChange(exindex, index)} wrap>
                     <Tex content = {i.value} />
                   </CheckboxItem>
