@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { WingBlank, Grid, Flex, List, Checkbox, Button, Icon, Modal, Toast, Progress, NavBar,ActivityIndicator} from 'antd-mobile';
+import { WingBlank, Grid, Flex, List, Checkbox, Button, Icon, Modal, Toast, Progress, Badge, NavBar,ActivityIndicator} from 'antd-mobile';
 import Tex from './renderer.js';
 // import MathInput from '../../math-input/src/components/app.js'
 
@@ -14,8 +14,13 @@ const alert = Modal.alert;
 class Question extends React.Component {
   constructor(props) { 
   	super(props);
+    this.answer_img = [];
     this.state = {
       sheetmodal: false,
+      title_img_width: "auto",
+      title_img_height: "3rem",
+      answer_img_width: "auto",
+      answer_img_height: "3rem",
     };
   }
 
@@ -98,16 +103,33 @@ class Question extends React.Component {
     this.props.router.push("/mobile-zq/question/");
   }
 
+  titleImageLoaded(){
+    console.log(this.title_img.width, window.innerWidth);
+    if(this.title_img.width > window.innerWidth){
+      this.setState({title_img_width: "90%", title_img_height: "auto"})
+    }
+  }
+
+  answerImageLoaded(i){
+    console.log(this.answer_img[i].width, window.innerWidth);
+    if(this.answer_img[i].width > window.innerWidth){
+      this.setState({answer_img_width: "90%", answer_img_height: "auto"})
+    }
+  }
+
   renderTitle(){
     const {exercise, exindex} = this.props;
     const {title, title_img_url, title_audio_url} = exercise[exindex]; 
+    const {title_img_width, title_img_height} = this.state;
     console.log(title_img_url);
     return (
       <div style={{ margin: '30px 0 18px 0', fontSize: '1.0rem'}}>
         <Tex content={title} />
         {
           title_img_url? 
-          <img src={title_img_url} style={{width: "100%", height:"auto"}} />
+          <img src={title_img_url}  ref={element => {
+              this.title_img = element;
+            }} onLoad = {() => this.titleImageLoaded()} style={{width: title_img_width, height: title_img_height}} />
           :
           null
         }
@@ -127,9 +149,11 @@ class Question extends React.Component {
     const {exercise, exindex, exercise_log} = this.props;
     const {exercise_type, answer} = exercise[exindex];
     console.log(exercise_log, exindex);
-    const {exercise_state} = exercise_log[exindex];
+    const {exercise_state, exercise_status} = exercise_log[exindex];
     const answerjson = answer;
     
+    const wrongColor = "#ffa39e", correctColor = "#95de64";
+
     switch(exercise_type){
       case 0:
         //TO-DO: 添加多个填空答案
@@ -143,12 +167,20 @@ class Question extends React.Component {
         if(exercise_state >= 0){
           return (
             <List key={'answer'+ exindex}>
-              {answerjson.map((i,index) => (
-                <CheckboxItem key={index} disabled defaultChecked = {i.select} 
-                  onChange={() => this.props.selectChange(exindex, index)} wrap>
-                  <Tex content = {i.value} />
-                </CheckboxItem>
-              ))}
+              {answerjson.map((i,index) => {
+                let borderStyle = {};
+                if(i.correct){
+                  borderStyle = {border:"2px solid " + correctColor, borderRadius: "5px"}
+                }else if(i.select){
+                  borderStyle =  {border:"2px solid " + wrongColor, borderRadius: "5px"}
+                }
+                return(
+                  <CheckboxItem key={index} disabled defaultChecked = {i.select} 
+                    onChange={() => this.props.selectChange(exindex, index)} wrap>
+                    <Tex content = {i.value} />
+                  </CheckboxItem>
+                )
+              })}
             </List>
           );
         }
@@ -166,15 +198,31 @@ class Question extends React.Component {
           );
         }
       case 2:
+        const {answer_img_width, answer_img_height} = this.state;
+        var disabled = false;
         if(exercise_state >= 0){
+          disabled = true;
+        }
+        if(exercise_status == 2){
           return (
             <List key={'answer'+ exindex}>
-              {answerjson.map((i,index) => (
-                <CheckboxItem key={index} disabled defaultChecked = {i.select} 
+              {answerjson.map((i,index) => {
+                let borderStyle = {};
+                if(i.correct){
+                  borderStyle = {border:"2px solid " + correctColor, borderRadius: "5px"}
+                }else if(i.select){
+                  borderStyle =  {border:"2px solid " + wrongColor, borderRadius: "5px"}
+                }
+                return (
+                <CheckboxItem key={index} defaultChecked = {i.select}
+                  style={borderStyle} 
                   onChange={() => this.props.selectChange(exindex, index)} wrap>
-                  <img src={i.url} style={{height: "4rem", width: "auto"}}/>
+                  <img src={i.url} ref={element => {this.answer_img[index] = element;}} 
+                  onLoad = {() => this.answerImageLoaded(index)} 
+                  style={{height: answer_img_height, width: answer_img_width}}/>
                 </CheckboxItem>
-              ))}
+                )
+              })}
             </List>
           );  
         }else{

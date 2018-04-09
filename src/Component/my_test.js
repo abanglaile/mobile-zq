@@ -1,7 +1,6 @@
 import { Tabs, WhiteSpace, List, Icon, Button, NavBar, ActivityIndicator } from 'antd-mobile';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Tex from './renderer.js';
 
 import *as action from '../Action/';
 import {connect} from 'react-redux';

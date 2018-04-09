@@ -1,7 +1,6 @@
 import { SegmentedControl, Progress, WhiteSpace, List, Badge, Button,NavBar,ActivityIndicator,Flex,Icon } from 'antd-mobile';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Tex from './renderer.js';
 import { Progress as Circle} from 'antd';
 
 import *as action from '../Action/';
