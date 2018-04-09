@@ -150,6 +150,7 @@ class Question extends React.Component {
     const {exercise_type, answer} = exercise[exindex];
     console.log(exercise_log, exindex);
     const {exercise_state, exercise_status} = exercise_log[exindex];
+    const answer_log = exercise_log[exindex].answer;
     const answerjson = answer;
     
     const wrongColor = "#ffa39e", correctColor = "#95de64";
@@ -169,13 +170,13 @@ class Question extends React.Component {
             <List key={'answer'+ exindex}>
               {answerjson.map((i,index) => {
                 let borderStyle = {};
-                if(i.correct){
+                if(answer_log[index].correct){
                   borderStyle = {border:"2px solid " + correctColor, borderRadius: "5px"}
-                }else if(i.select){
+                }else if(answer_log[index].select){
                   borderStyle =  {border:"2px solid " + wrongColor, borderRadius: "5px"}
                 }
                 return(
-                  <CheckboxItem key={index} disabled defaultChecked = {i.select} 
+                  <CheckboxItem key={index} disabled defaultChecked = {answer_log[index].select} 
                     style={borderStyle}
                     onChange={() => this.props.selectChange(exindex, index)} wrap>
                     <Tex content = {i.value} />
@@ -190,7 +191,7 @@ class Question extends React.Component {
           return (
             <List key={'answer'+ exindex}>
               {answerjson.map((i,index) => (
-                <CheckboxItem key={index} defaultChecked = {i.select} 
+                <CheckboxItem key={index} defaultChecked = {answer_log[index].select} 
                   onChange={() => this.props.selectChange(exindex, index)} wrap>
                   <Tex content = {i.value} />
                 </CheckboxItem>
@@ -209,13 +210,13 @@ class Question extends React.Component {
             <List key={'answer'+ exindex}>
               {answerjson.map((i,index) => {
                 let borderStyle = {};
-                if(i.correct){
+                if(answer_log[index].correct){
                   borderStyle = {border:"2px solid " + correctColor, borderRadius: "5px"}
-                }else if(i.select){
+                }else if(answer_log[index].select){
                   borderStyle =  {border:"2px solid " + wrongColor, borderRadius: "5px"}
                 }
                 return (
-                <CheckboxItem key={index} defaultChecked = {i.select}
+                <CheckboxItem key={index} defaultChecked = {answer_log[index].select}
                   style={borderStyle} 
                   onChange={() => this.props.selectChange(exindex, index)} wrap>
                   <img src={i.url} ref={element => {this.answer_img[index] = element;}} 
@@ -230,7 +231,7 @@ class Question extends React.Component {
         return (
             <List key={'answer'+ exindex}>
               {answerjson.map((i,index) => (
-                <CheckboxItem key={index} defaultChecked = {i.select} 
+                <CheckboxItem key={index} defaultChecked = {answer_log[index].select} 
                   onChange={() => this.props.selectChange(exindex, index)} wrap>
                   <img src={i.url} style={{height: "4rem", width: "auto"}}/>
                 </CheckboxItem>
