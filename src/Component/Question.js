@@ -216,7 +216,7 @@ class Question extends React.Component {
                   borderStyle =  {border:"2px solid " + wrongColor, borderRadius: "5px"}
                 }
                 return (
-                <CheckboxItem key={index} defaultChecked = {answer_log[index].select}
+                <CheckboxItem key={index} disabled defaultChecked = {answer_log[index].select}
                   style={borderStyle} 
                   onChange={() => this.props.selectChange(exindex, index)} wrap>
                   <img src={i.url} ref={element => {this.answer_img[index] = element;}} 
