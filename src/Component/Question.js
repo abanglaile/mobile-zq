@@ -153,7 +153,7 @@ class Question extends React.Component {
     const answer_log = exercise_log[exindex].answer;
     const answerjson = answer;
     
-    const wrongColor = "#ffa39e", correctColor = "#95de64";
+    const wrongColor = "#ff7875", correctColor = "#73d13d";
 
     switch(exercise_type){
       case 0:
@@ -169,14 +169,17 @@ class Question extends React.Component {
           return (
             <List key={'answer'+ exindex}>
               {answerjson.map((i,index) => {
-                let borderStyle = {};
+                let borderStyle = {border:"1px solid #f5f5f5",borderRadius: "5px",margin :"1rem 0"};
+                let iconflag = null;
                 if(answer_log[index].correct){
-                  borderStyle = {border:"2px solid " + correctColor, borderRadius: "5px"}
+                  borderStyle = {border:"2px solid " + correctColor, borderRadius: "5px",margin :"1rem 0"};
+                  iconflag = <Icon type="check" color={correctColor} />;
                 }else if(answer_log[index].select){
-                  borderStyle =  {border:"2px solid " + wrongColor, borderRadius: "5px"}
+                  borderStyle =  {border:"2px solid " + wrongColor, borderRadius: "5px",margin :"1rem 0"};
+                  iconflag = <Icon type="cross" color={wrongColor} />;
                 }
                 return(
-                  <CheckboxItem key={index} disabled defaultChecked = {answer_log[index].select} 
+                  <CheckboxItem extra={iconflag} key={index} disabled defaultChecked = {answer_log[index].select} 
                     style={borderStyle}
                     onChange={() => this.props.selectChange(exindex, index)} wrap>
                     <Tex content = {i.value} />
@@ -209,14 +212,19 @@ class Question extends React.Component {
           return (
             <List key={'answer'+ exindex}>
               {answerjson.map((i,index) => {
-                let borderStyle = {};
+
+                let borderStyle = {border:"1px solid #f5f5f5",borderRadius: "5px",margin :"1rem 0"};
+                let iconflag = null;
                 if(answer_log[index].correct){
-                  borderStyle = {border:"2px solid " + correctColor, borderRadius: "5px"}
+                  borderStyle = {border:"2px solid " + correctColor, borderRadius: "5px",margin :"1rem 0"};
+                  iconflag = <Icon type="check" color={correctColor} />;
                 }else if(answer_log[index].select){
-                  borderStyle =  {border:"2px solid " + wrongColor, borderRadius: "5px"}
+                  borderStyle =  {border:"2px solid " + wrongColor, borderRadius: "5px",margin :"1rem 0"};
+                  iconflag = <Icon type="cross" color={wrongColor} />;
                 }
+
                 return (
-                <CheckboxItem key={index} disabled defaultChecked = {answer_log[index].select}
+                <CheckboxItem extra={iconflag} key={index} disabled defaultChecked = {answer_log[index].select}
                   style={borderStyle} 
                   onChange={() => this.props.selectChange(exindex, index)} wrap>
                   <img src={i.url} ref={element => {this.answer_img[index] = element;}} 
@@ -503,8 +511,10 @@ class Question extends React.Component {
         {this.renderAnswerTest()}
         {this.renderTitle()}
         </WingBlank>
+        <WingBlank>
         {this.renderAnswer()}
         {this.renderBreakdown()}
+        </WingBlank>
         <div style={{
                   width: '100%',
                   height: "6rem",}}>
