@@ -11,6 +11,8 @@ import StudentStatus from '../Component/StudentStatus.js'
 import StudentKp from '../Component/StudentKp.js'
 import Invite from '../Component/invite.js'
 import perCenter from '../Component/me.js'
+
+import lessonDetail from '../Component/lessonDetail.js'
 import { Route, IndexRoute } from 'react-router';
 import { requireAuthentication } from '../utils';
 
@@ -34,6 +36,7 @@ export default (
           <Route path="practice" component={practice} /> 
           <Route path="my_book_chapter" component={MyChapter} />
           <Route path="percenter" component={perCenter} />
+          <Route path="lesson" component={lessonDetail} />
         </Route>
         <Route path="login" component={login} />
         
