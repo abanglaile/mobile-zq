@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom';
 // import Tex from './renderer.js';
 import { Progress as Circle} from 'antd';
 
-
 import *as action from '../Action/';
 import {connect} from 'react-redux';
 
@@ -60,8 +59,8 @@ class StudentKp extends React.Component {
         range: [ 0, 1 ]
       },
       kp_rating: {
-        tickCount: 5,
-        min: 300  
+        tickCount: 3,
+        min: 100  
       }
     };
     // 配置刻度文字大小，供PC端显示用(移动端可以使用默认值20px)
@@ -175,12 +174,14 @@ class StudentKp extends React.Component {
         return(    
           <List>
             <Item>
-              <div style={{fontWeight: 'bold'}}>知识点攻略</div>
+              <div style={{fontWeight: 'bold'}}>知识点小百科</div>
             </Item>
-            <Item arrow='horizontal' multipleLine>
-              等音程百科
-              <Brief>两个音程的音响相同，记法和意义不同，就称为等音程。等音程是由于等音变化而来的，其重要特点是音数相等。可以只改变一个音的记谱，也可以两个音同时变换记谱。</Brief>
-            </Item>
+            <a href="http://mp.weixin.qq.com/s?__biz=MzI5OTAyNjU4Mg==&tempkey=OTUyX2FYTk91SEhhM0lrZFRPdXFJRnBLZ0E4TXJTaDBZSUJPd2JFNVNjb0J6SHgtbWJXdEkxZ1VBeTdaVmdJZk4xY3laTUVkdTI3cS0tbERGLXZkTmpBVE1mNzY2RnlZU2w1b3N5MzhlZ1F2OFA5LTVWdjNTYkY1dDRDYjVzbmZpMHJTc2ozbmlNVW5sUjNGa2NqZGtaTGFaU1VVMkxzU1V0TTNFX1FkTUF%2Bfg%3D%3D&chksm=7484999643f3108026abb65ab301827cde9deca9693d46b7b4981eae0be8f68b1f8519155a62&mpshare=1&scene=1&srcid=0418UrKfbDg5X2axXkgu9vAq#wechat_redirect">
+              <Item arrow='horizontal' multipleLine >
+                单音程
+                <Brief>在乐音体系中，两个音之间的高低关系，叫做“音程”。其中，较高的音称为冠音（上方音），较低的音称为根音（下方音）。</Brief>
+              </Item>
+            </a>
           </List>
         ); 
       }

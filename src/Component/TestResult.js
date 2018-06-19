@@ -42,9 +42,14 @@ function formatTime(seconds) {
 }
 
 function GetDateParse(time) {  
-    //将xxxx-xx-xx的时间格式，转换为 xxxx/xx/xx的格式   
-    var paraTime = time.replace(/\-/g, "/");  
-    return Date.parse(paraTime);
+    //将xxxx-xx-xx的时间格式，转换为 xxxx/xx/xx的格式 
+    if(typeof(time) == 'string'){
+      var paraTime = time.replace(/\-/g, "/");  
+      return Date.parse(paraTime);
+    }else{
+      return time;
+    }  
+    
 };  
 
 class TestResult extends React.Component {
@@ -181,7 +186,9 @@ class TestResult extends React.Component {
     var {isFetching, test_log, exercise_log, test_kp} = this.props;
     var test_time = '';
     var finish_time = '';
+    console.log("test_log: "+JSON.stringify(test_log));
     if(test_log.finish_time && test_log.start_time){
+
       var time = (GetDateParse(test_log.finish_time) - GetDateParse(test_log.start_time)) /1000;
       // var hour = parseInt(time/3600);
       // var mini = parseInt(time%3600/60);

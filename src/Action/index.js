@@ -218,6 +218,18 @@ const getTestSuccess = (json, test_type) => {
   }
 }
 
+const getRandomTestSuccess = (json, test_type) => {
+    console.log(json.test_id);
+  return {
+    type: 'GET_RANDOM_TEST_SUCCESS',
+    exercise: json.exercise,
+    test_id: json.test_id,
+    exercise_log : json.exercise_log,
+    test_type,
+    student_rating: json.student_rating,
+  }
+}
+
 //获取测试数据成功
 const getTestExerciseSuccess = (json) => {
   console.log(json);
@@ -528,6 +540,28 @@ export const getTestData = (student_id, test_id, test_type, entry) => {
     }
 }
 
+//带随机参数题目
+export const getRandomTestData = (student_id, test_id, test_type, entry) => {
+    let url = target + "/getExerciseByTest2";
+    return (dispatch) => {
+        dispatch(getTestStart());
+        return axios.get(url,{
+                params:{
+                   test_id,
+                   student_id,
+                }
+        })
+        .then(function (response) {
+            dispatch(getMyScoreSuccess(response.data));
+            dispatch(getRandomTestSuccess(response.data, test_type));
+            dispatch(push("/mobile-zq/question"));
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+}
+
 export const getTestKpReward = (student_id, test_id) => {
     let url = target + "/getTestKpReward";
     return (dispatch) => {
@@ -645,10 +679,13 @@ export const jumpNext = (exercise_status) => {
         const {exercise_state, exercise_status} = exercise_log[exindex];
         const blength = exercise[exindex].breakdown.length;
 
+        console.log(exercise_status);
         if(exercise_status > 0 || exercise_state || blength == 1){
             //跳过导学页面
+
             if(exercise_status == 0){
-                updateExerciseStatus(exindex, 2);
+                console.log(exercise_status, exercise_state, blength);
+                dispatch(updateExerciseStatus(exindex, 2));
             }
 
             var next = -1;
@@ -761,12 +798,12 @@ export const updateExerciseTime = (i, ac_time) => {
 }
 
 //更新题目页面状态
-export const updateExerciseStatus = (i, exercise_status) => {
-    return {
+const updateExerciseStatus = (exindex, exercise_status) => {
+    return{
         type: 'UPDATE_EXERCISE_STATUS',
-        i,
+        exindex,
         exercise_status,
-    }
+    } 
 }
 
 //提交单题测试结果
@@ -833,6 +870,7 @@ const checkAnswer = (exercise_type, log_answer) => {
  * [修改题目选项]
  */
 export const selectChange = (exindex, index) => {
+    console.log("selectChange+++++++++");
     return{
         type: 'EXERCISE_SELECT_CHANGE',
         exindex,

@@ -121,6 +121,7 @@ class Question extends React.Component {
     const {exercise, exindex} = this.props;
     const {title, title_img_url, title_audio_url} = exercise[exindex]; 
     const {title_img_width, title_img_height} = this.state;
+    console.log("exercise.sample :"+JSON.stringify(exercise[0].sample));
     console.log(title_img_url);
     return (
       <div style={{ margin: '30px 0 18px 0', fontSize: '1.0rem'}}>
@@ -195,6 +196,7 @@ class Question extends React.Component {
             <List key={'answer'+ exindex}>
               {answerjson.map((i,index) => (
                 <CheckboxItem key={index} defaultChecked = {answer_log[index].select} 
+                  style={{border:"1px solid #f5f5f5",borderRadius: "5px",margin :"1rem 0"}}
                   onChange={() => this.props.selectChange(exindex, index)} wrap>
                   <Tex content = {i.value} />
                 </CheckboxItem>
@@ -208,6 +210,7 @@ class Question extends React.Component {
         if(exercise_state >= 0){
           disabled = true;
         }
+        console.log(exercise_status);
         if(exercise_status == 2){
           return (
             <List key={'answer'+ exindex}>
@@ -224,27 +227,28 @@ class Question extends React.Component {
                 }
 
                 return (
-                <CheckboxItem extra={iconflag} key={index} disabled defaultChecked = {answer_log[index].select}
-                  style={borderStyle} 
-                  onChange={() => this.props.selectChange(exindex, index)} wrap>
-                  <img src={i.url} ref={element => {this.answer_img[index] = element;}} 
-                  onLoad = {() => this.answerImageLoaded(index)} 
-                  style={{height: answer_img_height, width: answer_img_width}}/>
-                </CheckboxItem>
+                  <CheckboxItem extra={iconflag} key={index} disabled defaultChecked = {answer_log[index].select}
+                    style={borderStyle} 
+                    onChange={() => this.props.selectChange(exindex, index)} wrap>
+                    <img src={i.url} ref={element => {this.answer_img[index] = element;}} 
+                    onLoad = {() => this.answerImageLoaded(index)} 
+                    style={{height: answer_img_height, width: answer_img_width}}/>
+                  </CheckboxItem>
                 )
               })}
             </List>
           );  
         }else{
-        return (
-            <List key={'answer'+ exindex}>
-              {answerjson.map((i,index) => (
-                <CheckboxItem key={index} defaultChecked = {answer_log[index].select} 
-                  onChange={() => this.props.selectChange(exindex, index)} wrap>
-                  <img src={i.url} style={{height: "4rem", width: "auto"}}/>
-                </CheckboxItem>
-              ))}
-            </List>
+          return (
+              <List key={'answer'+ exindex}>
+                {answerjson.map((i,index) => (
+                  <CheckboxItem key={index} defaultChecked = {answer_log[index].select}
+                    style={{border:"1px solid #f5f5f5",borderRadius: "5px",margin :"1rem 0"}} 
+                    onChange={() => this.props.selectChange(exindex, index)} wrap>
+                    <img src={i.url} style={{height: "4rem", width: "auto"}}/>
+                  </CheckboxItem>
+                ))}
+              </List>
           );
         }  
       default:
@@ -527,11 +531,13 @@ class Question extends React.Component {
   }
 }
 
+
+
 export default connect(state => {
-  const test_state = state.testData.toJS();
-  const student_rating = state.studentData.get("student_rating");
+  var test_state = state.testData.toJS();
+  var student_rating = state.studentData.get("student_rating");
   console.log(student_rating);
-  const {exercise, exindex, exercise_log, test_log, modalOpen, feedbackToast, exercise_st, isFetching} = test_state;
+  var {exercise, exindex, exercise_log, test_log, modalOpen, feedbackToast, exercise_st, isFetching} = test_state;
   return {
     test_log: test_log,
     //跳转题目页面开始时间
@@ -539,7 +545,7 @@ export default connect(state => {
     exercise: exercise,
     exindex: exindex,
     exercise_log: exercise_log,
-    modalOpen: modalOpen,
+    modalOpen: modalOpen, 
     student_rating: student_rating,
     feedbackToast: feedbackToast,
     isFetching : isFetching,

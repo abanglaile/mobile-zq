@@ -149,6 +149,7 @@ const defaulatStudentData = Immutable.fromJS({
 // >>>>>>> origin/master
 // //手动获取数据
 export const testData = (state = defaulatTestData, action = {}) => {
+    console.log("action.type: "+action.type);
     switch(action.type){
         case 'GET_TEST_START':
             return state.set('isFetching', true);
@@ -198,6 +199,15 @@ export const testData = (state = defaulatTestData, action = {}) => {
                 .set('isFetching', false);
             break;
 
+        case 'GET_RANDOM_TEST_SUCCESS':
+            let test_log = {test_id: action.test_id, start_time: new Date(), test_type: action.test_type}
+            return state.set('exercise', Immutable.fromJS(action.exercise)).set('exindex', 0)
+                .set('test_log', Immutable.fromJS(test_log))
+                .set('exercise_log', Immutable.fromJS(action.exercise_log))
+                .set('exercise_st', new Date())
+                .set('isFetching', false);
+            break;
+
         case 'GET_TEST_EXERCISE_SUCCESS':
             return state.set('exercise', Immutable.fromJS(action.json)).set('isFetching', false);
         case 'GET_TEST_RATING_REWARD_SUCCESS':
@@ -214,7 +224,7 @@ export const testData = (state = defaulatTestData, action = {}) => {
         case 'UPDATE_EXINDEX':
             return state.set('exindex', action.exindex).set('exercise_st', new Date());
         case 'UPDATE_EXERCISE_STATUS':
-            return state.setIn(['exercise_log', action.i, 'exercise_status'], action.exercise_status);
+            return state.setIn(['exercise_log', action.exindex, 'exercise_status'], action.exercise_status);
         case 'UPDATE_EXERCISE_TIME':
             return state.updateIn(['exercise_log', action.i, 'ac_time'], ac_time => ac_time + action.ac_time);
         case 'UPDATE_FINISH_TIME':
@@ -229,7 +239,7 @@ export const testData = (state = defaulatTestData, action = {}) => {
             const exindex = state.get('exindex');
             return state.mergeDeepIn(['exercise_log', exindex], Immutable.fromJS(action.exercise_log)).set("modalOpen", true);
         case 'EXERCISE_SELECT_CHANGE':
-            console.log(action.index);
+            console.log("EXERCISE_SELECT_CHANGE: "+action.index);
             return state.updateIn(['exercise_log', action.exindex, 'answer', action.index, 'select'], select => !select)
         case 'BREAKDOWN_SN_SELECT_CHANGE':
             const val = action.index;

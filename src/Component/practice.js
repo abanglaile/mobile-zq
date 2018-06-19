@@ -63,7 +63,8 @@ class MyTest extends React.Component {
           <Item 
             multipleLine 
             extra={<Button type="primary" size='small' inline>开始</Button>}
-            onClick={e => this.props.getTestData(student_id,item.test_id,item.test_type)}
+            // onClick={e => this.props.getTestData(student_id,item.test_id,item.test_type)}
+            onClick={e => this.props.getRandomTestData(student_id,item.test_id,item.test_type)}
             style = {{border:"1px solid #888",borderRadius: "5px",margin :"1rem 1rem"}}
           >
             {item.test_name}
