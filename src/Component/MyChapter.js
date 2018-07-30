@@ -144,8 +144,7 @@ class MyChapter extends React.Component {
       <div>
         <div>
           <NavBar
-            style = {{position:'relative',color: '#FFF' ,backgroundColor: '#1890ff',zIndex: '90'}}
-            mode="dark"
+            mode="light"
             rightContent={<div onClick={(e) => this.handleClick(e)} >基本乐理<Icon type={show ? "up" : "down"} /></div>}
           >
             学习情况

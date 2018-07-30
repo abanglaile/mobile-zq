@@ -31,8 +31,7 @@ class perCenter extends React.Component {
     return (
       <div>
         <NavBar
-          mode="dark"
-          style = {{backgroundColor:"#1890ff"}}
+          mode="light"
           >我</NavBar>
         <List>
           <Item

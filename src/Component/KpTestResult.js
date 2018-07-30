@@ -17,8 +17,11 @@ class KpTestResult extends React.Component {
     const {student_id, params} = this.props;
     const test_id = params.test_id;
     if(test_id){
-        this.props.getTestRatingReward(student_id, test_id);
-        this.props.getMyLadderScore(student_id);
+        // this.props.getTestRatingReward(student_id, test_id);
+        this.props.getTestRatingReward(1, 124);
+        // this.props.getMyLadderScore(student_id);
+        // this.props.getMyScore(1);
+        this.props.getMyLadderScore(1);
       // this.props.getTestRankingList(test_id);
       // this.props.getStuTestInfo(student_id,test_id);
     }else{
@@ -62,12 +65,12 @@ class KpTestResult extends React.Component {
         成就奖励         
         </NavBar>
       </div>
-      <div style={{backgroundColor: '#1890ff', paddingTop: '2rem',}}>
+      <div style={{backgroundColor: '#fafafa', paddingTop: '3rem',paddingBottom: '3rem'}}>
         <div style={{
               textAlign: 'center',
               height: '3rem',
               lineHeight: '3rem',
-              color: 'white',
+              color: 'black',
             }}>
             <span style={{fontSize: '3rem'}} >{student_rating}</span>
         
@@ -76,37 +79,19 @@ class KpTestResult extends React.Component {
               textAlign: 'center',
               height: '2rem',
               lineHeight: '2rem',
-              color: 'white',
+              color: 'black',
               fontSize: '1.1rem'
-            }}><span>{'我的天梯'}</span><Badge text={rating.delta_student_rating} size='large'  style={{
-              marginLeft: 6, fontSize: "1rem", padding: '0 3px', backgroundColor: '#fff', color: "#1890ff", borderRadius: 2}} /></div>
-        <div style={{
-        textAlign: 'center',
-        height: '4rem',
-        lineHeight: '4rem',
-        color: 'white',
-        fontSize: '1rem'
-      }}>最近天梯 ></div>
+            }}>
+            <div>
+              <span>{'我的天梯 '}</span>
+              <span style={{color: "#40a9ff"}}>{rating.delta_student_rating>0 ? '+'+rating.delta_student_rating : '-'+rating.delta_student_rating}</span>
+            </div>
+        </div>   
       </div>
 
       <List>
         <Item>
-          <div><span style={{fontWeight: "1.2rem"}}>{"经验 +15"} </span><span style={{color: "#1890ff", fontSize: "1rem"}}>{'105/500'}</span></div>
-          <Brief>
-            <div style={{ width: '85%' }}>
-              <span style={{color: "#1890ff", fontSize: "1rem", marginRight: "0.5rem"}}>LV.1</span>
-              <Circle size="small" showInfo="false" type="line" percent={105/500 * 100}/>
-            </div> 
-          </Brief> 
-
-        </Item>
-      </List>
-      <List>
-        <Item extra={'规则'}><div>{"学科积分 +" + credit.delta_credit}</div></Item>
-        <Item style={{marginTop: "0.5rem"}}
-          thumb={<Circle width={100} type="dashboard" percent={credit.new_credit} format={() => '50 / 200'}/>} >
-          
-          <Brief><div>全对 +2</div><div>击破3题 +3</div></Brief>    
+          <div><span style={{fontWeight: "1.2rem"}}>{"我的积分 "} </span><span style={{color: "#40a9ff",fontWeight: "1.2rem"}}>{'+15'}</span></div>
         </Item>
       </List>
       <WhiteSpace />
@@ -127,6 +112,8 @@ class KpTestResult extends React.Component {
 export default connect(state => {
   const test_state = state.testData.toJS();
   var {delta_result, test_id, test_reward} = test_state;
+  console.log("delta_result,",delta_result);
+  console.log("test_reward,",test_reward);
   const student_rating = state.studentData.get("student_rating");
   delta_result = {
     delta_kp: [{kpname: "二次函数标准式与定义", kp_delta_rating: +12}],

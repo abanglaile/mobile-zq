@@ -105,8 +105,7 @@ class MyTest extends React.Component {
     return (
     <div>
       <NavBar
-          mode="dark"
-          style = {{backgroundColor:"#1890ff"}}
+          mode="light"
         >提分</NavBar>
       <div>
         <List>

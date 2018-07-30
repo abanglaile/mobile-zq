@@ -415,6 +415,25 @@ export const getMyLadderScore = (student_id) => {
     }
 }
 
+//获取我的积分（变化）
+export const getMyScore = (student_id) => {
+    let url = target + "/getMyScore";
+    return (dispatch) => {
+        dispatch(getDataStart());
+        return axios.get(url,{
+                params:{
+                   student_id,
+                }
+        })
+        .then(function (response) {
+            dispatch(getMyPointsSuccess(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+}
+
 //获取我的章节数据
 export const getMyBookChapter = (student_id, course_id) => {
     let url = target + "/getMyBookChapter";
