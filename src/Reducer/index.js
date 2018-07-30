@@ -22,25 +22,36 @@ const defaulatStudentData = Immutable.fromJS({
         class_name:null,
         imgurl:null,
         student_rating: 0,
-        book: [],
+
+        course_id: 3,
+        course: [{course_id: 3, course_name: '基本乐理'}],
+        //学情
+        books: [],
+
+        chapter: {
+            chapterid: null,
+            chapter_status: {chaptername: '', chapter_mastery: 0, kp_mastery_count: 0, practice: 0, correct:0},
+            kp_status: [],
+        },
+
         my_test_list: [],
         my_uncompleted_test: [],
-        chapter: {
-            chaptername : null,
-            status: {practice: 0, correct:0},
-            kp: [],
-        },
+        
+        //底部栏
         tab: '',
         test_tab:'',
+
+        //总体
         capatity: [],
         ladder : [],
+
+        //单个知识点
         kpladder : [],
         kpcapatity: [],
+
         comusedkp : [],
     });
 
-// <<<<<<< HEAD
-// =======
 // const defaulatAuthData = Immutable.fromJS({
 //         token: null,
 //         nickname: null,
@@ -199,6 +210,9 @@ export const testData = (state = defaulatTestData, action = {}) => {
                 .set('isFetching', false);
             break;
 
+        case 'SUBMIT_EXERCISE_LOG_SUCCESS':
+            console.log(action.i, action.exercise_log);
+            return state.setIn(['exercise_log', action.i], Immutable.fromJS(action.exercise_log)).set("modalOpen", true);
         case 'GET_RANDOM_TEST_SUCCESS':
             let test_log = {test_id: action.test_id, start_time: new Date(), test_type: action.test_type}
             return state.set('exercise', Immutable.fromJS(action.exercise)).set('exindex', 0)
@@ -281,14 +295,15 @@ export const studentData = (state = defaulatStudentData, action = {}) => {
         case 'GET_MY_SCORE_SUCCESS':
             console.log(action.json.student_rating);
             return state.set('student_rating', action.json.student_rating).set('isFetching', false);
-        case 'GET_CHAPTER_SUCCESS':
-            return state.set('book', action.json).set('isFetching', false);
+        case 'GET_MY_CHAPTER_SUCCESS':
+            console.log(action.json);
+            return state.set('books', Immutable.fromJS(action.json)).set('isFetching', false);
         case 'GET_CHAPTER_NAME_SUCCESS':
             return state.setIn(['chapter', 'chaptername'], action.json.chaptername).set('isFetching', false);
         case 'GET_CHAPTER_STATUS_SUCCESS':
             return state.setIn(['chapter', 'status'], action.json).set('isFetching', false);
         case 'GET_CHAPTER_KP_SUCCESS':
-            return state.setIn(['chapter', 'kp'], action.json).set('isFetching', false);
+            return state.set('chapter', action.json);
         case 'GET_MYTEST_SUCCESS':
             return state.set('my_test_list', action.json).set('isFetching', false);
         case 'GET_MY_UNCOMPLETEDTEST_SUCCESS':

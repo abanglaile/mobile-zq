@@ -6,11 +6,16 @@ import KpTestResult from '../Component/KpTestResult.js'
 import practice from '../Component/practice.js'
 import MyTest from '../Component/my_test.js'
 import MyChapter from '../Component/MyChapter.js'
+
+import ChapterKp from '../Component/chapter_kp.js'
+
 import login from '../Component/login.js'
 import StudentStatus from '../Component/StudentStatus.js'
 import StudentKp from '../Component/StudentKp.js'
 import Invite from '../Component/invite.js'
 import perCenter from '../Component/me.js'
+
+import lessonDetail from '../Component/lessonDetail.js'
 import { Route, IndexRoute } from 'react-router';
 import { requireAuthentication } from '../utils';
 
@@ -34,6 +39,7 @@ export default (
           <Route path="practice" component={practice} /> 
           <Route path="my_book_chapter" component={MyChapter} />
           <Route path="percenter" component={perCenter} />
+          <Route path="lesson" component={lessonDetail} />
         </Route>
         <Route path="login" component={login} />
         
@@ -44,5 +50,7 @@ export default (
         <Route path="kp_test_result/:test_id" component={KpTestResult} />
         <Route path="test_result/:test_id" component={TestResult} />
         <Route path="invite" component={Invite} />
+
+        <Route path="chapter_kp/:chapter_id" component={ChapterKp} />
     </Route>
 );

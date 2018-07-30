@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {List,NavBar,Icon,ActivityIndicator,Menu,WhiteSpace,Modal} from 'antd-mobile';
+import {List,NavBar,Icon,ActivityIndicator,Menu,WhiteSpace,Modal, Tabs} from 'antd-mobile';
 // import Tex from './renderer.js'
 import { Progress as Circle} from 'antd';
 
@@ -25,13 +25,15 @@ class MyChapter extends React.Component {
       show: false,
       modal: false,
       m_index: 0,
+      tab_index: 0,
     };
   }
 
   componentDidMount(){
     const {student_id, course_id} = this.props;
     this.props.setSelectedTab("redTab");
-    this.props.getMyLadderScore(student_id);
+ 
+    this.props.getMyStudentRating(student_id, course_id);
     this.props.getMyBookChapter(student_id, course_id);
   }
 
@@ -39,11 +41,17 @@ class MyChapter extends React.Component {
     this.setState({
       m_index: value,
     });
-    // console.log('value:'+JSON.stringify(value));
-    // console.log('value:'+value);
-    // let label = '';
+    console.log(value);
     
-    // console.log(label);
+  }
+
+  onChangeTabs(index){
+    this.setState({
+      tab_index: index,
+    })
+    // const {student_id} = this.props;
+    // console.log("tab", tab);
+    // this.props.getMyBookChapter(student_id, tab.bookid);
   }
 
   handleClick(e){
@@ -67,57 +75,58 @@ class MyChapter extends React.Component {
     });
   }
 
-  getKpByChapterid(chapterid){
-    console.log("chapterid:"+chapterid);
-    this.props.getChapterKpStatus(this.props.student_id, chapterid);
-    this.setState({modal: true});
+  getKpByChapterid(chapter_id){
+    this.props.router.push("/mobile-zq/chapter_kp/" + chapter_id);
   }
 
   renderChapterList(){
-    const {book,student_id} = this.props;
-    const { m_index} = this.state;
+    const {books, student_id} = this.props;
+    const {tab_index} = this.state;
 
-    if(book.length > 0){
+    if(books.length > 0){
       return (
         <List>
           {
-            book[m_index].chapters.map((chapteritem) => {
+            books[tab_index].chapters.map((item) => {
+              let chapter_rate = (item.chapter_rating && item.chapter_standard) ? (item.chapter_rating * 100/item.chapter_standard).toFixed(1) : 0;
               return (
                 <div>
                   <Item 
                     extra={'开始练习'}
-                    thumb={<Circle width={50} type="circle" percent={chapteritem.chapterrate} format={(percent) => `${percent}%`}/>} 
-                    onClick={() => this.getKpByChapterid(chapteritem.chapterid)}
+                    thumb={<Circle width={50} type="circle" percent={chapter_rate} format={(percent) => `${percent}%`}/>} 
+                    onClick={() => this.props.router.push("/mobile-zq/chapter_kp/" + item.chapterid)}
                   >
                     <div style={{display: 'flex', marginTop: '1.5rem',marginBottom: '1.5rem', alignItems: 'center'}}>
-                      {chapteritem.chaptername}
+                      {item.chaptername}
                     </div>
                   </Item>
-                  <WhiteSpace style={{backgroundColor:"#f5f5f5"}}/>
+
                 </div>
               )
             })
           }
         </List>
       );
-    }else{
-      return;
     }
     
   }
 
   render(){
     const { show } = this.state;
-    const {book,student_rating,chapter,isFetching} = this.props;
-    const {kp} = chapter
+    const {books, student_rating,chapter,isFetching} = this.props;
     var initData = [];
-    if(book.length > 0){
-      for(var i=0;i<book.length;i++){
-        initData.push({"value":i.toString(),"label":book[i].bookname});
+    if(books.length > 0){
+      for(var i=0;i<books.length;i++){
+        initData.push({"value":i.toString(),"label":books[i].bookname});
       }
     }
-    console.log('book:'+JSON.stringify(book));
-    console.log('student_rating:'+JSON.stringify(student_rating));
+    console.log(books[0]);
+
+    let tabs = [];
+    for(var i = 0; i < books.length; i++){
+      tabs[i] = { title: books[i].bookname, bookid: books[i].bookid};
+    }
+    console.log(tabs);
 
     const menuEl = (
       <Menu
@@ -175,40 +184,19 @@ class MyChapter extends React.Component {
           </List>
         </div>
         <WhiteSpace size='lg' style={{backgroundColor:"#f5f5f5"}}/>
-        {this.renderChapterList()}
-
-        <Modal
-          title='相关知识点'
-          transparent
-          visible={this.state.modal}
-          onClose
-          footer={[{ text: '确定', onPress: () => { this.setState({modal: false})} }]}
+        <Tabs tabs={tabs}
+          initialPage={0}
+          
+          onChange={(tab, index) => { console.log('onChange', index, tab); }}
+          onTabClick={(tab, index) => { this.onChangeTabs(index) }}
         >
-          <div style={{ height: 400, overflow: 'scroll' }}>
-            <List>
-            {
-              kp.map((item) => {
-                var correct_rate = item.practice ? Math.round((item.correct/item.practice)*100) : 0;
-                return (
-                  <Item 
-                    arrow="horizontal"
-                    multipleLine
-                    onClick={e => this.props.router.push("/mobile-zq/student_kp/"+item.kpid)}
-                  > 
-                      {item.kpname}
-                      <Brief>
-                        <div>
-                          <span>正确率： </span>
-                          <span style={{color: '#1890ff', fontSize: '1.2rem'}}>{correct_rate}%</span>
-                        </div>
-                      </Brief>
-                  </Item>
-                )
-              })
-            }
-            </List>
-          </div>
-        </Modal>
+          {this.renderChapterList()}
+
+        </Tabs>
+
+        
+
+        
       </div>
     );
   }
@@ -217,13 +205,13 @@ class MyChapter extends React.Component {
 
 export default connect((state, ownProps) => {
   const studentData = state.studentData.toJS();
-  const {book, course_id,student_rating,chapter,isFetching} = studentData;
+  const {books, course, course_id, student_rating, chapter,isFetching} = studentData;
   return {
-    book: book,
-    course_id: 3,
+    books: books,
+    course_id: course_id,
+    course: course,
     isFetching: isFetching,
     student_rating : student_rating,
-    chapter: chapter ? chapter : [],
     student_id: state.AuthData.get('userid'),
   };
 }, action)(MyChapter);

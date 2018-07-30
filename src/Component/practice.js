@@ -37,15 +37,10 @@ class MyTest extends React.Component {
 
   componentDidMount(){
     const {student_id} = this.props;
-    this.loadTest();
+    this.props.getNotFinishTest(this.props.student_id);
     this.props.setSelectedTab("blueTab");
     this.props.updateEntry("root");
-    this.props.getStuComUsedKp(student_id);
-  }
-
-  loadTest(){
-    // var student_id = '1';
-    this.props.getUncompletedTest(this.props.student_id);
+    //this.props.getStuComUsedKp(student_id);
   }
 
   getMyComUsedKp(){

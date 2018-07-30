@@ -152,6 +152,7 @@ class Question extends React.Component {
     console.log(exercise_log, exindex);
     const {exercise_state, exercise_status} = exercise_log[exindex];
     const answer_log = exercise_log[exindex].answer;
+    console.log(answer_log);
     const answerjson = answer;
     
     const wrongColor = "#ff7875", correctColor = "#73d13d";
@@ -206,12 +207,7 @@ class Question extends React.Component {
         }
       case 2:
         const {answer_img_width, answer_img_height} = this.state;
-        var disabled = false;
-        if(exercise_state >= 0){
-          disabled = true;
-        }
-        console.log(exercise_status);
-        if(exercise_status == 2){
+        if(exercise_status >= 1){
           return (
             <List key={'answer'+ exindex}>
               {answerjson.map((i,index) => {
@@ -260,6 +256,7 @@ class Question extends React.Component {
     const {modalOpen, exindex, exercise_log} = this.props;
     var {delta_student_rating, exercise_state} = exercise_log[exindex];
     var title = 'Sorry!';
+    console.log(exercise_log[exindex]);
     delta_student_rating = delta_student_rating ? delta_student_rating : 0;
     var delta_tip = delta_student_rating < 0 ? delta_student_rating : '+' + delta_student_rating;  
     if(exercise_state){
@@ -290,7 +287,7 @@ class Question extends React.Component {
       return (
       <List renderHeader='请选择你做对的步骤'>
         {breakdown.map((item,i) => {
-          console.log(item.content);
+          console.log(breakdown_sn[i]);
           const presn = item.presn;
           //显示第一个或前置已经被选择（最后答案不显示）
           if((i != breakdown.length - 1) && (breakdown_sn[i].sn_state >= 0 || (presn > 0 && breakdown_sn[presn - 1].sn_state > 0))){
@@ -386,7 +383,7 @@ class Question extends React.Component {
           </Flex.Item>
           <Flex.Item>
             <Button style={{margin: '0.5rem 0 0 0'}}
-                onClick={e => this.props.submitExerciseLog(exercise[exindex], exercise_log[exindex].answer,student_rating)} 
+                onClick={e => this.props.submitExerciseLog(exercise[exindex], exercise_log[exindex], exindex)} 
                 type="primary" size='small'>
               提交答案
             </Button>
@@ -536,7 +533,7 @@ class Question extends React.Component {
 export default connect(state => {
   var test_state = state.testData.toJS();
   var student_rating = state.studentData.get("student_rating");
-  console.log(student_rating);
+  
   var {exercise, exindex, exercise_log, test_log, modalOpen, feedbackToast, exercise_st, isFetching} = test_state;
   return {
     test_log: test_log,
