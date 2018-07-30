@@ -6,6 +6,9 @@ import KpTestResult from '../Component/KpTestResult.js'
 import practice from '../Component/practice.js'
 import MyTest from '../Component/my_test.js'
 import MyChapter from '../Component/MyChapter.js'
+
+import ChapterKp from '../Component/chapter_kp.js'
+
 import login from '../Component/login.js'
 import StudentStatus from '../Component/StudentStatus.js'
 import StudentKp from '../Component/StudentKp.js'
@@ -47,5 +50,7 @@ export default (
         <Route path="kp_test_result/:test_id" component={KpTestResult} />
         <Route path="test_result/:test_id" component={TestResult} />
         <Route path="invite" component={Invite} />
+
+        <Route path="chapter_kp/:chapter_id" component={ChapterKp} />
     </Route>
 );

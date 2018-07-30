@@ -314,9 +314,9 @@ const getStudentInfoSuccess = (json) => {
 }
 
 //获取测试数据成功
-const getChapterSuccess = (json) => {
+const getMyChapterSuccess = (json) => {
   return {
-    type: 'GET_CHAPTER_SUCCESS',
+    type: 'GET_MY_CHAPTER_SUCCESS',
     json,
   }
 }
@@ -369,7 +369,7 @@ const getChapterStatusSuccess = (json) => {
 }
 
 //获取章节知识点状态成功
-const getChapterKpStatusSuccess = (json) => {
+const getChapterKpSuccess = (json) => {
   return {
     type: 'GET_CHAPTER_KP_SUCCESS',
     json,
@@ -397,13 +397,14 @@ export const setMyTestTab = (test_tab) => {
 }
 
 //获取我的天梯总分
-export const getMyLadderScore = (student_id) => {
-    let url = target + "/getMyLadderScore";
+export const getMyStudentRating = (student_id, course_id) => {
+    let url = target + "/getMyStudentRating";
     return (dispatch) => {
         dispatch(getDataStart());
         return axios.get(url,{
                 params:{
                    student_id,
+                   course_id,
                 }
         })
         .then(function (response) {
@@ -414,6 +415,7 @@ export const getMyLadderScore = (student_id) => {
         });
     }
 }
+
 
 //获取我的章节数据
 export const getMyBookChapter = (student_id, course_id) => {
@@ -427,7 +429,7 @@ export const getMyBookChapter = (student_id, course_id) => {
                 }
         })
         .then(function (response) {
-            dispatch(getChapterSuccess(response.data));
+            dispatch(getMyChapterSuccess(response.data));
         })
         .catch(function (error) {
             console.log(error);
@@ -486,7 +488,8 @@ export const getChapterKpStatus = (student_id, chapter_id) => {
                 }
         })
         .then(function (response) {
-            dispatch(getChapterKpStatusSuccess(response.data));
+            console.log(response.data);
+            dispatch(getChapterKpSuccess(response.data));
         })
         .catch(function (error) {
             console.log(error);
@@ -542,7 +545,7 @@ export const getTestData = (student_id, test_id, test_type, entry) => {
 
 //带随机参数题目
 export const getRandomTestData = (student_id, test_id, test_type, entry) => {
-    let url = target + "/getExerciseByTest2";
+    let url = target + "/getExerciseByTest";
     return (dispatch) => {
         dispatch(getTestStart());
         return axios.get(url,{
@@ -636,8 +639,8 @@ export const getMyHistoryTests = (student_id) => {
 }
 
 //获取老师布置的未完成的作业
-export const getUncompletedTest = (student_id) => {
-    let url = target + "/getUncompletedTest";
+export const getNotFinishTest = (student_id) => {
+    let url = target + "/getNotFinishTest";
     return (dispatch) => {
         dispatch(getDataStart());
         return axios.get(url,{
@@ -656,7 +659,27 @@ export const getUncompletedTest = (student_id) => {
 
 //-------------------------------做题交互-------------------------------//
 
-export const submitFeedBack = (exindex) => {
+const submitBreakdownLogSuccess = (exercise_log, i) => {
+    console.log(exercise_log);
+    return {
+        type: 'SUBMIT_BREAKDOWN_LOG_SUCCESS',
+        exercise_log,
+        i,
+    }
+}
+
+export const submitFeedBack = (exercise_log) => {
+    let url = target + "/submitBreakdownLog";
+    return (dispatch) => {
+        //dispatch(getTestStart());
+        return axios.post(url, {exercise_log})
+        .then(function (response) {
+            dispatch(submitBreakdownLogSuccess(response.data, exindex));
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
     console.log(exindex);
     return {
         type: 'SUBMIT_FEEDBACK',
@@ -889,12 +912,38 @@ export const breakdownSelectChange = (exindex, index) => {
     } 
 }
 
+export const submitExerciseLogSuccess = (exercise_log, i) => {
+    console.log(exercise_log);
+    return {
+        type: 'SUBMIT_EXERCISE_LOG_SUCCESS',
+        exercise_log,
+        i,
+    }
+}
 
+
+export const submitExerciseLog = (exercise, exercise_log, exindex) => {
+    const {exercise_id, answer, exercise_type, exercise_rating, breakdown} = exercise;
+    const result = checkAnswer(exercise_type, exercise_log.answer);
+
+    exercise_log.exercise_state = result;
+    let url = target + "/submitExerciseLog";
+    return (dispatch) => {
+        //dispatch(getTestStart());
+        return axios.post(url,{exercise_log})
+        .then(function (response) {
+            dispatch(submitExerciseLogSuccess(response.data, exindex));
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+}
 
 /**
  * [提交单题测试结果]
  */
-export const submitExerciseLog = (exercise, log_answer, student_rating) => {
+export const submitExerciseLogOld = (exercise, log_answer, student_rating) => {
     const {exercise_id, answer, exercise_type, exercise_rating, breakdown} = exercise;
     console.log(exercise_rating, student_rating);
     const result = checkAnswer(exercise_type, log_answer);
@@ -946,7 +995,7 @@ export const submitExerciseLog = (exercise, log_answer, student_rating) => {
     }
 }
 
-//--------------------------------------------------//
+//------------------------测试相关接口--------------------------//
 
 export const getTestStatus = (student_id, test_id) => {
     let url = target + "/getTestStatus";
