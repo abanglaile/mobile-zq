@@ -218,15 +218,14 @@ const getTestSuccess = (json, test_type) => {
   }
 }
 
-const getRandomTestSuccess = (json, test_type) => {
+const getMyTestDataSuccess = (json) => {
     console.log(json.test_id);
   return {
-    type: 'GET_RANDOM_TEST_SUCCESS',
+    type: 'GET_MY_TEST_SUCCESS',
     exercise: json.exercise,
     test_id: json.test_id,
     exercise_log : json.exercise_log,
-    test_type,
-    student_rating: json.student_rating,
+    test_log : json.test_log,
   }
 }
 
@@ -239,12 +238,11 @@ const getTestExerciseSuccess = (json) => {
   }
 }
 
-const getTestStatusSuccess = (json, test_id, isFinish) => {
+const getTestStatusSuccess = (json, test_id) => {
     return {
         type: 'GET_TEST_STATUS_SUCCESS',
         json,
         test_id,
-        isFinish,
     }
 }
 
@@ -298,9 +296,9 @@ const getStuComUsedKpSuccess = (json) => {
 
 
 //成功获取测试结果数据
-const getTestResultSuccess = (json) => {
+const getMyTestStatusSucces = (json) => {
     return {
-        type: 'GET_TEST_RESULT_SUCCESS',
+        type: 'GET_MY_TEST_STATUS_SUCCESS',
         json,
     }
 }
@@ -543,9 +541,9 @@ export const getTestData = (student_id, test_id, test_type, entry) => {
     }
 }
 
-//带随机参数题目
-export const getRandomTestData = (student_id, test_id, test_type, entry) => {
-    let url = target + "/getExerciseByTest";
+//根据 testid 获取测试信息  （新接口）
+export const getMyTestData = (student_id, test_id, test_type, entry) => {
+    let url = target + "/getMyTestData";
     return (dispatch) => {
         dispatch(getTestStart());
         return axios.get(url,{
@@ -555,9 +553,9 @@ export const getRandomTestData = (student_id, test_id, test_type, entry) => {
                 }
         })
         .then(function (response) {
-            dispatch(getMyScoreSuccess(response.data));
-            dispatch(getRandomTestSuccess(response.data, test_type));
-            dispatch(push("/mobile-zq/question"));
+            // dispatch(getMyScoreSuccess(response.data));
+            dispatch(getMyTestDataSuccess(response.data));
+            // dispatch(push("/mobile-zq/question"));
         })
         .catch(function (error) {
             console.log(error);
@@ -620,8 +618,8 @@ export const getTestDataByKp = (student_id, kpid, kpname) => {
 }
 
 //获取我的历史做题记录
-export const getMyHistoryTests = (student_id) => {
-    let url = target + "/getMyHistoryTests";
+export const getHistoryTest = (student_id) => {
+    let url = target + "/getHistoryTest";
     return (dispatch) => {
         dispatch(getDataStart());
         return axios.get(url,{
@@ -997,7 +995,7 @@ export const submitExerciseLogOld = (exercise, log_answer, student_rating) => {
 
 //------------------------测试相关接口--------------------------//
 
-export const getTestStatus = (student_id, test_id) => {
+export const getTestStatus = (test_id) => {
     let url = target + "/getTestStatus";
     return (dispatch) => {
         dispatch(getTestStart());
@@ -1025,13 +1023,14 @@ export const getTestRankingList = (test_id) => {
     }
 }
 
-export const getTestResult = (student_id, test_id) => {
-    let url = target + "/getTestResult";
+export const getMyTestStatus = (student_id, test_id) => {
+    let url = target + "/getMyTestStatus";
     return (dispatch) => {
         dispatch(getDataStart());
         return axios.post(url,{student_id,test_id})
         .then(function (response) {
-            dispatch(getTestResultSuccess(response.data));
+            // dispatch(getTestResultSuccess(response.data));
+            dispatch(getMyTestStatusSucces(response.data));
         })
         .catch(function (error) {
             console.log(error);

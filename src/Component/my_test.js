@@ -41,7 +41,7 @@ class MyTest extends React.Component {
   loadTest(){
     // var student_id = '17';
     // this.props.getMyHistoryTests(student_id);
-    this.props.getMyHistoryTests(this.props.student_id);
+    this.props.getHistoryTest(this.props.student_id);
   }
 
   render() {

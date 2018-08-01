@@ -213,10 +213,11 @@ export const testData = (state = defaulatTestData, action = {}) => {
         case 'SUBMIT_EXERCISE_LOG_SUCCESS':
             console.log(action.i, action.exercise_log);
             return state.setIn(['exercise_log', action.i], Immutable.fromJS(action.exercise_log)).set("modalOpen", true);
-        case 'GET_RANDOM_TEST_SUCCESS':
-            let test_log = {test_id: action.test_id, start_time: new Date(), test_type: action.test_type}
+        case 'GET_MY_TEST_SUCCESS':
+            let test_log = {test_id: action.test_id, start_time: new Date()}
             return state.set('exercise', Immutable.fromJS(action.exercise)).set('exindex', 0)
-                .set('test_log', Immutable.fromJS(test_log))
+                // .set('test_log', Immutable.fromJS(test_log))
+                .set('test_log', Immutable.fromJS(action.test_log))
                 .set('exercise_log', Immutable.fromJS(action.exercise_log))
                 .set('exercise_st', new Date())
                 .set('isFetching', false);
@@ -227,11 +228,8 @@ export const testData = (state = defaulatTestData, action = {}) => {
         case 'GET_TEST_RATING_REWARD_SUCCESS':
             console.log(action.json);
             return state.set('test_reward', Immutable.fromJS(action.json));
-        case 'GET_TEST_RESULT_SUCCESS':
-            console.log(action.json.test_log);
-            return state.set('exercise_log', Immutable.fromJS(action.json.exercise_log))
-                .set('test_kp', Immutable.fromJS(action.json.test_kp))
-                .set('test_log', Immutable.fromJS(action.json.test_log))
+        case 'GET_MY_TEST_STATUS_SUCCESS':
+            return state.set('test_kp', Immutable.fromJS(action.json.test_kp))
                 .set('isFetching', false);
         case 'UPDATE_ENTRY': 
             return state.set('entry', action.entry);

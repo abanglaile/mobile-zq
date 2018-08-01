@@ -44,8 +44,11 @@ function formatTime(seconds) {
 function GetDateParse(time) {  
     //将xxxx-xx-xx的时间格式，转换为 xxxx/xx/xx的格式 
     if(typeof(time) == 'string'){
-      var paraTime = time.replace(/\-/g, "/");  
-      return Date.parse(paraTime);
+      // console.log("time: ",time);
+      // var paraTime = time.replace(/\-/g, "/");  
+      // console.log("paraTime: ",paraTime);
+      // console.log("Date.parse(time): ",Date.parse(time));
+      return Date.parse(time);
     }else{
       return time;
     }  
@@ -65,10 +68,12 @@ class TestResult extends React.Component {
     const {student_id, params} = this.props;
     const test_id = params.test_id;
     if(test_id){
-      this.props.getTestStatus(student_id, test_id);
+      this.props.getTestStatus(test_id);
       this.props.getTestRankingList(test_id);
-      this.props.getTestResult(student_id, test_id);
-      this.props.getTestExercise(student_id, test_id);
+      this.props.getMyTestStatus(student_id, test_id);
+      // this.props.getTestExercise(student_id, test_id);
+      this.props.getMyTestData(student_id,test_id);
+
     }else{
       alert("页面参数错误");
     }
@@ -188,13 +193,16 @@ class TestResult extends React.Component {
     var finish_time = '';
     console.log("test_log: "+JSON.stringify(test_log));
     if(test_log.finish_time && test_log.start_time){
-
+      console.log("test_log.finish_time before: ",test_log.finish_time);
+      console.log("test_log.finish_time: ",GetDateParse(test_log.finish_time));
       var time = (GetDateParse(test_log.finish_time) - GetDateParse(test_log.start_time)) /1000;
       // var hour = parseInt(time/3600);
       // var mini = parseInt(time%3600/60);
       // var sec = parseInt(time%60);
       // test_time = hour ? hour+ '小时' : ''  + mini ? mini : '' + '分' + sec ? sec : 00+ '秒'
+      console.log("time: ",time);
       test_time = formatTime(time);
+      console.log("test_time: ",test_time);
 
       finish_time = new Date(GetDateParse(test_log.finish_time)).Format('MM月dd日 hh:mm');
     }
