@@ -266,8 +266,8 @@ export const testData = (state = defaulatTestData, action = {}) => {
                 }
             }
             return state.setIn(['exercise_log', action.exindex, 'breakdown_sn'], Immutable.fromJS(breakdown_sn));
-        case 'SUBMIT_FEEDBACK':
-            return state.setIn(['exercise_log', action.exindex, 'exercise_status'], 2).set('feedbackToast', true);
+        case 'SUBMIT_BREAKDOWN_LOG_SUCCESS':
+            return state.setIn(['exercise_log', action.exindex], Immutable.fromJS(action.exercise_log)).set('feedbackToast', true);
         case 'SUBMIT_TEST_START':
             return state;
         case 'SUBMIT_TEST_SUCCESS':

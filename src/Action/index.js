@@ -666,7 +666,7 @@ const submitBreakdownLogSuccess = (exercise_log, i) => {
     }
 }
 
-export const submitFeedBack = (exercise_log) => {
+export const submitBreakdownLog = (exercise_log, exindex) => {
     let url = target + "/submitBreakdownLog";
     return (dispatch) => {
         //dispatch(getTestStart());
@@ -700,19 +700,11 @@ export const jumpNext = (exercise_status) => {
         const {exercise_state, exercise_status} = exercise_log[exindex];
         const blength = exercise[exindex].breakdown.length;
 
-        console.log(exercise_status);
-        if(exercise_status > 0 || exercise_state || blength == 1){
-            //跳过导学页面
-
-            if(exercise_status == 0){
-                console.log(exercise_status, exercise_state, blength);
-                dispatch(updateExerciseStatus(exindex, 2));
-            }
-
+        if(exercise_status == 2){
             var next = -1;
             var i = (exindex + 1)%exercise.length;
             while(i != exindex){
-                if(exercise_log[i].exercise_state < 0){
+                if(exercise_log[i].exercise_status < 2){
                     next = i;
                     break;
                 }
@@ -721,47 +713,78 @@ export const jumpNext = (exercise_status) => {
             console.log('next' + next);
             //还有未完成的题目
             if(next >= 0){
-                console.log('update');
-                
                 dispatch(updateExindex(next));
-                // dispatch(updateExerciseST());
-                //dispatch(push("/mobile-zq/question"));
-            }
-            //题目全部完成
-            else{
-                //测试完成，记录测试结束时间
-                dispatch(updateFinishTime());
-                const testData = getState().testData.toJS();
-                console.log(testData);
-                dispatch(submitTestStart());
-                let url = target + '/submitTest';
-
-                /**
-                 * [提交后台测试数据]
-                 */
-                const test_result = {
-                    test_id: testData.test_log.test_id,
-                    exercise_log: testData.exercise_log,
-                    start_time: testData.test_log.start_time,
-                    finish_time: testData.test_log.finish_time,
-                }
-                console.log(test_result);
-                return axios.post(url,{student_id: student_id, student_rating: 500, test_result: test_result})
+            }else{
+                //提交整个Test
+                return axios.post(url,{exercise_log})
                 .then(function (response) {
-                    console.log(response.data);
-                    dispatch(submitTestSuccess(response.data));
                     dispatch(push("/mobile-zq/kp_test_result/"+testData.test_log.test_id));
                 })
-                .catch(function (error) {
-                    console.log(error);
-                });
             }
-        }else{
-            console.log('jump');
-            dispatch(closeModal());
-            dispatch(showAnswerTest(exindex));
-            //dispatch(push("/mobile-zq/AnswerTest"));
         }
+        dispatch(closeModal());
+        // console.log(exercise_status);
+        // if(exercise_status > 0 || exercise_state || blength == 1){
+        //     //跳过导学页面
+
+        //     if(exercise_status == 0){
+        //         console.log(exercise_status, exercise_state, blength);
+        //         dispatch(updateExerciseStatus(exindex, 2));
+        //     }
+
+        //     var next = -1;
+        //     var i = (exindex + 1)%exercise.length;
+        //     while(i != exindex){
+        //         if(exercise_log[i].exercise_state < 0){
+        //             next = i;
+        //             break;
+        //         }
+        //         i = ++i%exercise.length;
+        //     }
+        //     console.log('next' + next);
+        //     //还有未完成的题目
+        //     if(next >= 0){
+        //         console.log('update');
+                
+        //         dispatch(updateExindex(next));
+        //         // dispatch(updateExerciseST());
+        //         //dispatch(push("/mobile-zq/question"));
+        //     }
+        //     //题目全部完成
+        //     else{
+        //         //测试完成，记录测试结束时间
+        //         dispatch(updateFinishTime());
+        //         const testData = getState().testData.toJS();
+        //         console.log(testData);
+        //         dispatch(submitTestStart());
+        //         let url = target + '/submitTest';
+
+        //         /**
+        //          * [提交后台测试数据]
+        //          */
+        //         const test_result = {
+        //             test_id: testData.test_log.test_id,
+        //             exercise_log: testData.exercise_log,
+        //             start_time: testData.test_log.start_time,
+        //             finish_time: testData.test_log.finish_time,
+        //         }
+        //         console.log(test_result);
+        //         return axios.post(url,{student_id: student_id, student_rating: 500, test_result: test_result})
+        //         .then(function (response) {
+        //             console.log(response.data);
+        //             dispatch(submitTestSuccess(response.data));
+        //             dispatch(push("/mobile-zq/kp_test_result/"+testData.test_log.test_id));
+        //         })
+        //         .catch(function (error) {
+        //             console.log(error);
+        //         });
+        //     }
+        // }else{
+        //     console.log('jump');
+        //     dispatch(closeModal());
+        //     dispatch(showAnswerTest(exindex));
+        //     //dispatch(push("/mobile-zq/AnswerTest"));
+        // }
     }
 }
 
@@ -780,6 +803,7 @@ export const updateEntry = (entry) => {
         entry,
     }
 }
+
 
 export const hideFeedbackToast = () => {
     console.log('hideFeedbackToast');

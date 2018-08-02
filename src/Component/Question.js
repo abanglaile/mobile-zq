@@ -345,14 +345,14 @@ class Question extends React.Component {
         <Flex>
           <Flex.Item>
             <Button style={{margin: '0.5rem 0 0 0'}}
-                  onClick={e => this.props.submitFeedBack(exindex)} 
+                  onClick={e => this.props.submitBreakdownLog(exercise_log[exindex], exindex)} 
                   type="ghost" size='small'>
               没有思路
             </Button>
           </Flex.Item>
           <Flex.Item>
             <Button style={{margin: '0.5rem 0 0 0'}}
-                  onClick={e => this.props.submitFeedBack(exindex)} 
+                  onClick={e => this.props.submitBreakdownLog(exercise_log[exindex], exindex)} 
                   type="primary" size='small'>
               提交反馈
             </Button>
