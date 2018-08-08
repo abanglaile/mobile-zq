@@ -47,7 +47,7 @@ const defaulatStudentData = Immutable.fromJS({
 
         //单个知识点
         kpladder : [],
-        kpcapatity: [],
+        kpcapatity: {},
 
         comusedkp : [],
     });
@@ -256,16 +256,17 @@ export const testData = (state = defaulatTestData, action = {}) => {
         case 'BREAKDOWN_SN_SELECT_CHANGE':
             const val = action.index;
 
-            var breakdown_sn = state.getIn(['exercise_log', action.exindex, 'breakdown_sn']).toJS();
-            breakdown_sn[val].sn_state = breakdown_sn[val].sn_state ? 0 : 1;
+            var breakdown_log = state.getIn(['exercise_log', action.exindex, 'breakdown_sn']).toJS();
+            var breakdown = state.getIn(['exercise', action.exindex, 'breakdown']).toJS();
+            breakdown_log[val].sn_state = breakdown_log[val].sn_state ? 0 : 1;
             //取消选择，将以这步作为前置的步骤全部设为不确定-1并不渲染显示
-            for(var i = 0; i < breakdown_sn.length; i++){
-                if(breakdown_sn[i].presn == breakdown_sn[val].sn){
+            for(var i = 0; i < breakdown.length; i++){
+                if(breakdown[i].presn == breakdown[val].sn){
                     //如果选择则把二级知识点设置为0，如果取消选择则把二级知识点设置为-1
-                    breakdown_sn[i].sn_state = breakdown_sn[val].sn_state ? 0 : -1;
+                    breakdown_log[i].sn_state = breakdown_log[val].sn_state ? 0 : -1;
                 }
             }
-            return state.setIn(['exercise_log', action.exindex, 'breakdown_sn'], Immutable.fromJS(breakdown_sn));
+            return state.setIn(['exercise_log', action.exindex, 'breakdown_sn'], Immutable.fromJS(breakdown_log));
         case 'SUBMIT_BREAKDOWN_LOG_SUCCESS':
             return state.setIn(['exercise_log', action.exindex], Immutable.fromJS(action.exercise_log)).set('feedbackToast', true);
         case 'SUBMIT_TEST_START':
@@ -316,10 +317,13 @@ export const studentData = (state = defaulatStudentData, action = {}) => {
             return state.set('ladder', Immutable.fromJS(action.json)).set('isFetching', false);
         case 'GET_COMUSED_KP_SUCCESS':
             return state.set('comusedkp', Immutable.fromJS(action.json)).set('isFetching', false);
-        case 'GET_KP_LADDER_STATUS_SUCCESS':
+        case 'GET_KP_RATING_HISTORY':
             return state.set('kpladder', Immutable.fromJS(action.json)).set('isFetching', false);
-        case 'GET_KP_ABILITY_STATUS_SUCCESS':
-            return state.set('kpcapatity', Immutable.fromJS(action.json)).set('isFetching', false);   
+        case 'GET_KP_ABILITY':
+            return state.set('kpcapatity', Immutable.fromJS(action.json)).set('isFetching', false);  
+         case 'FETCH_SUCCESS':
+            return state.set('isFetching', false);  
+             
         default:
             return state;
     }

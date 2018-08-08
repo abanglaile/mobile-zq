@@ -219,7 +219,7 @@ const getTestSuccess = (json, test_type) => {
 }
 
 const getMyTestDataSuccess = (json) => {
-    console.log(json.test_id);
+console.log(json);
   return {
     type: 'GET_MY_TEST_SUCCESS',
     exercise: json.exercise,
@@ -274,12 +274,12 @@ const getStuLadderSuccess = (json) => {
     }
 }
 
-const getStuKpLadderSuccess = (json) => {
-    return {
-        type: 'GET_KP_LADDER_STATUS_SUCCESS',
-        json,
-    }
-}
+// const getKpRatingHistory = (json) => {
+//     return {
+//         type: 'GET_KP_LADDER_STATUS_SUCCESS',
+//         json,
+//     }
+// }
 const getStuKpAbilitySuccess = (json) => {
     return {
         type: 'GET_KP_ABILITY_STATUS_SUCCESS',
@@ -542,7 +542,7 @@ export const getTestData = (student_id, test_id, test_type, entry) => {
 }
 
 //根据 testid 获取测试信息  （新接口）
-export const getMyTestData = (student_id, test_id, test_type, entry) => {
+export const getMyTestData = (student_id, test_id) => {
     let url = target + "/getMyTestData";
     return (dispatch) => {
         dispatch(getTestStart());
@@ -594,22 +594,18 @@ export const getTestRatingReward = (student_id, test_id) => {
 }
 
 //根据kpid获得该主测点下的试题
-export const getTestDataByKp = (student_id, kpid, kpname) => {
-    let url = target + "/getExerciseByKpid";
+export const generateTestByKp = (student_id, kpid, kpname) => {
+    let url = target + "/generateTestByKp";
     return (dispatch) => {
-        console.log(kpid, kpname);
         dispatch(getTestStart());
-        return axios.get(url,{
-                params:{
+        return axios.post(url, {
                    student_id,
                    kpid,
-                   kpname,
-                }
-        })
+                   kpname, 
+                })
         .then(function (response) {
-            dispatch(getMyScoreSuccess(response.data));
-            dispatch(getTestSuccess(response.data, 2));
-            dispatch(push("/mobile-zq/question"));
+            dispatch({type: 'FETCH_SUCCESS'});
+            dispatch(push("/mobile-zq/question/" + response.data.test_id));
         })
         .catch(function (error) {
             console.log(error);
@@ -657,12 +653,12 @@ export const getNotFinishTest = (student_id) => {
 
 //-------------------------------做题交互-------------------------------//
 
-const submitBreakdownLogSuccess = (exercise_log, i) => {
+const submitBreakdownLogSuccess = (exercise_log, exindex) => {
     console.log(exercise_log);
     return {
         type: 'SUBMIT_BREAKDOWN_LOG_SUCCESS',
         exercise_log,
-        i,
+        exindex,
     }
 }
 
@@ -689,16 +685,16 @@ export const submitBreakdownLog = (exercise_log, exindex) => {
  * 提交后跳转到下一题
  * @param  exercise_status [0:当前为做题页面，1:当前为导学页面，2:当前为完成页面]
  */
-export const jumpNext = (exercise_status) => {
+export const jumpNext = () => {
     console.log('jumpNext');
     return (dispatch, getState) => {
         const testData = getState().testData;
         const student_id = getState().AuthData.get('userid');
         const exindex = testData.get("exindex");
+        const test_log = testData.get("test_log");
         const exercise_log = testData.get("exercise_log").toJS();
         const exercise = testData.get("exercise").toJS();
-        const {exercise_state, exercise_status} = exercise_log[exindex];
-        const blength = exercise[exindex].breakdown.length;
+        const {exercise_status} = exercise_log[exindex];
 
         if(exercise_status == 2){
             var next = -1;
@@ -715,10 +711,11 @@ export const jumpNext = (exercise_status) => {
             if(next >= 0){
                 dispatch(updateExindex(next));
             }else{
+                let url = target + "/submitTestLog";
                 //提交整个Test
                 return axios.post(url,{exercise_log})
                 .then(function (response) {
-                    dispatch(push("/mobile-zq/kp_test_result/"+testData.test_log.test_id));
+                    dispatch(push("/mobile-zq/kp_test_result/" + test_log.test_id));
                 })
             }
         }
@@ -806,7 +803,6 @@ export const updateEntry = (entry) => {
 
 
 export const hideFeedbackToast = () => {
-    console.log('hideFeedbackToast');
     return {
         type: 'HIDE_FEEDBACK_TOAST'
     }
@@ -1113,8 +1109,8 @@ export const getStuLadderWithTime = (student_id) => {
     }
 }
 //获取学生某知识点天梯分数变化情况
-export const getStuKpLadder = (student_id,kpid) => {
-    let url = target + "/getStuKpLadder";
+export const getKpRatingHistory = (student_id,kpid) => {
+    let url = target + "/getKpRatingHistory";
     return (dispatch) => {
         dispatch(getStatusStart());
         return axios.get(url,{
@@ -1124,7 +1120,11 @@ export const getStuKpLadder = (student_id,kpid) => {
             }
         })
         .then(function (response) {
-            dispatch(getStuKpLadderSuccess(response.data));
+            console.log(response.data);
+            dispatch({
+                type: 'GET_KP_RATING_HISTORY',
+                json: response.data,
+            })
         })
         .catch(function (error) {
             console.log(error);
@@ -1132,8 +1132,8 @@ export const getStuKpLadder = (student_id,kpid) => {
     }
 }
 //获取学生某知识点天能力概况
-export const getStuKpAbility = (student_id, kpid) => {
-    let url = target + "/getStuKpAbility";
+export const getKpAbility = (student_id, kpid) => {
+    let url = target + "/getKpAbility";
     return (dispatch) => {
         dispatch(getStatusStart());
         return axios.get(url,{
@@ -1143,7 +1143,10 @@ export const getStuKpAbility = (student_id, kpid) => {
             }
         })
         .then(function (response) {
-            dispatch(getStuKpAbilitySuccess(response.data));
+            dispatch({
+                type: 'GET_KP_ABILITY',
+                json: response.data,
+            });
         })
         .catch(function (error) {
             console.log(error);

@@ -24,10 +24,10 @@ class StudentKp extends React.Component {
     // const kpid = "167772686";
     console.log("student_id params:"+student_id+' '+params);
     if(kpid){
-        this.props.getStuKpLadder(student_id, kpid);
-        this.props.getStuKpAbility(student_id, kpid);
+        this.props.getKpRatingHistory(student_id, kpid);
+        this.props.getKpAbility(student_id, kpid);
         this.props.updateEntry("/student_kp/");
-        this.props.getMyLadderScore(student_id);
+        // this.props.getMyLadderScore(student_id);
       // this.props.getTestRankingList(test_id);
       // this.props.getStuTestInfo(student_id,test_id);
     }else{
@@ -109,7 +109,8 @@ class StudentKp extends React.Component {
 
   renderKpAbility(){
     const {kpcapatity} = this.props;
-    if(kpcapatity.length){
+    console.log(kpcapatity);
+//    if(kpcapatity.length){
       return (
         <Flex justify="center" style={{marginBottom:"1rem"}}> 
             <Flex.Item>
@@ -165,7 +166,7 @@ class StudentKp extends React.Component {
               </Flex.Item>
         </Flex>
       );
-    }
+//    }
   }
 
   renderKpContent(){
@@ -188,8 +189,11 @@ class StudentKp extends React.Component {
   }
   
   render() {
-    const {kpcapatity, student_id, params} = this.props;
+    const {kpcapatity, student_id, params, isFetching} = this.props;
     const kpid = params.kpid;
+    if(isFetching){
+      Toast.loading("正在智能出题", 0)
+    }
     return (
       <div>
         <NavBar
@@ -232,7 +236,7 @@ class StudentKp extends React.Component {
           <WhiteSpace size='lg'/>
           <WingBlank>
           <Button style={{marginTop: '0.5rem'}} type="primary"
-            onClick={ e => this.props.getTestDataByKp(student_id, kpid, kpcapatity.kpname)} >
+            onClick={ e => this.props.generateTestByKp(student_id, kpid, kpcapatity.kpname)} >
               {kpcapatity ? "继续修炼" : "开始修炼"}
           </Button>
           </WingBlank>
