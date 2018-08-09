@@ -1,4 +1,4 @@
-import { WhiteSpace, WingBlank, List, Button, NavBar, ActivityIndicator, Flex, Icon } from 'antd-mobile';
+import { WhiteSpace, WingBlank, List, Button, NavBar, ActivityIndicator, Flex, Icon, Toast } from 'antd-mobile';
 import React from 'react';
 import ReactDOM from 'react-dom';
 // import Tex from './renderer.js';
@@ -192,7 +192,9 @@ class StudentKp extends React.Component {
     const {kpcapatity, student_id, params, isFetching} = this.props;
     const kpid = params.kpid;
     if(isFetching){
-      Toast.loading("正在智能出题", 0)
+      Toast.loading("正在加载", 0);
+    }else{
+      Toast.hide();
     }
     return (
       <div>

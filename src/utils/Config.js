@@ -6,7 +6,7 @@ const config = {
   // appid : "wx6f3a777231ad1747",
   appid : "wx1dc40895f45755ba",
   redirect_uri : "https%3a%2f%2fwww.kmap.xin%2fmobile-zq%2finvite",
-  server_url: "http://127.0.0.1:7001/klmanager",
+  server_url: "http://127.0.0.1:7001/api",
 }
 //配置常用参数
 export default config; 
