@@ -24,6 +24,13 @@ class Question extends React.Component {
     };
   }
 
+  componentDidMount(){
+    const {student_id, params} = this.props;
+    const test_id = params.test_id;
+    //TO-DO
+    this.props.getMyTestData(1, test_id);
+  }
+
   showModal(e){
     e.preventDefault(); // 修复 Android 上点击穿透
     this.setState({
@@ -76,7 +83,7 @@ class Question extends React.Component {
   onContinue(){
     this.props.closeModal();
     this.accExerciseTime();
-    this.props.jumpNext(false);
+    this.props.jumpNext();
   }
 
   onInputChange(val){
@@ -167,7 +174,8 @@ class Question extends React.Component {
       case 1:
         //文字选择题
         //已做完
-        if(exercise_state >= 0){
+        if(exercise_status >= 1){
+          console.log(answer_log);
           return (
             <List key={'answer'+ exindex}>
               {answerjson.map((i,index) => {
@@ -281,7 +289,7 @@ class Question extends React.Component {
     const {exercise, exindex, exercise_log, modalOpen} = this.props;
     const {breakdown, title} = exercise[exindex];
     const {exercise_state, exercise_status, answer_test, breakdown_sn} = exercise_log[exindex];
-    console.log(exercise[exindex]);
+    console.log("breakdown", breakdown);
     if(exercise_status == 1){
       
       return (
@@ -312,7 +320,7 @@ class Question extends React.Component {
         <List renderHeader={() => '答案解析'} >
           {
             breakdown_sn.map((item, i) => {
-                console.log(i, breakdown[i].content);
+                console.log(i, breakdown_sn[i]);
                 return (
                   <Item arrow="horizontal" multipleLine wrap onClick={() => this.props.router.push("/mobile-zq/studentkp/" + item.kpid)}
                     style={item.sn_state == 0 ? {backgroundColor: "#ffccc7"} : {backgroundColor: "white"}}>
@@ -345,14 +353,14 @@ class Question extends React.Component {
         <Flex>
           <Flex.Item>
             <Button style={{margin: '0.5rem 0 0 0'}}
-                  onClick={e => this.props.submitFeedBack(exindex)} 
+                  onClick={e => this.props.submitBreakdownLog(exercise_log[exindex], exindex)} 
                   type="ghost" size='small'>
               没有思路
             </Button>
           </Flex.Item>
           <Flex.Item>
             <Button style={{margin: '0.5rem 0 0 0'}}
-                  onClick={e => this.props.submitFeedBack(exindex)} 
+                  onClick={e => this.props.submitBreakdownLog(exercise_log[exindex], exindex)} 
                   type="primary" size='small'>
               提交反馈
             </Button>
@@ -467,17 +475,17 @@ class Question extends React.Component {
   onLeftClick(){
     const {test_log, entry} = this.props;
     const {finish_time} = test_log;
-    console.log(finish_time);
-    if(finish_time){
-      //测试已结束
-      this.props.router.goBack();  
-    }else{
-      alert('退出练习？', '退出后将不保存本次练习记录', 
-          [
-            { text: '取消', onPress: () => console.log('cancel') },
-            { text: '退出练习', onPress: () => this.props.router.goBack()},
-          ])
-    }
+    this.props.router.goBack();
+    // if(finish_time){
+    //   //测试已结束
+    //   this.props.router.goBack();  
+    // }else{
+    //   alert('退出练习？', '退出后将不保存本次练习记录', 
+    //       [
+    //         { text: '取消', onPress: () => console.log('cancel') },
+    //         { text: '退出练习', onPress: () => this.props.router.goBack()},
+    //       ])
+    // }
   }
 
   render() {
@@ -489,7 +497,7 @@ class Question extends React.Component {
       Toast.success("谢谢你的反馈", 1, () => {
         this.props.hideFeedbackToast();
         this.accExerciseTime();
-        this.props.jumpNext(true);
+        this.props.jumpNext();
       })
     }
    
@@ -533,7 +541,7 @@ class Question extends React.Component {
 export default connect(state => {
   var test_state = state.testData.toJS();
   var student_rating = state.studentData.get("student_rating");
-  
+  console.log(test_state);
   var {exercise, exindex, exercise_log, test_log, modalOpen, feedbackToast, exercise_st, isFetching} = test_state;
   return {
     test_log: test_log,
