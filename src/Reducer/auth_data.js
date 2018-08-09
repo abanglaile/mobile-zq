@@ -66,14 +66,12 @@ export const AuthData = (state = defaulatAuthData, action = {}) => {
             return Immutable.fromJS(failRegState);
         case 'LOGOUT_USER':
             return state.set('isAuthenticated', false)
-                    .set('token',null)
                     .set('userName',null)
                     .set('userid',null)
                     .set('statusText','You have been successfully logged out.');
                     
         case 'LOGOUT_WX_USER':
             return state.set('isAuthenticated', false)
-                    .set('token',null)
                     .set('nickname',null)
                     .set('userid',null)
                     .set('imgurl',null)
@@ -84,11 +82,10 @@ export const AuthData = (state = defaulatAuthData, action = {}) => {
             var sucState = {
                 isAuthenticating: false,
                 isAuthenticated: true,
-                token: action.payload.token,
-                nickname: jwtDecode(action.payload.token).nickname,
-                userid: jwtDecode(action.payload.token).userid,
-                imgurl:jwtDecode(action.payload.token).imgurl,
-                student_name:jwtDecode(action.payload.token).name,
+                nickname: action.user_info.nickname,
+                userid: action.user_info.userid,
+                imgurl: action.user_info.imgurl,
+                student_name:action.user_info.realname,
                 hascode: -1,
                 statusText: 'You have been successfully logged in by wx.'
             };

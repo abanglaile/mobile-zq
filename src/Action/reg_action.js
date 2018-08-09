@@ -169,13 +169,11 @@ export const regUser = (username, password, redirect) => {
 //登录注册相关结束
 /*-------------------------------------------------*/
 
-export const getWxUserInfoSuccess = (token) => {
-    localStorage.setItem('token', token);
+export const getWxUserInfoSuccess = (user_info) => {
+    // localStorage.setItem('token', token);
     return {
         type: "GET_WX_USERINFO_SUCCESS",
-        payload: {
-          token: token
-        }
+        user_info: user_info
     }
 }
 const saveTempWxInfo = (wx_info) => {
@@ -235,11 +233,10 @@ export const getWxAuth = (code,state) => {
             if(response.data.newuser){
                 alert('newuser');  
                 alert('wx_info:'+JSON.stringify(response.data.wx_info));  
-                // dispatch(getWxUserInfoSuccess(response.data.token));
                 dispatch(saveTempWxInfo(response.data.wx_info));
             }else{
                 alert('olduser');
-                dispatch(getWxUserInfoSuccess(response.data.token));
+                dispatch(getWxUserInfoSuccess(response.data.user_info));
                 dispatch(push(response.data.redirect_uri));
             }
         })
@@ -250,7 +247,7 @@ export const getWxAuth = (code,state) => {
 }
 
 export const logoutwx = () => {
-    localStorage.removeItem('token');
+    // localStorage.removeItem('token');
     return {
         type: 'LOGOUT_WX_USER',
     }
@@ -270,7 +267,7 @@ export const checkInviCode = (wx_info,invitationcode) => {
         .then(function (response) {
             alert('checkInviCode response.data:'+JSON.stringify(response.data));
             if(response.data.hascode){
-                dispatch(getWxUserInfoSuccess(response.data.token));
+                dispatch(getWxUserInfoSuccess(response.data.user_info));
                 dispatch(checkCodeSucess());
                 dispatch(push("/mobile-zq/mytest"));
             }else{
