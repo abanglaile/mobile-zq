@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import *as action from '../Action/';
 import {connect} from 'react-redux';
-import { List, Icon, WhiteSpace, WingBlank, ActivityIndicator, Button, Modal, NavBar, Grid, Flex, SegmentedControl } from 'antd-mobile';
+import { List, Icon, WhiteSpace, WingBlank, ActivityIndicator, Button, Modal, NavBar, Grid, Flex, SegmentedControl, Progress } from 'antd-mobile';
 
 //import Tex from './renderer.js';
 
@@ -93,7 +93,8 @@ class TestResult extends React.Component {
               <div>
                 <span>能力值： </span>
                 <span style={{color: '#1890ff', fontSize: '1.5rem'}}>{test_kp[0] ? test_kp[0].kp_rating : ''}</span>
-              </div>
+                <Progress percent={30} position="normal" unfilled={true} appearTransition />
+                </div>
             </Brief>
           </Item>
           
@@ -102,8 +103,12 @@ class TestResult extends React.Component {
   }
 
   jumpToExercise(i){
-    this.props.updateExindex(i);
-    this.props.router.push("/mobile-zq/question/");
+    const {params} = this.props;
+    const test_id = params.test_id;
+    if(test_id){
+      this.props.updateExindex(i);
+      this.props.router.push("/mobile-zq/question/" + test_id);
+    }
   }
 
   renderExerciseList2(){
@@ -178,7 +183,7 @@ class TestResult extends React.Component {
           <WingBlank>
           <WhiteSpace />
           <Button  type="primary"
-            onClick={ e => this.props.getTestDataByKp(student_id, test_config.kp[0].kpid, test_config.kp[0].kpname)} >
+            onClick={ e => this.props.generateTestByKp(student_id, test_config.kp[0].kpid, test_config.kp[0].kpname)} >
               继续修炼
           </Button>
           </WingBlank>
@@ -255,6 +260,7 @@ class TestResult extends React.Component {
                       <div>
                         <span>能力值： </span>
                         <span style={{color: '#1890ff', fontSize: '1.5rem'}}>{item.kp_rating}</span>
+                        <Progress percent={30} position="normal" unfilled={true} appearTransition />
                       </div>
                     </Brief>
                   </Item>

@@ -19,21 +19,23 @@ class StudentStatus extends React.Component {
   }
 
   componentDidMount(){
-     this.props.getStuAbility(this.props.student_id);
-     this.props.getStuLadderWithTime(this.props.student_id);
+    const {student_id, params} = this.props;
+    const course_id = params.course_id;
+    this.props.getStuAbility(this.props.student_id, course_id);
+    this.props.getStuRatingHistory(this.props.student_id, course_id);
      // this.props.getStuComUsedKp(this.props.student_id);
   }
 
   componentWillReceiveProps(nextProps){
-    this.setState({ladder : nextProps.ladder},() => {
-      if(nextProps.ladder.length > 0){
+    this.setState({rating_history : nextProps.rating_history},() => {
+      if(nextProps.rating_history.length > 0){
         this.renderF2();
       }
     });
   }
 
   renderF2(){
-    const data = this.state.ladder;
+    const data = this.state.rating_history;
     console.log("data:"+JSON.stringify(data));
 
     const chart = new F2.Chart({
@@ -101,7 +103,7 @@ class StudentStatus extends React.Component {
      this.setState({selectedIndex : e.nativeEvent.selectedSegmentIndex});
   }
   renderOneAbility(){
-    const {capatity,ladder} = this.props;
+    const {capatity, rating_history} = this.props;
     var abilityheaderDom = (<Flex justify="center">
               <Flex.Item><div style={{
                   textAlign: 'center',
@@ -306,7 +308,7 @@ class StudentStatus extends React.Component {
 
 export default connect(state => {
   const student_status = state.studentData.toJS();
-  const {capatity , ladder, comusedkp, isFetching} = student_status;
+  const {capatity , rating_history, comusedkp, isFetching} = student_status;
   const default_capatity = [{
       key: '1',
       exercount: 560,
@@ -329,7 +331,7 @@ export default connect(state => {
   return {
     isFetching : isFetching,
     capatity : capatity.length > 0 ? capatity : default_capatity,
-    ladder : ladder ? ladder : [],
+    rating_history : rating_history ? rating_history : [],
     comusedkp : comusedkp.length > 0 ? comusedkp : default_comusedkp,
     student_id: state.AuthData.get('userid'), 
   }

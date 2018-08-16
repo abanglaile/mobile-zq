@@ -267,13 +267,6 @@ const getStuAbilitySuccess = (json) => {
     }
 }
 
-const getStuLadderSuccess = (json) => {
-    return {
-        type: 'GET_LADDER_STATUS_SUCCESS',
-        json,
-    }
-}
-
 // const getKpRatingHistory = (json) => {
 //     return {
 //         type: 'GET_KP_LADDER_STATUS_SUCCESS',
@@ -1091,17 +1084,21 @@ export const getStuAbility = (student_id) => {
     }
 }
 //获取学生天梯分数变化情况
-export const getStuLadderWithTime = (student_id) => {
-    let url = target + "/getStuLadderWithTime";
+export const getStuRatingHistory = (student_id, course_id) => {
+    let url = target + "/getStuRatingHistory";
     return (dispatch) => {
         dispatch(getStatusStart());
         return axios.get(url,{
             params:{
                 student_id,
+                course_id
             }
         })
         .then(function (response) {
-            dispatch(getStuLadderSuccess(response.data));
+            dispatch({
+                type: 'GET_RATING_HISTORY',
+                json: response.data,
+            });
         })
         .catch(function (error) {
             console.log(error);
