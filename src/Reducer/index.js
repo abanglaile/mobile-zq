@@ -43,7 +43,7 @@ const defaulatStudentData = Immutable.fromJS({
 
         //总体
         capatity: [],
-        ladder : [],
+        rating_history : [],
 
         //单个知识点
         kpladder : [],
@@ -313,8 +313,9 @@ export const studentData = (state = defaulatStudentData, action = {}) => {
             return state.set('test_tab', action.test_tab);
         case 'GET_ABILITY_STATUS_SUCCESS':
             return state.set('capatity', Immutable.fromJS(action.json)).set('isFetching', false);
-        case 'GET_LADDER_STATUS_SUCCESS':
-            return state.set('ladder', Immutable.fromJS(action.json)).set('isFetching', false);
+        case 'GET_RATING_HISTORY':
+            console.log(action.json);
+            return state.set('rating_history', Immutable.fromJS(action.json)).set('isFetching', false);
         case 'GET_COMUSED_KP_SUCCESS':
             return state.set('comusedkp', Immutable.fromJS(action.json)).set('isFetching', false);
         case 'GET_KP_RATING_HISTORY':

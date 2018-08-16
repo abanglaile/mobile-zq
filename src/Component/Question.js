@@ -503,9 +503,7 @@ class Question extends React.Component {
    
     return (
       isFetching ?
-      <div>
-        <ActivityIndicator animating={isFetching} />
-      </div>
+        <ActivityIndicator toast animating={isFetching} />
       :
       <div>
         <NavBar
