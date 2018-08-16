@@ -164,8 +164,9 @@ class MyTest extends React.Component {
 }
 
 export default connect(state => {
-  console.log(state);
+  
   const student_data = state.studentData.toJS();
+  console.log(state.AuthData.get('userid'));
   const {isFetching, comusedkp, my_uncompleted_test} = student_data;
   return {
     my_uncompleted_test: my_uncompleted_test, 
