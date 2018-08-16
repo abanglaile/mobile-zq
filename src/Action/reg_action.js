@@ -91,44 +91,65 @@ export const logoutAndRedirect = () => {
 }
 
 export const loginUser = (username, password, redirect) => {
-    return function(dispatch) {
-        let path = '/login';
-        let url = target + path;
+   
+    let path = '/login';
+    let url = target + path;
 
-        dispatch(loginUserRequest());
-        return fetch(url, {
-            method: 'post',
-            mode: "cors",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-                body: JSON.stringify({username: username, password: password})
-            })
-            .then(checkHttpStatus)
-            .then(parseJSON)
-            .then(response => {
-                try {
-                    let decoded = jwtDecode(response.token);
-                    console.log('decoded:'+JSON.stringify(decoded));
-                    console.log('response.token:'+response.token);
-                    dispatch(loginUserSuccess(response.token));
-                    dispatch(push(redirect));
-                } catch (e) {
-                    console.log('response.json():'+response.json());
-                    dispatch(loginUserFailure({
-                        response: {
-                            status: 403,
-                            statusText: response.json()
-                        }
-                    }));
-                }
-            })
-            .catch(error => {
-                console.log('error:'+error);
-                dispatch(loginUserFailure(error));
-            })
+    // dispatch(loginUserRequest());
+
+    return (dispatch) => {
+        // return axios.post(url,{username,password})
+        return axios.get(url,{
+            params:{
+                username,
+                password,
+            }
+        })
+        .then(function (response) {
+            if(response.data){
+                console.log("response.data :",response.data);
+            }
+        })
+        .catch(function (error) {
+            dispatch(loginUserFailure(error));
+        });
     }
+
+
+        // return fetch(url, {
+        //     method: 'post',
+        //     mode: "cors",
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json'
+        //     },
+        //         body: JSON.stringify({username: username, password: password})
+        //     })
+        //     .then(checkHttpStatus)
+        //     .then(parseJSON)
+        //     .then(response => {
+        //         console.log('response :'+response);
+        //         try {
+        //             let decoded = jwtDecode(response.token);
+        //             console.log('decoded:'+JSON.stringify(decoded));
+        //             console.log('response.token:'+response.token);
+        //             dispatch(loginUserSuccess(response.token));
+        //             dispatch(push(redirect));
+        //         } catch (e) {
+        //             console.log('response.json():'+response.json());
+        //             dispatch(loginUserFailure({
+        //                 response: {
+        //                     status: 403,
+        //                     statusText: response.json()
+        //                 }
+        //             }));
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.log('error:'+error);
+        //         dispatch(loginUserFailure(error));
+        //     })
+    
 }
 
 export const regUser = (username, password, redirect) => {
@@ -136,34 +157,49 @@ export const regUser = (username, password, redirect) => {
         let path = '/newuser';
         let url = target + path;
         dispatch(regUserRequest());
-        return fetch(url, {
-            method: 'post',
-            mode: "cors",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-                body: JSON.stringify({username: username, password: password})
-            })
-            .then(checkHttpStatus)
-            .then(parseJSON)
-            .then(response => {
-                try {
-                    let decoded = jwtDecode(response.token);
-                    dispatch(regUserSuccess(response.token));
-                    dispatch(push(redirect));
-                } catch (e) {
-                    dispatch(regUserFailure({
-                        response: {
-                            status: 403,
-                            statusText: response.json()
-                        }
-                    }));
+
+        return (dispatch) => {
+            return axios.post(url,{username,password})
+            .then(function (response) {
+                if(response.data){
+                   console.log("response.data :",response.data);
                 }
             })
-            .catch(error => {
+            .catch(function (error) {
                 dispatch(loginUserFailure(error));
-            })
+            });
+        }
+
+
+
+        // return fetch(url, {
+        //     method: 'post',
+        //     mode: "cors",
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json'
+        //     },
+        //         body: JSON.stringify({username: username, password: password})
+        //     })
+        //     .then(checkHttpStatus)
+        //     .then(parseJSON)
+        //     .then(response => {
+        //         try {
+        //             let decoded = jwtDecode(response.token);
+        //             dispatch(regUserSuccess(response.token));
+        //             dispatch(push(redirect));
+        //         } catch (e) {
+        //             dispatch(regUserFailure({
+        //                 response: {
+        //                     status: 403,
+        //                     statusText: response.json()
+        //                 }
+        //             }));
+        //         }
+        //     })
+        //     .catch(error => {
+        //         dispatch(loginUserFailure(error));
+        //     })
     }
 }
 //登录注册相关结束

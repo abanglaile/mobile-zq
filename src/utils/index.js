@@ -32,6 +32,7 @@ export function checkHttpStatus(response) {
 }
 
 export function parseJSON(response) {
+     console.log('response :'+JSON.stringify(response));
      return response.json()
 }
 
