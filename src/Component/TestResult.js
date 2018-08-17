@@ -218,15 +218,16 @@ class TestResult extends React.Component {
     
     return(
       <div>
-      <div style={{backgroundColor: '#1890ff', paddingTop: '2rem'}}>          
+      <div style={{backgroundColor: 'white', paddingTop: '2rem'}}>          
         <div style={{
               textAlign: 'center',
               height: '3rem',
               lineHeight: '3rem',
-              color: 'white',
+              color: '#1890ff',
             }}>
               <span style={{fontSize: '3rem'}} >{test_log.correct_exercise}</span>
-              <span style={{fontSize: '1rem'}}>{'/ ' + exercise_log.length + '题 耗时' + test_time}</span>
+              <span style={{fontSize: '1rem',color:'#1890ff'}}>{'/ ' + exercise_log.length + '题 耗时 '}</span>
+              <span style={{fontSize: '1rem',color:'#1890ff'}}>{test_time}</span>
         
         </div>
         
@@ -234,7 +235,7 @@ class TestResult extends React.Component {
         textAlign: 'center',
         height: '3rem',
         lineHeight: '3rem',
-        color: 'white',
+        color: '#1890ff',
         fontSize: '1rem'
       }}>{'交卷时间：' +  finish_time}</div>
       </div>
@@ -307,10 +308,10 @@ class TestResult extends React.Component {
       avg_time = formatTime(test_status.avg_timeconsuming);
       return(
         <div>
-          <div style={{backgroundColor: '#1890ff', paddingTop: '2.5rem', paddingBottom: '0.5rem', color: 'white'}}>
+          <div style={{backgroundColor: 'white', paddingTop: '2.5rem', paddingBottom: '0.5rem', color: '#1890ff'}}>
             <Flex>
               <Flex.Item><div style={{
-                      color: 'white',
+                      color: '#1890ff',
                       textAlign: 'center',
                       height: '1.5rem',
                       lineHeight: '1.5rem',
@@ -328,7 +329,7 @@ class TestResult extends React.Component {
               </Flex.Item>
               <Flex.Item>
                     <div style={{
-                      color: 'white',
+                      color: '#1890ff',
                       textAlign: 'center',
                       height: '1.5rem',
                       lineHeight: '1.5rem',

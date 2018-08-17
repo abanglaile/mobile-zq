@@ -31,10 +31,12 @@ class ChapterKp extends React.Component {
                 const random = Math.random() * 100;
 
                 return( 
-                <div style={{marginLeft: '1rem', marginBottom: '1rem', width: '70%'}}>
+                <div style={{marginLeft: '0.5rem', marginBottom: '0,5rem', width: '70%'}}>
                   <div style={{fontWeight: 'bold', color: "black", fontSize: '1rem'}}>{item.kpname}</div>
-                  <div>掌握度：{random.toFixed(1)}% </div>
-                  <Progress percent={random} position="normal" unfilled={true} appearTransition />
+                  <div style={{marginTop:'0.4rem',fontSize: '0.9rem'}}>
+                    掌握度：<span style={{color:'#1890ff',marginRight:'2rem'}}>{random.toFixed(1)}%</span>
+                    能力值：<span style={{color:'#1890ff'}}>{random.toFixed(0)}</span>
+                  </div>
                   <div style={{width: '70%', marginTop: "0.5rem"}}>
                     
                   </div>  
@@ -42,11 +44,31 @@ class ChapterKp extends React.Component {
                 )
               }}
             >
-                <List.Item style={{backgroundColor: '#f5f5f5'}}>
-                  <span style={{fontSize: "1rem",  marginLeft: "2rem"}}>开始修炼</span>
+                <List.Item 
+                  // thumb="../../img/item_icon/pen.png"
+                  thumb={<div style={{
+                    marginLeft:'0.5rem',
+                    width: '20px',
+                    height: '20px',
+                    background: 'url(../../img/item_icon/pen.png) center center /  17px 17px no-repeat' }}
+                    />
+                  }
+                  style={{backgroundColor: '#f5f5f5'}}
+                >
+                  <span style={{fontSize: "1rem"}}>开始修炼</span>
                 </List.Item>
-                <List.Item style={{backgroundColor: '#f5f5f5'}}>
-                  <span style={{fontSize: "1rem", marginLeft: "2rem"}}>视频</span>
+                <List.Item 
+                  // thumb="../../img/item_icon/video2.png"
+                  thumb={<div style={{
+                    marginLeft:'0.5rem',
+                    width: '20px',
+                    height: '20px',
+                    background: 'url(../../img/item_icon/video2.png) center center /  17px 17px no-repeat' }}
+                    />
+                  }
+                  style={{backgroundColor: '#f5f5f5'}}
+                >
+                  <span style={{fontSize: "1rem"}}>视频</span>
                 </List.Item>
           </List>
         )
@@ -113,49 +135,57 @@ class ChapterKp extends React.Component {
         ></NavBar>
         <div style={{marginLeft: '1.5rem', marginBottom: '1.5rem', width: '70%'}}>
           <div style={{fontSize: '1.5rem', fontWeight: 'bold'}}>{chapter.chapter_status.chaptername}</div>
-          <div style={{fontSize: '1rem', color: '#888'}}>掌握度：{random.toFixed(1)}% </div><Progress percent={random} position="normal" unfilled={true} appearTransition />                  
+          <div style={{fontSize: '1.2rem',marginTop: '0.5rem', color: '#888'}}>
+            掌握度：<span style={{color:'#1890ff'}}>{random.toFixed(1)}%</span>
+          </div>                 
           <div style={{marginTop: '1rem', padding: '1rem 1rem 1rem 1rem', backgroundColor: "#f5f5f5"}}>
             <Flex>
               <Flex.Item><div style={{
-                      height: '1rem',
-                      lineHeight: '1rem',
+                      height: '1.5rem',
+                      lineHeight: '1.5rem',
                       width: '3rem',
+                      color: '#888',
                       fontSize: '0.7rem',
                     }} >总次数</div>
                     <div style={{
-                      height: '1rem',
-                      lineHeight: '1rem',
+                      marginTop:'0.3rem',
+                      height: '1.5rem',
+                      lineHeight: '1.5rem',
                       width: '3rem',
                       fontSize: '1rem',
-                      color: 'black',
+                      color: '#1890ff',
                     }}>15</div>
               </Flex.Item>
               <Flex.Item><div style={{
-                      height: '1rem',
-                      lineHeight: '1rem',
+                      height: '1.5rem',
+                      lineHeight: '1.5rem',
                       width: '3rem',
+                      color: '#888',
                       fontSize: '0.7rem',
                     }} >正确率</div>
                     <div style={{
-                      height: '1rem',
-                      lineHeight: '1rem',
+                      marginTop:'0.3rem',
+                      height: '1.5rem',
+                      lineHeight: '1.5rem',
                       width: '3rem',
                       fontSize: '1rem',
-                      color: 'black',
+                      color: '#1890ff',
                     }}>45%</div>
               </Flex.Item>
               <Flex.Item><div style={{
-                      height: '1rem',
-                      lineHeight: '1rem',
+                      height: '1.5rem',
+                      lineHeight: '1.5rem',
                       width: '3rem',
+                      color: '#888',
                       fontSize: '0.7rem',
                     }} >已达标</div>
                     <div style={{
-                      height: '1rem',
-                      lineHeight: '1rem',
+                      marginTop:'0.3rem',
+                      height: '1.5rem',
+                      lineHeight: '1.5rem',
                       width: '3rem',
                       fontSize: '1rem',
-                      color: 'black',
+                      color: '#1890ff',
                     }}>6/10</div>
               </Flex.Item>
             </Flex>
