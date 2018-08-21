@@ -40,16 +40,16 @@ class MyTest extends React.Component {
     this.props.getNotFinishTest(this.props.student_id);
     this.props.setSelectedTab("blueTab");
     this.props.updateEntry("root");
-    //this.props.getStuComUsedKp(student_id);
+    this.props.getStuPoorKp(this.props.student_id);
   }
 
-  getMyComUsedKp(){
-    this.props.getStuComUsedKp(this.props.student_id);
-    this.setState({modal: true});
-  }
+  // getMyPoorKp(){
+  //   this.props.getStuPoorKp(this.props.student_id);
+  //   this.setState({modal: true});
+  // }
 
   render() {
-    var {isFetching, my_uncompleted_test,student_id,comusedkp} = this.props;
+    var {isFetching, my_uncompleted_test, student_id, poorkp} = this.props;
     var not_finish_item = null;
     if(my_uncompleted_test){
       not_finish_item = my_uncompleted_test.map((item,i) => {
@@ -113,7 +113,7 @@ class MyTest extends React.Component {
             style = {{border:"1px solid #888",borderRadius: "5px",margin :"1rem 1rem"}}
           >
             薄弱知识点
-            <Brief>{"已掌握0/" + comusedkp.length}</Brief>
+            <Brief>{"已掌握0/" + poorkp.length}</Brief>
           </Item>
         </List>
       </div>
@@ -126,7 +126,7 @@ class MyTest extends React.Component {
         >
           <List renderHeader={() => '以下知识点需要提高'}>
             {
-              comusedkp.map((item) => {
+              poorkp.map((item) => {
                 return (
                   <Item 
                     arrow="horizontal"
@@ -134,10 +134,10 @@ class MyTest extends React.Component {
                     onClick={e => this.props.router.push("/mobile-zq/student_kp/"+item.kpid)}>
                     {item.kpname}
                     <div style={{display: 'flex', marginTop: '0.5rem', alignItems: 'center'}}>
-                      <Progress style={{width: '60%'}} percent={item.rate} position="normal" />
-                      <div style={{fontSize: '1rem', marginLeft: '1rem'}}>{item.rate}%</div>
+                      <Progress style={{width: '60%'}} percent={(item.kp_rating *100/800).toFixed(1)} position="normal" />
+                      <div style={{fontSize: '1rem', marginLeft: '1rem'}}>{(item.kp_rating *100/800).toFixed(1)}%</div>
                     </div>
-                    <Brief><div>练习{item.usedcount ? item.usedcount : 0}次</div></Brief>
+                    <Brief><div>练习{item.count ? item.count : 0}次</div></Brief>
                   </Item>
                 )
               })
@@ -166,12 +166,12 @@ class MyTest extends React.Component {
 export default connect(state => {
   
   const student_data = state.studentData.toJS();
-  console.log(state.AuthData.get('userid'));
-  const {isFetching, comusedkp, my_uncompleted_test} = student_data;
+  console.log(state.AuthData.toJS());
+  const {isFetching, poorkp, my_uncompleted_test} = student_data;
   return {
     my_uncompleted_test: my_uncompleted_test, 
     isFetching: isFetching,
-    comusedkp : comusedkp ? comusedkp : [],
+    poorkp : poorkp,
     student_id: state.AuthData.get('userid'),
   }
 }, action)(MyTest);

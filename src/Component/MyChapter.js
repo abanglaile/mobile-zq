@@ -35,14 +35,17 @@ class MyChapter extends React.Component {
     console.log("set redTab");
     console.log("student_id, course_id :",student_id,course_id);
     this.props.getMyStudentRating(student_id, course_id);
+    this.props.getCourse();
     this.props.getMyBookChapter(student_id, course_id);
   }
 
   onChangeMenu(value){
-    this.setState({
-      m_index: value,
-    });
-    console.log(value);
+    // this.setState({
+    //   m_index: value,
+    // });
+    const {student_id} = this.props;
+    this.props.selectCourse(value[0]);
+    this.props.getMyBookChapter(student_id, value[0])
     
   }
 
@@ -114,13 +117,15 @@ class MyChapter extends React.Component {
 
   render(){
     const { show } = this.state;
-    const {books, student_rating,chapter,isFetching} = this.props;
-    var initData = [];
-    if(books.length > 0){
-      for(var i=0;i<books.length;i++){
-        initData.push({"value":i.toString(),"label":books[i].bookname});
+    const {books, student_rating, chapter, isFetching, course, course_id} = this.props;
+    console.log(course);
+    var course_name = '';
+    for(let item of course){
+      if(item.value == course_id){
+        course_name = item.label;
       }
     }
+
     console.log(books[0]);
 
     let tabs = [];
@@ -132,8 +137,8 @@ class MyChapter extends React.Component {
     const menuEl = (
       <Menu
         style = {{position:'absolute',zIndex: '90' ,width: '100%'}}
-        data={initData}
-        value={['0']}
+        data={course}
+        value={[course_id]}
         level={1}
         onChange={(value) => this.onChangeMenu(value)}
         height={document.documentElement.clientHeight * 0.3}
@@ -155,12 +160,12 @@ class MyChapter extends React.Component {
         <div>
           <NavBar
             mode="light"
-            rightContent={<div onClick={(e) => this.handleClick(e)} >基本乐理<Icon type={show ? "up" : "down"} /></div>}
+            rightContent={<div onClick={(e) => this.handleClick(e)} >{course_name}<Icon type={show ? "up" : "down"} /></div>}
           >
             学习情况
           </NavBar>
         </div>
-        {show ? initData ? menuEl : loadingEl : null}
+        {show ? course ? menuEl : loadingEl : null}
         {
           show ? 
           <div 

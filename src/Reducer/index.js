@@ -10,11 +10,9 @@ const defaulatTestData = Immutable.fromJS({
         ranking_list: [{}],
         test_log: {finish_time: '', correct_exercise: 0},
         test_reward: {
-            credit: {
-                    delta_credit: 5,
-                    old_credit: 30,
-                    new_credit: 35,
-            }, rating:{old_student_rating: 0, delta_student_rating: 0}, kp_rating: []},
+            rating:{old_student_rating: 0, delta_student_rating: 0}, 
+            kp_rating: []
+        },
     });
 const defaulatStudentData = Immutable.fromJS({
         isFetching: false,
@@ -49,7 +47,7 @@ const defaulatStudentData = Immutable.fromJS({
         kpladder : [],
         kpcapatity: {},
 
-        comusedkp : [],
+        poorkp : [],
     });
 
 // const defaulatAuthData = Immutable.fromJS({
@@ -225,8 +223,7 @@ export const testData = (state = defaulatTestData, action = {}) => {
 
         case 'GET_TEST_EXERCISE_SUCCESS':
             return state.set('exercise', Immutable.fromJS(action.json)).set('isFetching', false);
-        case 'GET_TEST_RATING_REWARD_SUCCESS':
-            console.log(action.json);
+        case 'GET_TEST_RATING_REWARD':
             return state.set('test_reward', Immutable.fromJS(action.json));
         case 'GET_MY_TEST_STATUS_SUCCESS':
             return state.set('test_kp', Immutable.fromJS(action.json.test_kp))
@@ -291,9 +288,17 @@ export const studentData = (state = defaulatStudentData, action = {}) => {
                         .set('class_name', action.json.group_name)
                         .set('imgurl', action.json.avatar)
                         .set('isFetching', false);
-        case 'GET_MY_SCORE_SUCCESS':
-            console.log(action.json.student_rating);
+        case 'GET_MY_RATING':
             return state.set('student_rating', action.json.student_rating).set('isFetching', false);
+        case 'GET_COURSE':
+            var course = [];
+            for(var i = 0; i < action.course.length; i++){
+                course.push({value: action.course[i].course_id, label: action.course[i].course_name});
+            }
+            return state.set('course', course).set('course_id', course[0].value)
+            .set('isFetching', false);
+        case 'SELECT_COURSE':
+            return state.set('course_id', action.course_id); 
         case 'GET_MY_CHAPTER_SUCCESS':
             console.log(action.json);
             return state.set('books', Immutable.fromJS(action.json)).set('isFetching', false);
@@ -316,8 +321,8 @@ export const studentData = (state = defaulatStudentData, action = {}) => {
         case 'GET_RATING_HISTORY':
             console.log(action.json);
             return state.set('rating_history', Immutable.fromJS(action.json)).set('isFetching', false);
-        case 'GET_COMUSED_KP_SUCCESS':
-            return state.set('comusedkp', Immutable.fromJS(action.json)).set('isFetching', false);
+        case 'GET_STU_POORKP':
+            return state.set('poorkp', Immutable.fromJS(action.json)).set('isFetching', false);
         case 'GET_KP_RATING_HISTORY':
             return state.set('kpladder', Immutable.fromJS(action.json)).set('isFetching', false);
         case 'GET_KP_ABILITY':

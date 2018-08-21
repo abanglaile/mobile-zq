@@ -17,13 +17,7 @@ class KpTestResult extends React.Component {
     const {student_id, params} = this.props;
     const test_id = params.test_id;
     if(test_id){
-        // this.props.getTestRatingReward(student_id, test_id);
-        this.props.getTestRatingReward(1, 124);
-        // this.props.getMyLadderScore(student_id);
-        // this.props.getMyScore(1);
-        this.props.getMyLadderScore(1);
-      // this.props.getTestRankingList(test_id);
-      // this.props.getStuTestInfo(student_id,test_id);
+        this.props.getTestRatingReward(student_id, test_id);
     }else{
       alert("页面参数错误");
     }
@@ -53,8 +47,8 @@ class KpTestResult extends React.Component {
   }
 
   render() {
-    var { test_reward, student_rating } = this.props;
-    const {credit, rating, kp_rating} = test_reward;
+    var { test_reward } = this.props;
+    const {rating, kp_rating} = test_reward;
     console.log(test_reward);
     return (
       <div>
@@ -72,7 +66,7 @@ class KpTestResult extends React.Component {
               lineHeight: '3rem',
               color: 'black',
             }}>
-            <span style={{fontSize: '3rem'}} >{student_rating}</span>
+            <span style={{fontSize: '3rem'}} >{rating.old_student_rating}</span>
         
         </div>
         <div style={{
@@ -84,7 +78,7 @@ class KpTestResult extends React.Component {
             }}>
             <div>
               <span>{'我的天梯 '}</span>
-              <span style={{color: "#40a9ff"}}>{rating.delta_student_rating>0 ? '+'+rating.delta_student_rating : '-'+rating.delta_student_rating}</span>
+              <span style={{color: "#40a9ff"}}>{rating.delta_student_rating >= 0 ? '+'+rating.delta_student_rating : '-'+rating.delta_student_rating}</span>
             </div>
         </div>   
       </div>
@@ -111,22 +105,10 @@ class KpTestResult extends React.Component {
 
 export default connect(state => {
   const test_state = state.testData.toJS();
-  var {delta_result, test_id, test_reward} = test_state;
-  console.log("delta_result,",delta_result);
-  console.log("test_reward,",test_reward);
-  const student_rating = state.studentData.get("student_rating");
-  delta_result = {
-    delta_kp: [{kpname: "二次函数标准式与定义", kp_delta_rating: +12}],
-    delta_student_rating: 39,
-    student_rating: 800,
-    delta_points: [{}],
-  }
+  var {test_id, test_reward} = test_state;
   return {
     student_id: state.AuthData.get('userid'), 
     test_id: test_id,
     test_reward: test_reward,
-    student_rating: student_rating,
-    delta_kp: delta_result.delta_kp,
-    delta_student_rating: delta_result.delta_student_rating
   }; 
 }, action)(KpTestResult);

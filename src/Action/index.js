@@ -279,12 +279,12 @@ const getStuKpAbilitySuccess = (json) => {
         json,
     }
 }
-const getStuComUsedKpSuccess = (json) => {
-    return {
-        type: 'GET_COMUSED_KP_SUCCESS',
-        json,
-    }
-}
+// const getStuComUsedKpSuccess = (json) => {
+//     return {
+//         type: 'GET_COMUSED_KP_SUCCESS',
+//         json,
+//     }
+// }
 
 
 
@@ -319,13 +319,6 @@ const getMyScoreSuccess = (json) => {
     type: 'GET_MY_SCORE_SUCCESS',
     json,
   }
-}
-
-const getTestRatingRewardSuccess = (json) => {
-    return {
-        type: 'GET_TEST_RATING_REWARD_SUCCESS',
-        json,
-    }
 }
 
 //开始提交测试结果
@@ -381,9 +374,16 @@ export const setSelectedTab = (tab) => {
 
 //记录mytest 做题历史被选中的tab状态(0 or 1)
 export const setMyTestTab = (test_tab) => {
-     return {
+    return {
         type: 'GET_MY_TEST_TAB',
         test_tab,
+    }
+}
+
+export const selectCourse = (course_id) => {
+    return {
+        type: 'SELECT_COURSE',
+        course_id,
     }
 }
 
@@ -399,7 +399,11 @@ export const getMyStudentRating = (student_id, course_id) => {
                 }
         })
         .then(function (response) {
-            dispatch(getMyScoreSuccess(response.data));
+            console.log(response.data);
+            dispatch({
+                type: 'GET_MY_RATING',
+                json: response.data,
+            })
         })
         .catch(function (error) {
             console.log(error);
@@ -425,6 +429,18 @@ export const getMyBookChapter = (student_id, course_id) => {
         .catch(function (error) {
             console.log(error);
         });
+    }
+}
+
+export const getCourse = () => {
+    let url = target + "/getCourse";
+    return (dispatch) => {
+        return axios.get(url).then(function(response){
+            dispatch({
+                type: 'GET_COURSE',
+                course: response.data,
+            })            
+        })
     }
 }
 
@@ -578,7 +594,10 @@ export const getTestRatingReward = (student_id, test_id) => {
         return axios.get(url, {
             params: {student_id, test_id}
         }).then(function (response) {
-            dispatch(getTestRatingRewardSuccess(response.data));
+            dispatch({
+                type: 'GET_TEST_RATING_REWARD',
+                json: response.data,
+            });
         })
         .catch(function (error) {
             console.log(error);
@@ -1151,8 +1170,8 @@ export const getKpAbility = (student_id, kpid) => {
     }
 }
 //获取学生经常使用知识点的情况
-export const getStuComUsedKp = (student_id) => {
-    let url = target + "/getStuComUsedKp";
+export const getStuPoorKp = (student_id) => {
+    let url = target + "/getStuPoorKp";
     return (dispatch) => {
         dispatch(getStatusStart());
         return axios.get(url,{
@@ -1161,7 +1180,10 @@ export const getStuComUsedKp = (student_id) => {
             }
         })
         .then(function (response) {
-            dispatch(getStuComUsedKpSuccess(response.data));
+            dispatch({
+                type: 'GET_STU_POORKP',
+                json: response.data,
+            });
         })
         .catch(function (error) {
             console.log(error);
