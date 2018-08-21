@@ -218,7 +218,7 @@ class TestResult extends React.Component {
     
     return(
       <div>
-      <div style={{backgroundColor: 'white', paddingTop: '2rem'}}>          
+      <div style={{backgroundColor: '#fafafa', paddingTop: '2rem'}}>          
         <div style={{
               textAlign: 'center',
               height: '3rem',
