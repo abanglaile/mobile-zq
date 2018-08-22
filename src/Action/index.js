@@ -279,22 +279,6 @@ const getStuKpAbilitySuccess = (json) => {
         json,
     }
 }
-// const getStuComUsedKpSuccess = (json) => {
-//     return {
-//         type: 'GET_COMUSED_KP_SUCCESS',
-//         json,
-//     }
-// }
-
-
-
-//成功获取测试结果数据
-const getMyTestStatusSucces = (json) => {
-    return {
-        type: 'GET_MY_TEST_STATUS_SUCCESS',
-        json,
-    }
-}
 
 //成功获取学生个人情况信息
 const getStudentInfoSuccess = (json) => {
@@ -1062,7 +1046,13 @@ export const getMyTestStatus = (student_id, test_id) => {
         return axios.post(url,{student_id,test_id})
         .then(function (response) {
             // dispatch(getTestResultSuccess(response.data));
-            dispatch(getMyTestStatusSucces(response.data));
+            console.log(response.data);
+            dispatch({
+                type: 'GET_MY_TEST_STATUS', 
+                test_kp: response.data.test_kp,
+                test_log: response.data.test_log,
+                exercise_log: response.data.exercise_log
+            });
         })
         .catch(function (error) {
             console.log(error);

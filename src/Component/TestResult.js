@@ -72,7 +72,7 @@ class TestResult extends React.Component {
       this.props.getTestRankingList(test_id);
       this.props.getMyTestStatus(student_id, test_id);
       // this.props.getTestExercise(student_id, test_id);
-      this.props.getMyTestData(student_id,test_id);
+      // this.props.getMyTestData(student_id, test_id);
 
     }else{
       alert("页面参数错误");
@@ -386,7 +386,7 @@ class TestResult extends React.Component {
 
   navBarContent(){
     const {test_log} = this.props;
-    console.log(test_log);
+    console.log("test_log",test_log);
     if(test_log.test_type == 1){
       //老师布置
       return (<SegmentedControl values={['我的', '排行']} style={{width: '6rem'}} onChange={e => this.SegmentedChange(e)} />)
@@ -418,13 +418,11 @@ class TestResult extends React.Component {
 
 export default connect(state => {
   const test_state = state.testData.toJS();
-  const {test_status, exercise_log, test_kp, test_log, isFetching, modalOpen, ranking_list, exercise, entry, exindex} = test_state;
+  const {test_status, exercise_log, test_kp, test_log, isFetching, modalOpen, ranking_list, entry} = test_state;
   return {
-    exindex: exindex,
-    exercise: exercise,
     test_status: test_status,
-    exercise_log: exercise_log ? exercise_log : [],
-    test_kp: test_kp ? test_kp : [],
+    exercise_log: exercise_log,
+    test_kp: test_kp,
     test_log: test_log,
     entry: entry,
     ranking_list: ranking_list,
