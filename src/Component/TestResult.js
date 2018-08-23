@@ -72,7 +72,7 @@ class TestResult extends React.Component {
       this.props.getTestRankingList(test_id);
       this.props.getMyTestStatus(student_id, test_id);
       // this.props.getTestExercise(student_id, test_id);
-      // this.props.getMyTestData(student_id, test_id);
+      this.props.getMyTestData(student_id, test_id);
 
     }else{
       alert("页面参数错误");
@@ -112,7 +112,7 @@ class TestResult extends React.Component {
 
   renderExerciseList2(){
     const {exercise_log} = this.props;
-    console.log("exercise_log :::::",JSON.stringify(exercise_log));
+    console.log("exercise_log", exercise_log);
     return (
         <div>
         <div style={{marginLeft: '1rem'}}>
