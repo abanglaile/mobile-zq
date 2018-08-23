@@ -112,7 +112,7 @@ class TestResult extends React.Component {
 
   renderExerciseList2(){
     const {exercise_log} = this.props;
-    // console.log("exercise_log :::::",JSON.stringify(exercise_log));
+    console.log("exercise_log :::::",JSON.stringify(exercise_log));
     return (
         <div>
         <div style={{marginLeft: '1rem'}}>
@@ -150,12 +150,12 @@ class TestResult extends React.Component {
         </div>
         <Grid data={exercise_log} hasLine={false} onClick={(e, i) => this.jumpToExercise(i)}
             columnNum={5}
-            renderItem={(dataItem,i) => (
+            renderItem={(dataItem) => (
               <svg width="75px" height="75px" version="1.1"
                     xmlns="http://www.w3.org/2000/svg">
 
-                <circle cx="50%" cy="30%" r="20%" stroke={dataItem.exercise_state < 0 ? 'grey' : dataItem.exercise_state ? 'green' : 'red'} fill="white" />
-                <text dx="45%" dy="37%" fontSize="0.8rem" style={{fill: dataItem.exercise_state < 0 ? 'grey' : dataItem.exercise_state ? 'green' : 'red'}}>{i+1}</text>
+                <circle cx="50%" cy="30%" r="20%" stroke={dataItem.exercise_state ? 'green' : dataItem.exercise_state==0 ? 'red' : 'grey'} fill="white" />
+                <text dx="45%" dy="37%" fontSize="0.8rem" style={{fill: dataItem.exercise_state ? 'green' : dataItem.exercise_state==0  ? 'red' : 'grey'}}>{dataItem.exercise_index+1}</text>
               </svg>
             )} 
         />
