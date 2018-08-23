@@ -150,12 +150,12 @@ class TestResult extends React.Component {
         </div>
         <Grid data={exercise_log} hasLine={false} onClick={(e, i) => this.jumpToExercise(i)}
             columnNum={5}
-            renderItem={(dataItem) => (
+            renderItem={(dataItem,i) => (
               <svg width="75px" height="75px" version="1.1"
                     xmlns="http://www.w3.org/2000/svg">
 
-                <circle cx="50%" cy="30%" r="20%" stroke={dataItem.exercise_state ? 'green' : dataItem.exercise_state==0 ? 'red' : 'grey'} fill="white" />
-                <text dx="45%" dy="37%" fontSize="0.8rem" style={{fill: dataItem.exercise_state ? 'green' : dataItem.exercise_state==0  ? 'red' : 'grey'}}>{dataItem.exercise_index+1}</text>
+                <circle cx="50%" cy="30%" r="20%" stroke={dataItem.exercise_state>0 ? 'green' : dataItem.exercise_state==0 ? 'red' : 'grey'} fill="white" />
+                <text dx="45%" dy="37%" fontSize="0.8rem" style={{fill: dataItem.exercise_state>0  ? 'green' : dataItem.exercise_state==0  ? 'red' : 'grey'}}>{i+1}</text>
               </svg>
             )} 
         />
@@ -204,6 +204,7 @@ class TestResult extends React.Component {
     var test_time = '';
     var finish_time = '';
     console.log("test_log: "+JSON.stringify(test_log));
+    console.log("test_kp: "+JSON.stringify(test_kp));
     if(test_log.finish_time && test_log.start_time){
       console.log("test_log.finish_time before: ",test_log.finish_time);
       console.log("test_log.finish_time: ",GetDateParse(test_log.finish_time));
@@ -225,27 +226,40 @@ class TestResult extends React.Component {
     
     return(
       <div>
-      <div style={{backgroundColor: '#fafafa', paddingTop: '2rem'}}>          
-        <div style={{
-              textAlign: 'center',
-              height: '3rem',
-              lineHeight: '3rem',
-              color: '#1890ff',
-            }}>
-              <span style={{fontSize: '3rem'}} >{test_log.correct_exercise}</span>
-              <span style={{fontSize: '1rem',color:'#1890ff'}}>{'/ ' + exercise_log.length + '题 耗时 '}</span>
-              <span style={{fontSize: '1rem',color:'#1890ff'}}>{test_time}</span>
-        
-        </div>
-        
-        <div style={{
-        textAlign: 'center',
-        height: '3rem',
-        lineHeight: '3rem',
-        color: '#1890ff',
-        fontSize: '1rem'
-      }}>{'交卷时间：' +  finish_time}</div>
-      </div>
+        {
+          finish_time ?
+          <div style={{backgroundColor: '#fafafa', paddingTop: '2rem',paddingBottom: '2rem'}}>          
+            <div style={{
+                  textAlign: 'center',
+                  height: '3rem',
+                  lineHeight: '3rem',
+                  color: '#1890ff',
+                }}>
+                  <span style={{fontSize: '3rem'}} >{test_log.correct_exercise}</span>
+                  <span style={{fontSize: '1rem',color:'#1890ff'}}>{'/ ' + exercise_log.length + '题 耗时 '}</span>
+                  <span style={{fontSize: '1rem',color:'#1890ff'}}>{test_time}</span>
+            
+            </div>
+            
+            <div style={{
+            textAlign: 'center',
+            height: '3rem',
+            lineHeight: '3rem',
+            color: '#1890ff',
+            fontSize: '1rem'
+          }}>{'交卷时间：' +  finish_time}</div>
+          </div> :
+          <div style={{backgroundColor: '#fafafa', paddingTop: '2rem',paddingBottom: '2rem'}}>  
+            <div style={{
+                  textAlign: 'center',
+                  height: '3rem',
+                  lineHeight: '3rem',
+                  color: '#1890ff',
+                }}>
+                  <span style={{fontSize: '1.5rem',color:'#1890ff'}}>{'待完成全部习题'}</span>           
+            </div>
+          </div>
+        } 
         {this.renderKpList()}
         <WhiteSpace/>
         {this.renderExerciseList2()}
@@ -316,7 +330,7 @@ class TestResult extends React.Component {
       avg_time = formatTime(test_status.avg_timeconsuming);
       return(
         <div>
-          <div style={{backgroundColor: 'white', paddingTop: '2.5rem', paddingBottom: '0.5rem', color: '#1890ff'}}>
+          <div style={{backgroundColor: '#fafafa', paddingTop: '2.5rem', paddingBottom: '0.5rem', color: '#1890ff'}}>
             <Flex>
               <Flex.Item><div style={{
                       color: '#1890ff',
