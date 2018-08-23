@@ -93,7 +93,6 @@ class TestResult extends React.Component {
               <div>
                 <span>能力值： </span>
                 <span style={{color: '#1890ff', fontSize: '1.5rem'}}>{test_kp[0] ? test_kp[0].kp_rating : ''}</span>
-                <Progress percent={30} position="normal" unfilled={true} appearTransition />
                 </div>
             </Brief>
           </Item>
@@ -113,28 +112,36 @@ class TestResult extends React.Component {
 
   renderExerciseList2(){
     const {exercise_log} = this.props;
+    console.log("exercise_log :::::",JSON.stringify(exercise_log));
     return (
         <div>
         <div style={{marginLeft: '1rem'}}>
         <Flex>
           <Flex.Item style={{
             color: 'black',
-            fontSize: '1rem', fontWeight: 'bold',
+            fontSize: '1rem', fontWeight: 'bold'
           }}>{'答题卡(' + exercise_log.length + '题)'}</Flex.Item>
           <Flex.Item>
             <Flex>
               <Flex.Item>
-                <svg width="5rem" height="2rem" version="1.1"
+                <svg width="4.5rem" height="2rem" version="1.1"
                     xmlns="http://www.w3.org/2000/svg">
-                <rect x="50%" y="50%" width="0.6rem" height="0.6rem" fill="green" />
-                <text dx="68%" dy="80%" fontSize="0.8rem" >正确</text>
+                <rect x="0%" y="50%" width="0.6rem" height="0.6rem" fill="green" />
+                <text dx="18%" dy="80%" fontSize="0.8rem" >正确</text>
                 </svg>
               </Flex.Item>
               <Flex.Item>
-                <svg width="5rem" height="2rem" version="1.1"
+                <svg width="4.5rem" height="2rem" version="1.1"
                     xmlns="http://www.w3.org/2000/svg">
-                <rect x="20%" y="50%" width="0.6rem" height="0.6rem" fill="red" />
-                <text dx="38%" dy="80%" fontSize="0.8rem" >错误</text>
+                <rect x="0%" y="50%" width="0.6rem" height="0.6rem" fill="red" />
+                <text dx="18%" dy="80%" fontSize="0.8rem" >错误</text>
+                </svg>
+              </Flex.Item>
+              <Flex.Item>
+                <svg width="4.5rem" height="2rem" version="1.1"
+                    xmlns="http://www.w3.org/2000/svg">
+                <rect x="0%" y="50%" width="0.6rem" height="0.6rem" fill="grey" />
+                <text dx="18%" dy="80%" fontSize="0.8rem" >未做</text>
                 </svg>
               </Flex.Item>
             </Flex>
@@ -147,8 +154,8 @@ class TestResult extends React.Component {
               <svg width="75px" height="75px" version="1.1"
                     xmlns="http://www.w3.org/2000/svg">
 
-                <circle cx="50%" cy="30%" r="20%" stroke={dataItem.exercise_state ? 'green' : 'red'} fill="white" />
-                <text dx="45%" dy="37%" fontSize="0.8rem" style={{fill: dataItem.exercise_state ? 'green' : 'red'}}>{i+1}</text>
+                <circle cx="50%" cy="30%" r="20%" stroke={dataItem.exercise_state < 0 ? 'grey' : dataItem.exercise_state ? 'green' : 'red'} fill="white" />
+                <text dx="45%" dy="37%" fontSize="0.8rem" style={{fill: dataItem.exercise_state < 0 ? 'grey' : dataItem.exercise_state ? 'green' : 'red'}}>{i+1}</text>
               </svg>
             )} 
         />
