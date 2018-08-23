@@ -165,9 +165,8 @@ export const testData = (state = defaulatTestData, action = {}) => {
         case 'GET_TEST_START':
             return state.set('isFetching', true);
         case 'GET_TEST_STATUS':
-            return state.set('test_status', Immutable.fromJS(action.json.test_status))
-                .set('test_id', action.test_id);
-        case 'GET_TEST_RANKLIST_SUCCESS':
+            return state.set('test_status', Immutable.fromJS(action.test_status));
+        case 'GET_TEST_RANKING_LIST':
             return state.set('ranking_list', Immutable.fromJS(action.json));
         //获取全新测试数据
         case 'GET_TEST_SUCCESS':

@@ -283,6 +283,7 @@ class TestResult extends React.Component {
 
   renderRanking(){
     var {ranking_list} = this.props;
+    console.log("ranking_list", ranking_list);
     var timeconsuming = '';
     return (
       <List>
@@ -308,7 +309,8 @@ class TestResult extends React.Component {
   }
 
   renderGlobalResult(){
-    const {test_status} = this.props;
+    const {test_status, test_log} = this.props;
+    console.log('test_status', test_status);
     var avg_time = '';
     console.log("test_status"+JSON.stringify(test_status));
     if(test_status){
@@ -343,7 +345,7 @@ class TestResult extends React.Component {
                       width: '100%',
                       fontSize: '2rem',
                     }} >{test_status.avg_accurracy}/
-                      <span style={{fontSize:'1.5rem'}}>{test_status.test_size}</span>
+                      <span style={{fontSize:'1.5rem'}}>{test_log.total_exercise}</span>
                     </div>
                     <div style={{
                       textAlign: 'center',

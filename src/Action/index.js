@@ -238,24 +238,10 @@ const getTestExerciseSuccess = (json) => {
   }
 }
 
-const getTestStatusSuccess = (json, test_id) => {
-    return {
-        type: 'GET_TEST_STATUS_SUCCESS',
-        json,
-        test_id,
-    }
-}
 
 const getStuTestInfoSuccess = (json) => {
     return {
         type: 'GET_STU_TESTINFO_SUCCESS',
-        json,
-    }
-}
-
-const getTestRankingListSuccess = (json) => {
-    return {
-        type: 'GET_TEST_RANKLIST_SUCCESS',
         json,
     }
 }
@@ -1017,7 +1003,10 @@ export const getTestStatus = (test_id) => {
         dispatch(getTestStart());
         return axios.post(url,{test_id})
         .then(function (response) {
-            dispatch(getTestStatusSuccess(response.data,test_id));
+            dispatch({
+                type: 'GET_TEST_STATUS',
+                test_status: response.data,
+            });
         })
         .catch(function (error) {
             console.log(error);
@@ -1029,9 +1018,14 @@ export const getTestRankingList = (test_id) => {
     let url = target + "/getTestRankingList";
     return (dispatch) => {
         dispatch(getTestStart());
+
         return axios.post(url,{test_id})
         .then(function (response) {
-            dispatch(getTestRankingListSuccess(response.data));
+            console.log("ranking_list",response.data);
+            dispatch({
+                type: 'GET_TEST_RANKING_LIST',
+                json: response.data,
+            });
         })
         .catch(function (error) {
             console.log(error);
