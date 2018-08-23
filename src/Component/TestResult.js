@@ -112,7 +112,7 @@ class TestResult extends React.Component {
 
   renderExerciseList2(){
     const {exercise_log} = this.props;
-    console.log("exercise_log :::::",JSON.stringify(exercise_log));
+    // console.log("exercise_log :::::",JSON.stringify(exercise_log));
     return (
         <div>
         <div style={{marginLeft: '1rem'}}>
@@ -268,7 +268,6 @@ class TestResult extends React.Component {
                       <div>
                         <span>能力值： </span>
                         <span style={{color: '#1890ff', fontSize: '1.5rem'}}>{item.kp_rating}</span>
-                        <Progress percent={30} position="normal" unfilled={true} appearTransition />
                       </div>
                     </Brief>
                   </Item>
