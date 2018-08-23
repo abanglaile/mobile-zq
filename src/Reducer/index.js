@@ -9,6 +9,8 @@ const defaulatTestData = Immutable.fromJS({
         exercise_log: [{}],
         ranking_list: [{}],
         test_log: {finish_time: '', correct_exercise: 0},
+        exercise_log: [],
+        test_kp: [],
         test_reward: {
             rating:{old_student_rating: 0, delta_student_rating: 0}, 
             kp_rating: []
@@ -162,10 +164,9 @@ export const testData = (state = defaulatTestData, action = {}) => {
     switch(action.type){
         case 'GET_TEST_START':
             return state.set('isFetching', true);
-        case 'GET_TEST_STATUS_SUCCESS':
-            return state.set('test_status', Immutable.fromJS(action.json.test_status))
-                .set('test_id', action.test_id);
-        case 'GET_TEST_RANKLIST_SUCCESS':
+        case 'GET_TEST_STATUS':
+            return state.set('test_status', Immutable.fromJS(action.test_status));
+        case 'GET_TEST_RANKING_LIST':
             return state.set('ranking_list', Immutable.fromJS(action.json));
         //获取全新测试数据
         case 'GET_TEST_SUCCESS':
@@ -212,7 +213,6 @@ export const testData = (state = defaulatTestData, action = {}) => {
             console.log(action.i, action.exercise_log);
             return state.setIn(['exercise_log', action.i], Immutable.fromJS(action.exercise_log)).set("modalOpen", true);
         case 'GET_MY_TEST_SUCCESS':
-            let test_log = {test_id: action.test_id, start_time: new Date()}
             return state.set('exercise', Immutable.fromJS(action.exercise)).set('exindex', 0)
                 // .set('test_log', Immutable.fromJS(test_log))
                 .set('test_log', Immutable.fromJS(action.test_log))
@@ -225,8 +225,11 @@ export const testData = (state = defaulatTestData, action = {}) => {
             return state.set('exercise', Immutable.fromJS(action.json)).set('isFetching', false);
         case 'GET_TEST_RATING_REWARD':
             return state.set('test_reward', Immutable.fromJS(action.json));
-        case 'GET_MY_TEST_STATUS_SUCCESS':
-            return state.set('test_kp', Immutable.fromJS(action.json.test_kp))
+        case 'GET_MY_TEST_STATUS':
+            console.log(action.test_log);
+            return state.set('test_kp', Immutable.fromJS(action.test_kp))
+                .set('test_log', Immutable.fromJS(action.test_log))
+                .set('exercise_log', Immutable.fromJS(action.exercise_log))
                 .set('isFetching', false);
         case 'UPDATE_ENTRY': 
             return state.set('entry', action.entry);
