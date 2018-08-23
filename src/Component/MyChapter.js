@@ -178,7 +178,7 @@ class MyChapter extends React.Component {
             <Item 
               arrow="horizontal" 
               extra={'查看我的能力'}
-              onClick={e => this.props.router.push("/mobile-zq/studentstatus")}
+              onClick={e => this.props.router.push("/mobile-zq/studentstatus/" + course_id)}
               style = {{border:"1px solid #1890ff",borderRadius: "5px",overflow:"hidden"}}
             >
               <div 
