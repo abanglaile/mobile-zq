@@ -1043,9 +1043,7 @@ export const getMyTestStatus = (student_id, test_id) => {
             console.log(response.data);
             dispatch({
                 type: 'GET_MY_TEST_STATUS', 
-                test_kp: response.data.test_kp,
-                test_log: response.data.test_log,
-                exercise_log: response.data.exercise_log
+                test_kp: response.data,
             });
         })
         .catch(function (error) {

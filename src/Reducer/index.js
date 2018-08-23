@@ -9,7 +9,7 @@ const defaulatTestData = Immutable.fromJS({
         exercise_log: [{}],
         ranking_list: [{}],
         test_log: {finish_time: '', correct_exercise: 0},
-        exercise_log: [],
+        exercise_log: [{exercise_status: 0, exercise_state: -1}],
         test_kp: [],
         test_reward: {
             rating:{old_student_rating: 0, delta_student_rating: 0}, 
@@ -226,10 +226,7 @@ export const testData = (state = defaulatTestData, action = {}) => {
         case 'GET_TEST_RATING_REWARD':
             return state.set('test_reward', Immutable.fromJS(action.json));
         case 'GET_MY_TEST_STATUS':
-            console.log(action.test_log);
             return state.set('test_kp', Immutable.fromJS(action.test_kp))
-                .set('test_log', Immutable.fromJS(action.test_log))
-                .set('exercise_log', Immutable.fromJS(action.exercise_log))
                 .set('isFetching', false);
         case 'UPDATE_ENTRY': 
             return state.set('entry', action.entry);
