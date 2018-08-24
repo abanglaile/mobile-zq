@@ -1067,13 +1067,14 @@ export const getStudentInfo = (student_id) => {
 }
 
 //获取学生综合能力情况
-export const getStuAbility = (student_id) => {
+export const getStuAbility = (student_id, course_id) => {
     let url = target + "/getStuAbility";
     return (dispatch) => {
         dispatch(getStatusStart());
         return axios.get(url,{
             params:{
                 student_id,
+                course_id
             }
         })
         .then(function (response) {

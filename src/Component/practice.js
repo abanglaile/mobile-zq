@@ -50,6 +50,7 @@ class MyTest extends React.Component {
 
   render() {
     var {isFetching, my_uncompleted_test, student_id, poorkp} = this.props;
+    console.log("poorkp",JSON.stringify(poorkp));
     var not_finish_item = null;
     if(my_uncompleted_test){
       not_finish_item = my_uncompleted_test.map((item,i) => {
@@ -127,17 +128,16 @@ class MyTest extends React.Component {
           <List renderHeader={() => '以下知识点需要提高'}>
             {
               poorkp.map((item) => {
+                var holdrate = ((item.kp_rating/(item.kp_standard? item.kp_standard : 1000))*100).toFixed(1);
                 return (
                   <Item 
                     arrow="horizontal"
                     multipleLine
                     onClick={e => this.props.router.push("/mobile-zq/student_kp/"+item.kpid)}>
                     {item.kpname}
-                    <div style={{display: 'flex', marginTop: '0.5rem', alignItems: 'center'}}>
-                      <Progress style={{width: '60%'}} percent={(item.kp_rating *100/800).toFixed(1)} position="normal" />
-                      <div style={{fontSize: '1rem', marginLeft: '1rem'}}>{(item.kp_rating *100/800).toFixed(1)}%</div>
+                    <div style={{marginTop:'0.4rem',fontSize: '0.9rem'}}>
+                      掌握度：<span style={{color:'#1890ff',marginRight:'1rem'}}>{holdrate}%</span>
                     </div>
-                    <Brief><div>练习{item.count ? item.count : 0}次</div></Brief>
                   </Item>
                 )
               })

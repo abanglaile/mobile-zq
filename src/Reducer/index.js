@@ -289,7 +289,7 @@ export const studentData = (state = defaulatStudentData, action = {}) => {
                         .set('imgurl', action.json.avatar)
                         .set('isFetching', false);
         case 'GET_MY_RATING':
-            return state.set('student_rating', action.json.student_rating).set('isFetching', false);
+            return state.set('student_rating', action.json).set('isFetching', false);
         case 'GET_COURSE':
             var course = [];
             for(var i = 0; i < action.course.length; i++){
