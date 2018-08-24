@@ -81,7 +81,9 @@ class TestResult extends React.Component {
 
   renderKpList(){
     const {test_kp} = this.props;
-    //<Brief>{item.kpid}</Brief>
+    if(test_kp[0]){
+      var hold_rate = ((test_kp[0].kp_rating/(test_kp[0].kp_standard? test_kp[0].kp_standard : 1000))*100).toFixed(1);
+    }
     return (
         <List>
           <Item style={{fontSize: '1.5rem', fontWeight: 'bold'}}>相关知识点</Item>
@@ -90,10 +92,10 @@ class TestResult extends React.Component {
               } arrow="horizontal">
             <div>{test_kp[0] ? test_kp[0].kpname : ''}</div>
             <Brief>
-              <div>
-                <span>能力值： </span>
-                <span style={{color: '#1890ff', fontSize: '1.5rem'}}>{test_kp[0] ? test_kp[0].kp_rating : ''}</span>
-                </div>
+              <div style={{marginTop:'0.4rem',fontSize: '0.9rem'}}>
+                掌握度：<span style={{color:'#1890ff',marginRight:'1rem'}}>{hold_rate}%</span>
+                能力值：<span style={{color:'#1890ff'}}>{test_kp[0] ? test_kp[0].kp_rating : ''}</span>
+              </div>
             </Brief>
           </Item>
           
@@ -112,7 +114,7 @@ class TestResult extends React.Component {
 
   renderExerciseList2(){
     const {exercise_log} = this.props;
-    console.log("exercise_log :::::",JSON.stringify(exercise_log));
+    // console.log("exercise_log :::::",JSON.stringify(exercise_log));
     return (
         <div>
         <div style={{marginLeft: '1rem'}}>
@@ -274,14 +276,14 @@ class TestResult extends React.Component {
           <List>
           {
             test_kp.map((item) => {
-              var correct_rate = item.practice ? item.correct/item.practice : 0;
+              var holdrate = ((item.kp_rating/(item.kp_standard? item.kp_standard : 1000))*100).toFixed(1);
               return (
                 <Item multipleLine> 
                     {item.kpname}
                     <Brief>
-                      <div>
-                        <span>能力值： </span>
-                        <span style={{color: '#1890ff', fontSize: '1.5rem'}}>{item.kp_rating}</span>
+                      <div style={{marginTop:'0.4rem',fontSize: '0.9rem'}}>
+                        掌握度：<span style={{color:'#1890ff',marginRight:'1rem'}}>{holdrate}%</span>
+                        能力值：<span style={{color:'#1890ff'}}>{item.kp_rating}</span>
                       </div>
                     </Brief>
                   </Item>
@@ -296,7 +298,7 @@ class TestResult extends React.Component {
 
   renderRanking(){
     var {ranking_list} = this.props;
-    console.log("ranking_list", ranking_list);
+    console.log("ranking_list", JSON.stringify(ranking_list));
     var timeconsuming = '';
     return (
       <List>
@@ -311,7 +313,7 @@ class TestResult extends React.Component {
               console.log("timeconsuming:"+timeconsuming);
               return (
                 <Item arrow="horizontal">
-                  {item.student_name}
+                  {item.realname}
                   <Brief>{'正确率：' + item.correct_exercise + '/'+item.total_exercise+' | 耗时 ' + timeconsuming}</Brief>
                 </Item>
               )
