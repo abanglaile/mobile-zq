@@ -34,8 +34,8 @@ class ChapterKp extends React.Component {
                 <div style={{marginLeft: '0.5rem', marginBottom: '0,5rem', width: '70%'}}>
                   <div style={{fontWeight: 'bold', color: "black", fontSize: '1rem'}}>{item.kpname}</div>
                   <div style={{marginTop:'0.4rem',fontSize: '0.9rem'}}>
-                    掌握度：<span style={{color:'#1890ff',marginRight:'2rem'}}>{random.toFixed(1)}%</span>
-                    能力值：<span style={{color:'#1890ff'}}>{random.toFixed(0)}</span>
+                    掌握度：<span style={{color:'#1890ff',marginRight:'2rem'}}>{(item.kp_rating * 100/item.kp_standard).toFixed(1)}%</span>
+                    能力值：<span style={{color:'#1890ff'}}>{item.kp_rating}</span>
                   </div>
                   <div style={{width: '70%', marginTop: "0.5rem"}}>
                     
@@ -124,7 +124,8 @@ class ChapterKp extends React.Component {
   render(){
     const {chapter} = this.props;
     const random = Math.random() * 100;
-    console.log(chapter.chapter_status);
+    const {chaptername, chapter_rating, chapter_standard, practice, correct} = chapter;
+    console.log(chapter.chapter_standard);
 
     return (
       <div>
@@ -134,9 +135,9 @@ class ChapterKp extends React.Component {
           onLeftClick={() => this.props.router.push("/mobile-zq/root/my_book_chapter")}
         ></NavBar>
         <div style={{marginLeft: '1.5rem', marginBottom: '1.5rem', width: '70%'}}>
-          <div style={{fontSize: '1.5rem', fontWeight: 'bold'}}>{chapter.chapter_status.chaptername}</div>
+          <div style={{fontSize: '1.5rem', fontWeight: 'bold'}}>{chaptername}</div>
           <div style={{fontSize: '1.2rem',marginTop: '0.5rem', color: '#888'}}>
-            掌握度：<span style={{color:'#1890ff'}}>{random.toFixed(1)}%</span>
+            掌握度：<span style={{color:'#1890ff'}}>{(chapter_rating * 100/chapter_standard).toFixed(1)}%</span>
           </div>                 
           <div style={{marginTop: '1rem', padding: '1rem 1rem 1rem 1rem', backgroundColor: "#f5f5f5"}}>
             <Flex>
@@ -154,7 +155,7 @@ class ChapterKp extends React.Component {
                       width: '3rem',
                       fontSize: '1rem',
                       color: '#1890ff',
-                    }}>15</div>
+                    }}>{practice}</div>
               </Flex.Item>
               <Flex.Item><div style={{
                       height: '1.5rem',
@@ -170,7 +171,7 @@ class ChapterKp extends React.Component {
                       width: '3rem',
                       fontSize: '1rem',
                       color: '#1890ff',
-                    }}>45%</div>
+                    }}>{(correct*100/practice).toFixed(1)}%</div>
               </Flex.Item>
               <Flex.Item><div style={{
                       height: '1.5rem',
@@ -186,7 +187,7 @@ class ChapterKp extends React.Component {
                       width: '3rem',
                       fontSize: '1rem',
                       color: '#1890ff',
-                    }}>6/10</div>
+                    }}>0/10</div>
               </Flex.Item>
             </Flex>
           </div>
