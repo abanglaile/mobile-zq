@@ -21,9 +21,10 @@ class StudentStatus extends React.Component {
   componentDidMount(){
     const {student_id, params} = this.props;
     const course_id = params.course_id;
+    console.log("course_id :",course_id);
     this.props.getStuAbility(this.props.student_id, course_id);
     this.props.getStuRatingHistory(this.props.student_id, course_id);
-     // this.props.getStuComUsedKp(this.props.student_id);
+    //  this.props.getStuComUsedKp(this.props.student_id);
   }
 
   componentWillReceiveProps(nextProps){
@@ -229,6 +230,7 @@ class StudentStatus extends React.Component {
 
   renderOverallAbility(){
     const {capatity,ladder} = this.props;
+    console.log("capatity",JSON.stringify(capatity));
 
     if(capatity.length > 0){
       return(
@@ -332,7 +334,7 @@ export default connect(state => {
     isFetching : isFetching,
     capatity : capatity.length > 0 ? capatity : default_capatity,
     rating_history : rating_history ? rating_history : [],
-    comusedkp : comusedkp.length > 0 ? comusedkp : default_comusedkp,
+    // comusedkp : comusedkp.length > 0 ? comusedkp : default_comusedkp,
     student_id: state.AuthData.get('userid'), 
   }
 }, action)(StudentStatus);
