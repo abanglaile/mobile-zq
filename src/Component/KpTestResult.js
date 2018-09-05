@@ -35,7 +35,7 @@ class KpTestResult extends React.Component {
             const t = item.kp_delta_rating >= 0 ? '+' + item.kp_delta_rating : item.kp_delta_rating;
             return (
               <Item extra={
-                <div>{item.kp_old_rating + "(" + t + ")"}</div>
+                <div><span>{item.kp_old_rating+"("}</span><span style={{color: "#40a9ff"}}>{t}</span><span>{")"}</span></div>
 
               }>{item.kpname}   
               </Item>
@@ -48,8 +48,8 @@ class KpTestResult extends React.Component {
 
   render() {
     var { test_reward } = this.props;
-    const {rating, kp_rating} = test_reward;
-    console.log(test_reward);
+    const {rating, kp_rating, score} = test_reward;
+    console.log("test_reward :",test_reward);
     return (
       <div>
       <div>
@@ -85,7 +85,7 @@ class KpTestResult extends React.Component {
 
       <List>
         <Item>
-          <div><span style={{fontWeight: "1.2rem"}}>{"我的积分 "} </span><span style={{color: "#40a9ff",fontWeight: "1.2rem"}}>{'+15'}</span></div>
+          <div><span style={{fontWeight: "1.2rem"}}>{"我的积分 "} </span><span style={{color: "#40a9ff",fontWeight: "1.2rem"}}>{score.delta_score ? '+'+score.delta_score : '0'}</span></div>
         </Item>
       </List>
       <WhiteSpace />

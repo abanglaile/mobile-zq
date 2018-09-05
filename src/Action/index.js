@@ -923,6 +923,9 @@ export const submitExerciseLogSuccess = (exercise_log, i) => {
 
 
 export const submitExerciseLog = (exercise, exercise_log, exindex) => {
+    // console.log("exercise :",JSON.stringify(exercise));
+    console.log("exercise_log :",JSON.stringify(exercise_log));
+    console.log("student_id :",exercise_log.student_id);
     const {exercise_id, answer, exercise_type, exercise_rating, breakdown} = exercise;
     const result = checkAnswer(exercise_type, exercise_log.answer);
 

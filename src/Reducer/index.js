@@ -13,6 +13,7 @@ const defaulatTestData = Immutable.fromJS({
         test_kp: [],
         test_reward: {
             rating:{old_student_rating: 0, delta_student_rating: 0}, 
+            score : [],
             kp_rating: []
         },
     });
@@ -213,7 +214,7 @@ export const testData = (state = defaulatTestData, action = {}) => {
             console.log(action.i, action.exercise_log);
             return state.setIn(['exercise_log', action.i], Immutable.fromJS(action.exercise_log)).set("modalOpen", true);
         case 'GET_MY_TEST_SUCCESS':
-            return state.set('exercise', Immutable.fromJS(action.exercise)).set('exindex', 0)
+            return state.set('exercise', Immutable.fromJS(action.exercise))
                 // .set('test_log', Immutable.fromJS(test_log))
                 .set('test_log', Immutable.fromJS(action.test_log))
                 .set('exercise_log', Immutable.fromJS(action.exercise_log))

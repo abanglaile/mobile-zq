@@ -28,7 +28,14 @@ class Question extends React.Component {
     const {student_id, params} = this.props;
     const test_id = params.test_id;
     //TO-DO
-    this.props.getMyTestData(1, test_id);
+    this.props.getMyTestData(student_id, test_id);
+  }
+
+  componentWillUnmount(){
+    const {exindex} = this.props;
+    if(exindex){
+      this.props.updateExindex(0);
+    }  
   }
 
   showModal(e){
@@ -384,7 +391,7 @@ class Question extends React.Component {
         <Flex>
           <Flex.Item>
             <Button style={{margin: '0.5rem 0 0 0'}}
-                onClick={e => this.props.submitExerciseLog(exercise[exindex], exercise_log[exindex].answer,student_rating)} 
+                onClick={e => this.props.submitExerciseLog(exercise[exindex], exercise_log[exindex],student_rating)} 
                 type="ghost" size='small'>
               我不会做
             </Button>
@@ -490,7 +497,7 @@ class Question extends React.Component {
 
   render() {
     const {exercise, exindex, exercise_log, record, feedbackToast, isFetching} = this.props;
-    console.log(exindex);
+    console.log("exindex: ",exindex);
     const { exercise_status } = exercise_log[exindex];
     
     if(feedbackToast){
@@ -552,5 +559,6 @@ export default connect(state => {
     student_rating: student_rating,
     feedbackToast: feedbackToast,
     isFetching : isFetching,
+    student_id:state.AuthData.get('userid'),
   }; 
 }, action)(Question);
