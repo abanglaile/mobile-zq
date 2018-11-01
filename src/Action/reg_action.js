@@ -1,4 +1,3 @@
-import NetUtil from '../utils/NetUtil'
 import {push} from 'react-router-redux'
 import config from '../utils/Config'
 import jwtDecode from 'jwt-decode';
@@ -107,7 +106,8 @@ export const loginUser = (username, password, redirect) => {
         })
         .then(function (response) {
             if(response.data){
-                console.log("response.data :",response.data);
+                console.log("loginUser response.data :",response.data);
+                dispatch(push(redirect));
             }
         })
         .catch(function (error) {

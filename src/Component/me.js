@@ -27,7 +27,7 @@ class perCenter extends React.Component {
 
 
   render() {
-    const {nickname,imgurl,student_name,class_name} = this.props; 
+    const {nickname,imgurl,student_name,class_name,score} = this.props; 
     return (
       <div>
         <NavBar
@@ -46,13 +46,22 @@ class perCenter extends React.Component {
           </Item>
           <Item
             arrow="horizontal"
+            extra={score}
+            thumb="../../img/me_icon/score.png"
+          >
+            积分
+          </Item>
+          <Item
+            arrow="horizontal"
             extra={student_name}
+            thumb="../../img/me_icon/name.png"
           >
             姓名
           </Item>
           <Item
             arrow="horizontal"
             extra={class_name? class_name:'未绑定'}
+            thumb="../../img/me_icon/class.png"
           >
             班级
           </Item>
@@ -61,7 +70,8 @@ class perCenter extends React.Component {
         <List>
           <Item
             arrow="horizontal"
-             onClick={() => alert('确定退出该账号吗？','', [
+            thumb="../../img/me_icon/quit.png"
+            onClick={() => alert('确定退出该账号吗？','', [
               { text: '取消', onPress: () => console.log('cancel') },
               { text: '确定', onPress: () => this.props.reg_action.logoutwxAndRedirect() },
             ])}
@@ -79,12 +89,13 @@ export default connect(state => {
   const auth_state = state.AuthData.toJS();
   const {userid,nickname} = auth_state;
   const student_data = state.studentData.toJS();
-  const {student_name,class_name,imgurl} = student_data;
+  const {student_name,class_name,imgurl,score} = student_data;
   console.log("student_name,class_name:"+student_name+' '+class_name);
   return {
     student_id:userid,
     imgurl: imgurl,
     nickname: nickname,
+    score : score,
     student_name: student_name,
     class_name:class_name,
   }; 

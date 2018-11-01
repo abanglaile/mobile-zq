@@ -22,6 +22,7 @@ const defaulatStudentData = Immutable.fromJS({
         student_name:null,
         class_name:null,
         imgurl:null,
+        score:0,
         student_rating: 0,
 
         course_id: 3,
@@ -288,6 +289,7 @@ export const studentData = (state = defaulatStudentData, action = {}) => {
             return state.set('student_name', action.json.nickname)
                         .set('class_name', action.json.group_name)
                         .set('imgurl', action.json.avatar)
+                        .set('score', action.json.score)
                         .set('isFetching', false);
         case 'GET_MY_RATING':
             return state.set('student_rating', action.json).set('isFetching', false);
