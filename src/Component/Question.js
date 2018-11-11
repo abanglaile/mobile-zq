@@ -26,6 +26,7 @@ class Question extends React.Component {
 
   componentDidMount(){
     const {student_id, params} = this.props;
+    console.log("student_id:",student_id);
     const test_id = params.test_id;
     //TO-DO
     this.props.getMyTestData(student_id, test_id);
@@ -553,8 +554,10 @@ class Question extends React.Component {
 export default connect(state => {
   var test_state = state.testData.toJS();
   var student_rating = state.studentData.get("student_rating");
-  console.log(test_state);
+  // console.log(test_state);
   var {exercise, exindex, exercise_log, test_log, modalOpen, feedbackToast, exercise_st, isFetching} = test_state;
+  console.log("test_log: ",test_log);
+  console.log("test_log.test_id: ",test_log.test_id);
   return {
     test_log: test_log,
     //跳转题目页面开始时间

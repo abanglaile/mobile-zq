@@ -49,7 +49,7 @@ class KpTestResult extends React.Component {
   render() {
     var { test_reward } = this.props;
     const {rating, kp_rating, score} = test_reward;
-    console.log("test_reward :",test_reward);
+    console.log("rating.delta_student_rating :",rating.delta_student_rating);
     return (
       <div>
       <div>
@@ -78,7 +78,7 @@ class KpTestResult extends React.Component {
             }}>
             <div>
               <span>{'我的天梯 '}</span>
-              <span style={{color: "#40a9ff"}}>{rating.delta_student_rating >= 0 ? '+'+rating.delta_student_rating : '-'+rating.delta_student_rating}</span>
+              <span style={{color: "#40a9ff"}}>{rating.delta_student_rating >= 0 ? '+'+rating.delta_student_rating : rating.delta_student_rating}</span>
             </div>
         </div>   
       </div>

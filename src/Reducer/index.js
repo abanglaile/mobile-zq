@@ -9,6 +9,7 @@ const defaulatTestData = Immutable.fromJS({
         exercise_log: [{}],
         ranking_list: [{}],
         test_log: {finish_time: '', correct_exercise: 0},
+        test_id: null,
         exercise_log: [{exercise_status: 0, exercise_state: -1}],
         test_kp: [],
         test_reward: {
@@ -217,6 +218,7 @@ export const testData = (state = defaulatTestData, action = {}) => {
         case 'GET_MY_TEST_SUCCESS':
             return state.set('exercise', Immutable.fromJS(action.exercise))
                 // .set('test_log', Immutable.fromJS(test_log))
+                .set('test_id', action.test_id)
                 .set('test_log', Immutable.fromJS(action.test_log))
                 .set('exercise_log', Immutable.fromJS(action.exercise_log))
                 .set('exercise_st', new Date())

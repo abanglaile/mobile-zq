@@ -34,7 +34,7 @@ const component = (component) => {
 
 export default (
   	<Route path="mobile-zq">
-        <Route path="root" component={App}>
+        <Route path="root" component={requireAuthentication(App)}>
           <IndexRoute component={practice} />
           <Route path="practice" component={practice} /> 
           <Route path="my_book_chapter" component={MyChapter} />
@@ -44,7 +44,7 @@ export default (
         <Route path="login" component={login} />
         
         <Route path="mytest" component={MyTest} />
-        <Route path="question/:test_id" component={Question} />
+        <Route path="question/:test_id" component={requireAuthentication(Question)} />
         <Route path="studentstatus/:course_id" component={StudentStatus} />
         <Route path="student_kp/:kpid" component={StudentKp} />
         <Route path="kp_test_result/:test_id" component={KpTestResult} />

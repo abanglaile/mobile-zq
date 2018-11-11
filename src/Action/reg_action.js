@@ -19,9 +19,7 @@ export const loginUserSuccess = (token) => {
   localStorage.setItem('token', token);
   return {
     type: 'LOGIN_USER_SUCCESS',
-    payload: {
-      token: token
-    }
+    token: token,
   }
 }
 
@@ -39,10 +37,10 @@ export const loginUserFailure = (error) => {
   localStorage.removeItem('token');
   return {
     type: 'LOGIN_USER_FAILURE',
-    payload: {
-      status: error.response.status,
-      statusText: error.response.statusText
-    }
+    // payload: {
+    //   status: error.response.status,
+    //   statusText: error.response.statusText
+    // }
   }
 }
 
@@ -93,20 +91,15 @@ export const loginUser = (username, password, redirect) => {
    
     let path = '/login';
     let url = target + path;
-
-    // dispatch(loginUserRequest());
-
+    console.log("redirect:",redirect);
     return (dispatch) => {
         // return axios.post(url,{username,password})
-        return axios.get(url,{
-            params:{
-                username,
-                password,
-            }
-        })
+        dispatch(loginUserRequest());
+        return axios.post(url,{username,password})
         .then(function (response) {
             if(response.data){
                 console.log("loginUser response.data :",response.data);
+                dispatch(loginUserSuccess(JSON.stringify(response.data)));
                 dispatch(push(redirect));
             }
         })
@@ -114,42 +107,6 @@ export const loginUser = (username, password, redirect) => {
             dispatch(loginUserFailure(error));
         });
     }
-
-
-        // return fetch(url, {
-        //     method: 'post',
-        //     mode: "cors",
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json'
-        //     },
-        //         body: JSON.stringify({username: username, password: password})
-        //     })
-        //     .then(checkHttpStatus)
-        //     .then(parseJSON)
-        //     .then(response => {
-        //         console.log('response :'+response);
-        //         try {
-        //             let decoded = jwtDecode(response.token);
-        //             console.log('decoded:'+JSON.stringify(decoded));
-        //             console.log('response.token:'+response.token);
-        //             dispatch(loginUserSuccess(response.token));
-        //             dispatch(push(redirect));
-        //         } catch (e) {
-        //             console.log('response.json():'+response.json());
-        //             dispatch(loginUserFailure({
-        //                 response: {
-        //                     status: 403,
-        //                     statusText: response.json()
-        //                 }
-        //             }));
-        //         }
-        //     })
-        //     .catch(error => {
-        //         console.log('error:'+error);
-        //         dispatch(loginUserFailure(error));
-        //     })
-    
 }
 
 export const regUser = (username, password, redirect) => {
