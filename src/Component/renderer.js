@@ -23,7 +23,8 @@ export default class Tex extends React.Component {
     var { content } = this.state;
     var htmlContent = content.replace(/(\$.*?\$)/g, function(word){
         //去掉首尾两个@
-        word = word.substring(1, word.length - 1)
+        word = word.substring(1, word.length - 1);
+        console.log("word:",word);
         return katex.renderToString(word);
       }
     );   

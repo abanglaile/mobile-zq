@@ -563,7 +563,7 @@ export default connect(state => {
     //跳转题目页面开始时间
     exercise_st: exercise_st,
     exercise: exercise,
-    exindex: exindex,
+    exindex: exindex, 
     exercise_log: exercise_log,
     modalOpen: modalOpen, 
     student_rating: student_rating,

@@ -162,11 +162,11 @@ export const regUser = (username, password, redirect) => {
 //登录注册相关结束
 /*-------------------------------------------------*/
 
-export const getWxUserInfoSuccess = (user_info) => {
-    // localStorage.setItem('token', token);
+export const getWxUserInfoSuccess = (token) => {
+    localStorage.setItem('token', token);
     return {
         type: "GET_WX_USERINFO_SUCCESS",
-        user_info: user_info
+        token: token,
     }
 }
 const saveTempWxInfo = (wx_info) => {

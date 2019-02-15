@@ -36,8 +36,8 @@ const history = syncHistoryWithStore(browserHistory, store)
 let token = localStorage.getItem('token');
 console.log("app js token",token);
 if (token !== null) {
-    store.dispatch(loginUserSuccess(token));
-    // store.dispatch(getWxUserInfoSuccess(token));
+    // store.dispatch(loginUserSuccess(token));
+    store.dispatch(getWxUserInfoSuccess(token));
 }
 
 ReactDOM.render(
