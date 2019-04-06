@@ -26,9 +26,17 @@ class Question extends React.Component {
 
   componentDidMount(){
     const {student_id, params} = this.props;
+    console.log("student_id:",student_id);
     const test_id = params.test_id;
     //TO-DO
-    this.props.getMyTestData(1, test_id);
+    this.props.getMyTestData(student_id, test_id);
+  }
+
+  componentWillUnmount(){
+    const {exindex} = this.props;
+    if(exindex){
+      this.props.updateExindex(0);
+    }  
   }
 
   showModal(e){
@@ -156,10 +164,11 @@ class Question extends React.Component {
   renderAnswer(){
     const {exercise, exindex, exercise_log} = this.props;
     const {exercise_type, answer} = exercise[exindex];
-    console.log(exercise_log, exindex);
+    console.log("renderAnswer exercise_type :", exercise_type);
+    // console.log(exercise_log, exindex);
     const {exercise_state, exercise_status} = exercise_log[exindex];
     const answer_log = exercise_log[exindex].answer;
-    console.log(answer_log);
+    // console.log(answer_log);
     const answerjson = answer;
     
     const wrongColor = "#ff7875", correctColor = "#73d13d";
@@ -215,6 +224,10 @@ class Question extends React.Component {
         }
       case 2:
         const {answer_img_width, answer_img_height} = this.state;
+        console.log("answer_img_width answer_img_height",answer_img_width,answer_img_height);
+        console.log("answerjson",JSON.stringify(answerjson));
+        console.log("exercise_status",exercise_status);
+        //已做完
         if(exercise_status >= 1){
           return (
             <List key={'answer'+ exindex}>
@@ -234,7 +247,7 @@ class Question extends React.Component {
                   <CheckboxItem extra={iconflag} key={index} disabled defaultChecked = {answer_log[index].select}
                     style={borderStyle} 
                     onChange={() => this.props.selectChange(exindex, index)} wrap>
-                    <img src={i.url} ref={element => {this.answer_img[index] = element;}} 
+                    <img src={i.value} ref={element => {this.answer_img[index] = element;}} 
                     onLoad = {() => this.answerImageLoaded(index)} 
                     style={{height: answer_img_height, width: answer_img_width}}/>
                   </CheckboxItem>
@@ -243,13 +256,14 @@ class Question extends React.Component {
             </List>
           );  
         }else{
+          //未做完
           return (
               <List key={'answer'+ exindex}>
                 {answerjson.map((i,index) => (
                   <CheckboxItem key={index} defaultChecked = {answer_log[index].select}
                     style={{border:"1px solid #f5f5f5",borderRadius: "5px",margin :"1rem 0"}} 
                     onChange={() => this.props.selectChange(exindex, index)} wrap>
-                    <img src={i.url} style={{height: "4rem", width: "auto"}}/>
+                    <img src={i.value} style={{height: "4rem", width: "auto"}}/>
                   </CheckboxItem>
                 ))}
               </List>
@@ -384,7 +398,7 @@ class Question extends React.Component {
         <Flex>
           <Flex.Item>
             <Button style={{margin: '0.5rem 0 0 0'}}
-                onClick={e => this.props.submitExerciseLog(exercise[exindex], exercise_log[exindex].answer,student_rating)} 
+                onClick={e => this.props.submitExerciseLog(exercise[exindex], exercise_log[exindex],exindex)} 
                 type="ghost" size='small'>
               我不会做
             </Button>
@@ -490,7 +504,8 @@ class Question extends React.Component {
 
   render() {
     const {exercise, exindex, exercise_log, record, feedbackToast, isFetching} = this.props;
-    console.log(exindex);
+    // console.log("exercise:::::: ",JSON.stringify(exercise));
+    // console.log("exercise_log:::::: ",JSON.stringify(exercise_log));
     const { exercise_status } = exercise_log[exindex];
     
     if(feedbackToast){
@@ -539,18 +554,21 @@ class Question extends React.Component {
 export default connect(state => {
   var test_state = state.testData.toJS();
   var student_rating = state.studentData.get("student_rating");
-  console.log(test_state);
+  // console.log(test_state);
   var {exercise, exindex, exercise_log, test_log, modalOpen, feedbackToast, exercise_st, isFetching} = test_state;
+  console.log("test_log: ",test_log);
+  console.log("test_log.test_id: ",test_log.test_id);
   return {
     test_log: test_log,
     //跳转题目页面开始时间
     exercise_st: exercise_st,
     exercise: exercise,
-    exindex: exindex,
+    exindex: exindex, 
     exercise_log: exercise_log,
     modalOpen: modalOpen, 
     student_rating: student_rating,
     feedbackToast: feedbackToast,
     isFetching : isFetching,
+    student_id:state.AuthData.get('userid'),
   }; 
 }, action)(Question);

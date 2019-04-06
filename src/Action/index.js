@@ -679,6 +679,10 @@ export const jumpNext = () => {
         const exercise_log = testData.get("exercise_log").toJS();
         const exercise = testData.get("exercise").toJS();
         const {exercise_status} = exercise_log[exindex];
+        const test_id = testData.get("test_id");
+        console.log("testData: ",JSON.stringify(testData));
+        // console.log("testData test_log: ",JSON.stringify(test_log));
+        console.log("jumpNext test_id: ",test_id);
 
         if(exercise_status == 2){
             var next = -1;
@@ -699,7 +703,7 @@ export const jumpNext = () => {
                 //提交整个Test
                 return axios.post(url,{exercise_log})
                 .then(function (response) {
-                    dispatch(push("/mobile-zq/kp_test_result/" + test_log.test_id));
+                    dispatch(push("/mobile-zq/kp_test_result/" + test_id));
                 })
             }
         }
@@ -925,6 +929,9 @@ export const submitExerciseLogSuccess = (exercise_log, i) => {
 
 
 export const submitExerciseLog = (exercise, exercise_log, exindex) => {
+    // console.log("exercise :",JSON.stringify(exercise));
+    console.log("exercise_log :",JSON.stringify(exercise_log));
+    console.log("student_id :",exercise_log.student_id);
     const {exercise_id, answer, exercise_type, exercise_rating, breakdown} = exercise;
     const result = checkAnswer(exercise_type, exercise_log.answer);
 

@@ -332,7 +332,7 @@ class TestResult extends React.Component {
       avg_time = formatTime(test_status.avg_timeconsuming);
       return(
         <div>
-          <div style={{backgroundColor: '#fafafa', paddingTop: '2.5rem', paddingBottom: '0.5rem', color: '#1890ff'}}>
+          <div style={{backgroundColor: '#fafafa', paddingTop: '3.5rem', paddingBottom: '2rem', color: '#1890ff'}}>
             <Flex>
               <Flex.Item><div style={{
                       color: '#1890ff',
@@ -342,7 +342,7 @@ class TestResult extends React.Component {
                       width: '100%',
                       fontSize: '2rem',
                     }} >{test_status.test_submit}/
-                      <span style={{fontSize:'1.5rem'}}>{test_status.test_students}</span>
+                      <span style={{fontSize:'1rem'}}>{test_status.test_students}</span>
                     </div>
                     <div style={{
                       textAlign: 'center',
@@ -360,7 +360,7 @@ class TestResult extends React.Component {
                       width: '100%',
                       fontSize: '2rem',
                     }} >{test_status.avg_accurracy}/
-                      <span style={{fontSize:'1.5rem'}}>{test_log.total_exercise}</span>
+                      <span style={{fontSize:'1rem'}}>{test_log.total_exercise}</span>
                     </div>
                     <div style={{
                       textAlign: 'center',

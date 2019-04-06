@@ -109,6 +109,7 @@ class App extends React.Component {
                 selectedTab: 'greenTab',
               });
               this.props.setSelectedTab("greenTab");
+              this.props.router.push("/mobile-zq/root/lesson");
             }}
           >
           </TabBar.Item>

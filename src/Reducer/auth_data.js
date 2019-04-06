@@ -5,7 +5,7 @@ const defaulatAuthData = Immutable.fromJS({
         token: null,
         nickname: null,
         imgurl:null,
-        userid: 1,
+        userid: 4,
         student_name:null,
         class_name:null,
         hascode: null, 
@@ -20,20 +20,18 @@ export const AuthData = (state = defaulatAuthData, action = {}) => {
     switch(action.type){
         case 'LOGIN_USER_REQUEST':
             return state.set('isAuthenticating', true);
-        case 'REG_USER_REQUEST':
-            return state.set('isAuthenticating', true);
+        // case 'REG_USER_REQUEST':
+        //     return state.set('isAuthenticating', true);
         case 'LOGIN_USER_SUCCESS':
-            var sucState = {
-                isAuthenticating: false,
-                isAuthenticated: true,
-                token: action.payload.token,
-                username: jwtDecode(action.payload.token).username,
-                userid: jwtDecode(action.payload.token).userid,
-                student_name:jwtDecode(action.payload.token).student_name,
-                class_name:jwtDecode(action.payload.token).class_name,
-                statusText: 'You have been successfully logged in.'
-            };
-            return Immutable.fromJS(sucState);
+            console.log("action.token:",action.token);
+            var obj = JSON.parse(action.token);
+            console.log("action username:",obj.identifier);
+            console.log("action userid:",obj.userid);
+            return state.set('isAuthenticating', false)
+                    .set('isAuthenticated',true)
+                    .set('username',obj.identifier)
+                    .set('userid',obj.userid);
+                    
         case 'REG_USER_SUCCESS':
             var sucRegState = {
                 isAuthenticating: false,
@@ -79,17 +77,16 @@ export const AuthData = (state = defaulatAuthData, action = {}) => {
                     .set('statusText','You have been successfully logged out.');
 
         case 'GET_WX_USERINFO_SUCCESS':
-            var sucState = {
-                isAuthenticating: false,
-                isAuthenticated: true,
-                nickname: action.user_info.nickname,
-                userid: action.user_info.userid,
-                imgurl: action.user_info.imgurl,
-                student_name:action.user_info.realname,
-                hascode: -1,
-                statusText: 'You have been successfully logged in by wx.'
-            };
-            return Immutable.fromJS(sucState);
+                    // console.log("action.token:",action.token);
+            var obj = JSON.parse(action.token);
+            console.log("userid:",obj.userid);
+            console.log("realname:",obj.realname);
+            return state.set('isAuthenticating', false)
+                    .set('isAuthenticated',true)
+                    .set('userid',obj.userid)
+                    .set('nickname',obj.nickname)
+                    .set('imgurl',obj.imgurl)
+                    .set('realname',obj.realname);
         case 'CHECK_CODE_SUCCESS':
             return state.set('hascode',1);
         case 'CHECK_CODE_FAILURE':

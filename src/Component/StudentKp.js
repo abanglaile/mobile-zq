@@ -26,7 +26,7 @@ class StudentKp extends React.Component {
     if(kpid){
         this.props.getKpRatingHistory(student_id, kpid);
         this.props.getKpAbility(student_id, kpid);
-        this.props.updateEntry("/student_kp/");
+        // this.props.updateEntry("/student_kp/");
         // this.props.getMyLadderScore(student_id);
       // this.props.getTestRankingList(test_id);
       // this.props.getStuTestInfo(student_id,test_id);
@@ -129,7 +129,7 @@ class StudentKp extends React.Component {
                     width: '100%',
                     color: '#1890ff',
                     fontSize: '1.5rem',
-                  }} >{kpcapatity.kp_rating ? kpcapatity.kp_rating : '未开始'}</div>  
+                  }} >{kpcapatity.kp_rating ? kpcapatity.kp_rating : '未评测'}</div>  
               </Flex.Item>
               <Flex.Item><div style={{
                 textAlign: 'center',
@@ -162,7 +162,7 @@ class StudentKp extends React.Component {
                     width: '100%',
                     color: '#1890ff',
                     fontSize: '1.5rem',
-                  }} >{kpcapatity.practice}</div>  
+                  }} >{kpcapatity.practice ? kpcapatity.practice : 0}</div>  
               </Flex.Item>
         </Flex>
       );
@@ -187,6 +187,10 @@ class StudentKp extends React.Component {
         ); 
       }
   }
+
+  onLeftClick(){
+    this.props.router.goBack();
+  }
   
   render() {
     const {kpcapatity, student_id, params, isFetching} = this.props;
@@ -204,7 +208,7 @@ class StudentKp extends React.Component {
           onLeftClick={e => this.props.router.goBack()}
         >{kpcapatity ? kpcapatity.kpname : ''}</NavBar>
         <div>
-          <div style={{backgroundColor: '#1890ff', paddingTop: '2rem', paddingBottom: '0.5rem', color: 'white'}}>
+          <div style={{backgroundColor: '#f5f5f5', paddingTop: '2rem', paddingBottom: '0.5rem', color: '#1890ff'}}>
             <div style={{
               textAlign: 'left',
               height: '3rem',

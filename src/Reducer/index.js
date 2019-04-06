@@ -9,10 +9,12 @@ const defaulatTestData = Immutable.fromJS({
         exercise_log: [{}],
         ranking_list: [{}],
         test_log: {finish_time: '', correct_exercise: 0},
+        test_id: null,
         exercise_log: [{exercise_status: 0, exercise_state: -1}],
         test_kp: [],
         test_reward: {
             rating:{old_student_rating: 0, delta_student_rating: 0}, 
+            score : [],
             kp_rating: []
         },
     });
@@ -21,6 +23,7 @@ const defaulatStudentData = Immutable.fromJS({
         student_name:null,
         class_name:null,
         imgurl:null,
+        score:0,
         student_rating: 0,
 
         course_id: 3,
@@ -213,8 +216,9 @@ export const testData = (state = defaulatTestData, action = {}) => {
             console.log(action.i, action.exercise_log);
             return state.setIn(['exercise_log', action.i], Immutable.fromJS(action.exercise_log)).set("modalOpen", true);
         case 'GET_MY_TEST_SUCCESS':
-            return state.set('exercise', Immutable.fromJS(action.exercise)).set('exindex', 0)
+            return state.set('exercise', Immutable.fromJS(action.exercise))
                 // .set('test_log', Immutable.fromJS(test_log))
+                .set('test_id', action.test_id)
                 .set('test_log', Immutable.fromJS(action.test_log))
                 .set('exercise_log', Immutable.fromJS(action.exercise_log))
                 .set('exercise_st', new Date())
@@ -287,6 +291,7 @@ export const studentData = (state = defaulatStudentData, action = {}) => {
             return state.set('student_name', action.json.nickname)
                         .set('class_name', action.json.group_name)
                         .set('imgurl', action.json.avatar)
+                        .set('score', action.json.score)
                         .set('isFetching', false);
         case 'GET_MY_RATING':
             return state.set('student_rating', action.json).set('isFetching', false);
