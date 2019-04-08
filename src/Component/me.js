@@ -8,8 +8,6 @@ import *as inreg_action from '../Action/';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-// const action =Object.assign({},reg_action,inreg_action);
-
 const Item = List.Item;
 const Brief = Item.Brief;
 const alert = Modal.alert;
@@ -20,14 +18,15 @@ class perCenter extends React.Component {
   }
 
   componentDidMount(){
-    const {student_id} = this.props;
+    var {student_id} = this.props;
+    // student_id = 'bbc7c060041711e98175d1610e288342';
     this.props.inreg_action.setSelectedTab("yellowTab");
     this.props.inreg_action.getStudentInfo(student_id);
   }
 
 
   render() {
-    const {nickname,imgurl,student_name,class_name,score} = this.props; 
+    const {realname,imgurl,group,score} = this.props; 
     return (
       <div>
         <NavBar
@@ -35,33 +34,39 @@ class perCenter extends React.Component {
           >我</NavBar>
         <List>
           <Item
-            arrow="horizontal"
+            arrow="empty"
             multipleLine
             onClick={() => {}}
           >
             <div style={{width:'40px', height:'40px', borderRadius:'50%',overflow:"hidden", margin:"1.6rem 1rem 1.6rem 0",float:'left',display:'inline'}}>
-             <img src={imgurl} style={{width:'40px',height:'40px'}}/>
+             {/* <img src={imgurl} style={{width:'60px',height:'60px'}}/> */}
+              <Avatar size='large' src={imgurl} />
             </div>
-            <div style={{float:'left',display:'inline',marginTop:"2rem"}}>{nickname}</div>
+            {/* <div style={{float:'left',display:'inline',marginTop:"2rem"}}>{realname}</div> */}
           </Item>
           <Item
-            arrow="horizontal"
+            arrow="empty"
             extra={score}
-            thumb="../../img/me_icon/score.png"
+            // thumb="../../img/me_icon/score.png"
+            thumb="/mobile-zq/img/me_icon/score.png"
           >
             积分
           </Item>
           <Item
             arrow="horizontal"
-            extra={student_name}
-            thumb="../../img/me_icon/name.png"
+            extra={realname}
+            // thumb="../../img/me_icon/name.png"
+            thumb="/mobile-zq//img/me_icon/name.png"
+            onClick={() => this.props.router.push("/mobile-zq/name")}
           >
             姓名
           </Item>
           <Item
             arrow="horizontal"
-            extra={class_name? class_name:'未绑定'}
-            thumb="../../img/me_icon/class.png"
+            extra={group[0].group_id ? '查看班级':'未绑定'}
+            // thumb="../../img/me_icon/class.png"
+            thumb="/mobile-zq//img/me_icon/class.png"
+            onClick={() => this.props.router.push("/mobile-zq/group")}
           >
             班级
           </Item>
@@ -70,7 +75,8 @@ class perCenter extends React.Component {
         <List>
           <Item
             arrow="horizontal"
-            thumb="../../img/me_icon/quit.png"
+            // thumb="../../img/me_icon/quit.png"
+            thumb="/mobile-zq//img/me_icon/quit.png"
             onClick={() => alert('确定退出该账号吗？','', [
               { text: '取消', onPress: () => console.log('cancel') },
               { text: '确定', onPress: () => this.props.reg_action.logoutwxAndRedirect() },
@@ -87,17 +93,16 @@ class perCenter extends React.Component {
 
 export default connect(state => {
   const auth_state = state.AuthData.toJS();
-  const {userid,nickname} = auth_state;
+  const {userid} = auth_state;
   const student_data = state.studentData.toJS();
-  const {student_name,class_name,imgurl,score} = student_data;
-  console.log("student_name,class_name:"+student_name+' '+class_name);
+  const {realname,group,score,imgurl} = student_data;
+  // console.log("auth_state:",JSON.stringify(auth_state));
   return {
     student_id:userid,
     imgurl: imgurl,
-    nickname: nickname,
+    realname: realname,
     score : score,
-    student_name: student_name,
-    class_name:class_name,
+    group : group,
   }; 
 },  (dispatch, ownProps) => {
   return{

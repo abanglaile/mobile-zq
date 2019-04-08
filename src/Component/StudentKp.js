@@ -193,7 +193,7 @@ class StudentKp extends React.Component {
   }
   
   render() {
-    const {kpcapatity, student_id, params, isFetching} = this.props;
+    const {kpcapatity, student_id, course_id, params, isFetching} = this.props;
     const kpid = params.kpid;
     if(isFetching){
       Toast.loading("正在加载", 0);
@@ -243,7 +243,7 @@ class StudentKp extends React.Component {
           <WhiteSpace size='lg'/>
           <WingBlank>
           <Button style={{marginTop: '0.5rem'}} type="primary"
-            onClick={ e => this.props.generateTestByKp(student_id, kpid, kpcapatity.kpname)} >
+            onClick={ e => this.props.generateTestByKp(student_id, kpid, kpcapatity.kpname, course_id)} >
               {kpcapatity ? "继续修炼" : "开始修炼"}
           </Button>
           </WingBlank>
@@ -258,7 +258,7 @@ class StudentKp extends React.Component {
 
 export default connect(state => {
   const student_data = state.studentData.toJS();
-  const {isFetching,kpladder,kpcapatity} = student_data;
+  const {isFetching,kpladder,kpcapatity,course_id} = student_data;
   const default_kpcapatity = [{
       kp_rating: 500,
       practice: 2,
@@ -266,6 +266,7 @@ export default connect(state => {
     }];
   return {
     isFetching : student_data.isFetching,
+    course_id: course_id,
     kpcapatity : kpcapatity,
     kpladder : kpladder ? kpladder : [],
     student_id: state.AuthData.get('userid'), 

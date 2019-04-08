@@ -1,5 +1,4 @@
 import Immutable from 'immutable';
-import jwtDecode from 'jwt-decode';
 
 const defaulatStudentData = Immutable.fromJS({
         isFetching: false,

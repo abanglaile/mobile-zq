@@ -14,6 +14,8 @@ import StudentStatus from '../Component/StudentStatus.js'
 import StudentKp from '../Component/StudentKp.js'
 import Invite from '../Component/invite.js'
 import perCenter from '../Component/me.js'
+import Name from '../Component/name.js'
+import Group from '../Component/group.js'
 
 import lessonDetail from '../Component/lessonDetail.js'
 import { Route, IndexRoute } from 'react-router';
@@ -52,7 +54,8 @@ export default (
         <Route path="kp_test_result/:test_id" component={KpTestResult} />
         <Route path="test_result/:test_id" component={TestResult} />
         <Route path="invite" component={Invite} />
-
         <Route path="chapter_kp/:chapter_id" component={ChapterKp} />
+        <Route path="name" component={Name} />
+        <Route path="group" component={Group} />
     </Route>
 );
