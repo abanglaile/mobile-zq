@@ -6,6 +6,7 @@ import { Toast } from 'antd-mobile';
 
 let target = config.server_url;
 
+
 // /*-------------------------------------------------*/
 
 //利用elo_rating方法更新rating
@@ -178,13 +179,13 @@ const getChapterKpSuccess = (json) => {
 
 
 
-//记录底部标签栏 selected bar 的状态(blueTab RedTab..)
-export const setSelectedTab = (tab) => {
-     return {
-        type: 'GET_SELECTED_TAB',
-        tab,
-    }
-}
+// //记录底部标签栏 selected bar 的状态(blueTab RedTab..)
+// export const setSelectedTab = (tab) => {
+//      return {
+//         type: 'GET_SELECTED_TAB',
+//         tab,
+//     }
+// }
 
 //记录mytest 做题历史被选中的tab状态(0 or 1)
 export const setMyTestTab = (test_tab) => {
@@ -204,6 +205,7 @@ export const selectCourse = (course_id) => {
 //获取我的天梯总分
 export const getMyStudentRating = (student_id, course_id) => {
     let url = target + "/getMyStudentRating";
+    console.log(student_id, course_id);
     return (dispatch) => {
         dispatch(getDataStart());
         return axios.get(url,{

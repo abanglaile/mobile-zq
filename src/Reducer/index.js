@@ -197,12 +197,10 @@ export const studentData = (state = defaulatStudentData, action = {}) => {
             for(var i = 0; i < action.course.length; i++){
                 course.push({value: action.course[i].course_id, label: action.course[i].course_name});
             }
-            return state.set('course', course).set('course_id', course[0].value)
-            .set('isFetching', false);
+            return state.set('course', course).set('isFetching', false);
         case 'SELECT_COURSE':
             return state.set('course_id', action.course_id); 
         case 'GET_MY_CHAPTER_SUCCESS':
-            console.log(action.json);
             return state.set('books', Immutable.fromJS(action.json)).set('isFetching', false);
         case 'GET_CHAPTER_NAME_SUCCESS':
             return state.setIn(['chapter', 'chaptername'], action.json.chaptername).set('isFetching', false);
@@ -214,8 +212,8 @@ export const studentData = (state = defaulatStudentData, action = {}) => {
             return state.set('my_test_list', action.json).set('isFetching', false);
         case 'GET_MY_UNCOMPLETEDTEST_SUCCESS':
             return state.set('my_uncompleted_test', action.json).set('isFetching', false);
-        case 'GET_SELECTED_TAB':
-            return state.set('tab', action.tab);
+        // case 'GET_SELECTED_TAB':
+        //     return state.set('tab', action.tab);
         case 'GET_MY_TEST_TAB':
             return state.set('test_tab', action.test_tab);
         case 'GET_ABILITY_STATUS_SUCCESS':

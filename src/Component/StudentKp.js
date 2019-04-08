@@ -205,8 +205,7 @@ class StudentKp extends React.Component {
         <NavBar
           mode="light"
           icon={<Icon type="left" />}
-          // onLeftClick={e => this.props.router.push("/mobile-zq/root/my_book_chapter")}
-          onLeftClick={() => this.onLeftClick()}
+          onLeftClick={e => this.props.router.goBack()}
         >{kpcapatity ? kpcapatity.kpname : ''}</NavBar>
         <div>
           <div style={{backgroundColor: '#f5f5f5', paddingTop: '2rem', paddingBottom: '0.5rem', color: '#1890ff'}}>
@@ -215,7 +214,7 @@ class StudentKp extends React.Component {
               height: '3rem',
               marginLeft: '2rem',
               lineHeight: '3rem',
-              fontSize: '2rem'
+              fontSize: '1.5rem'
             }}>
               {kpcapatity ? kpcapatity.kpname : ''}
             </div>

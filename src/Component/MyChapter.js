@@ -10,12 +10,6 @@ import {connect} from 'react-redux';
 
 const Item = List.Item;
 const Brief = Item.Brief;
-const data = [
-  {
-    value: '0',
-    label: '基本乐理',
-  }, 
-];
 
 class MyChapter extends React.Component {
 
@@ -31,9 +25,9 @@ class MyChapter extends React.Component {
 
   componentDidMount(){
     const {student_id, course_id} = this.props;
-    this.props.setSelectedTab("redTab");
-    console.log("set redTab");
-    console.log("student_id, course_id :",student_id,course_id);
+    // this.props.setSelectedTab("redTab");
+    // console.log("set redTab");
+    // console.log("student_id, course_id :",student_id,course_id);
     this.props.getMyStudentRating(student_id, course_id);
     this.props.getCourse();
     this.props.getMyBookChapter(student_id, course_id);
@@ -118,7 +112,7 @@ class MyChapter extends React.Component {
   render(){
     const { show } = this.state;
     const {books, student_rating, chapter, isFetching, course, course_id} = this.props;
-    console.log(course);
+    console.log("course_id", course_id);
     var course_name = '';
     for(let item of course){
       if(item.value == course_id){
@@ -192,7 +186,7 @@ class MyChapter extends React.Component {
         <WhiteSpace size='lg' style={{backgroundColor:"#f5f5f5"}}/>
         <Tabs tabs={tabs}
           initialPage={0}
-          
+          renderTabBar={props => <Tabs.DefaultTabBar {...props} page={3} />}
           onChange={(tab, index) => { console.log('onChange', index, tab); }}
           onTabClick={(tab, index) => { this.onChangeTabs(index) }}
         >

@@ -49,7 +49,7 @@ class MyTest extends React.Component {
     var teacher_test = [], auto_test = [];
     if(my_test_list){
       for(var i = 0; i < my_test_list.length; i++){
-        if(my_test_list[i].test_type == 1){
+        if(my_test_list[i].test_type == 1 || my_test_list[i].test_type == 3){
           teacher_test.push(my_test_list[i]);
         }else{
           auto_test.push(my_test_list[i]);

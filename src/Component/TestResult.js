@@ -404,7 +404,7 @@ class TestResult extends React.Component {
   navBarContent(){
     const {test_log} = this.props;
     console.log("test_log",test_log);
-    if(test_log.test_type == 1){
+    if(test_log.test_type == 1 || test_log.test_type == 3){
       //老师布置
       return (<SegmentedControl values={['我的', '排行']} style={{width: '6rem'}} onChange={e => this.SegmentedChange(e)} />)
     }else if(test_log.test_type == 2){
