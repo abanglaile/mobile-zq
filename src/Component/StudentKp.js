@@ -214,7 +214,7 @@ class StudentKp extends React.Component {
               height: '3rem',
               marginLeft: '2rem',
               lineHeight: '3rem',
-              fontSize: '2rem'
+              fontSize: '1.5rem'
             }}>
               {kpcapatity ? kpcapatity.kpname : ''}
             </div>
@@ -241,7 +241,8 @@ class StudentKp extends React.Component {
           <canvas id="c1" style={{width: "95%", height: "60%"}}></canvas>
           <WhiteSpace size='lg'/>
           <WingBlank>
-          <Button style={{marginTop: '0.5rem'}} type="primary"
+          <Button style={{marginTop: '0.5rem'}} type="primary" 
+            disabled
             onClick={ e => this.props.generateTestByKp(student_id, kpid, kpcapatity.kpname)} >
               {kpcapatity ? "继续修炼" : "开始修炼"}
           </Button>
