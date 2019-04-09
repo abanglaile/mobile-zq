@@ -179,13 +179,13 @@ const getChapterKpSuccess = (json) => {
 
 
 
-// //记录底部标签栏 selected bar 的状态(blueTab RedTab..)
-// export const setSelectedTab = (tab) => {
-//      return {
-//         type: 'GET_SELECTED_TAB',
-//         tab,
-//     }
-// }
+//记录底部标签栏 selected bar 的状态(blueTab RedTab..)
+export const setSelectedTab = (tab) => {
+     return {
+        type: 'GET_SELECTED_TAB',
+        tab,
+    }
+}
 
 //记录mytest 做题历史被选中的tab状态(0 or 1)
 export const setMyTestTab = (test_tab) => {

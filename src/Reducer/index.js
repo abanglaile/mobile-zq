@@ -212,8 +212,8 @@ export const studentData = (state = defaulatStudentData, action = {}) => {
             return state.set('my_test_list', action.json).set('isFetching', false);
         case 'GET_MY_UNCOMPLETEDTEST_SUCCESS':
             return state.set('my_uncompleted_test', action.json).set('isFetching', false);
-        // case 'GET_SELECTED_TAB':
-        //     return state.set('tab', action.tab);
+        case 'GET_SELECTED_TAB':
+            return state.set('tab', action.tab);
         case 'GET_MY_TEST_TAB':
             return state.set('test_tab', action.test_tab);
         case 'GET_ABILITY_STATUS_SUCCESS':

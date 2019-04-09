@@ -36,8 +36,8 @@ const component = (component) => {
 
 export default (
   	<Route path="mobile-zq">
-        {/* <Route path="root" component={requireAuthentication(App)}> */}
-        <Route path="root" component={App}>
+        <Route path="root" component={requireAuthentication(App)}>
+        {/* <Route path="root" component={App}> */}
           <IndexRoute component={practice} />
           <Route path="practice" component={practice} /> 
           <Route path="my_book_chapter" component={MyChapter} />

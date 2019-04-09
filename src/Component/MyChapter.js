@@ -25,7 +25,7 @@ class MyChapter extends React.Component {
 
   componentDidMount(){
     const {student_id, course_id} = this.props;
-    // this.props.setSelectedTab("redTab");
+    this.props.setSelectedTab("redTab");
     // console.log("set redTab");
     // console.log("student_id, course_id :",student_id,course_id);
     this.props.getMyStudentRating(student_id, course_id);
@@ -39,7 +39,8 @@ class MyChapter extends React.Component {
     // });
     const {student_id} = this.props;
     this.props.selectCourse(value[0]);
-    this.props.getMyBookChapter(student_id, value[0])
+    this.props.getMyStudentRating(student_id, value[0]);
+    this.props.getMyBookChapter(student_id, value[0]);
     
   }
 
@@ -80,10 +81,12 @@ class MyChapter extends React.Component {
   renderChapterList(){
     const {books, student_id} = this.props;
     const {tab_index} = this.state;
-
+    // console.log("document.documentElement.clientHeight :",document.documentElement.clientHeight ); 
+    
     if(books.length > 0){
       return (
-        <List>
+        <List style={{height:(document.documentElement.clientHeight * 3) / 5}}>
+        {/* <List> */}
           {
             books[tab_index].chapters.map((item) => {
               let chapter_rate = (item.chapter_rating && item.chapter_standard) ? (item.chapter_rating * 100/item.chapter_standard).toFixed(1) : 0;
