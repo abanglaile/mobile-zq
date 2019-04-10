@@ -74,7 +74,7 @@ class Group extends React.Component {
                 :
                 <Item
                     // thumb="../../img/me_icon/addgroup.png"
-                    thumb="/mobile-zq//img/me_icon/addgroup.png"
+                    thumb="/mobile-zq/img/me_icon/addgroup.png"
                     arrow="empty"
                     onClick={() => {this.setState({edit:true})}}
                 ><span style={{color:'#1296db'}}>添加班级</span></Item>

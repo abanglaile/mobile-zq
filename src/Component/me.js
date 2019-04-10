@@ -56,7 +56,7 @@ class perCenter extends React.Component {
             arrow="horizontal"
             extra={realname}
             // thumb="../../img/me_icon/name.png"
-            thumb="/mobile-zq//img/me_icon/name.png"
+            thumb="/mobile-zq/img/me_icon/name.png"
             onClick={() => this.props.router.push("/mobile-zq/name")}
           >
             姓名
@@ -65,7 +65,7 @@ class perCenter extends React.Component {
             arrow="horizontal"
             extra={group[0].group_id ? '查看班级':'未绑定'}
             // thumb="../../img/me_icon/class.png"
-            thumb="/mobile-zq//img/me_icon/class.png"
+            thumb="/mobile-zq/img/me_icon/class.png"
             onClick={() => this.props.router.push("/mobile-zq/group")}
           >
             班级
@@ -76,7 +76,7 @@ class perCenter extends React.Component {
           <Item
             arrow="horizontal"
             // thumb="../../img/me_icon/quit.png"
-            thumb="/mobile-zq//img/me_icon/quit.png"
+            thumb="/mobile-zq/img/me_icon/quit.png"
             onClick={() => alert('确定退出该账号吗？','', [
               { text: '取消', onPress: () => console.log('cancel') },
               { text: '确定', onPress: () => this.props.reg_action.logoutwxAndRedirect() },

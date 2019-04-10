@@ -189,7 +189,7 @@ class StudentStatus extends React.Component {
                   lineHeight: '1.5rem',
                   width: '100%',
                   fontSize: '1rem',
-                }} >{capatity[1].ladderscore>0? "+"+capatity[1].ladderscore : "-"+Math.abs(capatity[1].ladderscore)}</div></Flex.Item>
+                }} >{capatity[1].ladderscore ? (capatity[1].ladderscore>0) ? "+"+capatity[1].ladderscore : "-"+Math.abs(capatity[1].ladderscore) : ''}</div></Flex.Item>
             </Flex>
           </div>
         );
@@ -219,7 +219,7 @@ class StudentStatus extends React.Component {
                   lineHeight: '1.5rem',
                   width: '100%',
                   fontSize: '1rem',
-                }} >{capatity[2].ladderscore>0? "+"+capatity[2].ladderscore : "-"+Math.abs(capatity[2].ladderscore)}</div></Flex.Item>
+                }} >{capatity[2].ladderscore ? (capatity[2].ladderscore>0) ? "+"+capatity[2].ladderscore : "-"+Math.abs(capatity[2].ladderscore) : ''}</div></Flex.Item>
             </Flex>
           </div>
         );
@@ -298,7 +298,7 @@ class StudentStatus extends React.Component {
           <WhiteSpace style={{backgroundColor:"#f5f5f5"}}/>
           {this.renderOverallAbility()}
           <div>
-            <div style={{color: '#108ee9',fontSize:'1rem',margin:"15px 15px"}}>总天梯分变化情况</div> 
+            <div style={{color: '#108ee9',fontSize:'1rem',margin:"15px 15px"}}>天梯分变化情况</div> 
             <canvas id="c1" style={{width: "95%", height: "60%"}}></canvas>
           </div>
         </div>
@@ -313,19 +313,19 @@ export default connect(state => {
   const {capatity , rating_history, comusedkp, isFetching} = student_status;
   const default_capatity = [{
       key: '1',
-      exercount: 560,
-      rate: 89.4,
-      ladderscore: 1800,
+      exercount: 0,
+      rate: 0,
+      ladderscore: null,
     }, {
       key: '2',
-      exercount: 20,
-      rate: 88,
-      ladderscore: 1780,
+      exercount: 0,
+      rate: 0,
+      ladderscore: null,
     }, {
       key: '3',
-      exercount: 50,
-      rate: 91,
-      ladderscore: 1884,
+      exercount: 0,
+      rate: 0,
+      ladderscore: null,
     }, 
   ];
 
