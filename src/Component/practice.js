@@ -37,6 +37,7 @@ class MyTest extends React.Component {
 
   componentDidMount(){
     const {student_id} = this.props;
+    console.log(student_id);
     this.props.getNotFinishTest(this.props.student_id);
     this.props.setSelectedTab("blueTab");
     this.props.updateEntry("root");
