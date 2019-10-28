@@ -20,7 +20,8 @@ class Question extends React.Component {
     this.state = {
       sheetmodal: false,
       title_img_width: "auto",
-      title_img_height: "3rem",
+      // title_img_height: "3rem",
+      title_img_height: "auto",
       // title_img_width: "18rem",
       // title_img_height: "auto",
       answer_img_width: "auto",
@@ -48,7 +49,8 @@ class Question extends React.Component {
       this.setState({
         sheetmodal: false,
         title_img_width: "auto",
-        title_img_height: "3rem",
+        // title_img_height: "3rem",
+        title_img_height: "auto",
         answer_img_width: "auto",
         answer_img_height: "3rem",
       });
@@ -137,7 +139,7 @@ class Question extends React.Component {
   titleImageLoaded(){
     console.log("titleImageLoaded:",this.title_img.width, window.innerWidth);
     console.log("this.title_img.width > window.innerWidth",this.title_img.width > window.innerWidth);
-    if(this.title_img.width > window.innerWidth){
+    if(this.title_img.width > window.innerWidth*0.9){
       this.setState({title_img_width: "90%", title_img_height: "auto"})
     }
   }
