@@ -152,10 +152,12 @@ class Question extends React.Component {
           null
         }
         {
-          title_audio_url? 
-          <audio src={title_audio_url} controls="controls">
-            Your browser does not support the audio element.
-          </audio>
+          title_audio_url?
+          <div> 
+            <audio src={title_audio_url} controls="controls">
+              Your browser does not support the audio element.
+            </audio>
+          </div>
           :
           null
         }
@@ -184,23 +186,54 @@ class Question extends React.Component {
         //   <MathInput onChange={(v) => this.onInputChange(v)} />
 
         // );
-        return(
-        <InputItem
-            {...getFieldProps('money2', {
-              normalize: (v, prev) => {
-                if (v && !/^[a-z]+$/.test(v)) {
-                  return prev;
+        if(exercise_status >= 1){
+          return(
+            <List>              
+              {answer_log.map((item, index) => {
+                if(item.value == item.fill){
+                  return (
+                    <List.Item thumb={<Icon size="lg" type="check" color={correctColor} />}>
+                      <div style={{color: correctColor, fontWeight: "bold"}}>{item.fill}</div>
+                    </List.Item>
+                  )
+                }else{
+                  return ( 
+                  <List.Item thumb={<Icon size="lg" type="cross" color={wrongColor} />} 
+                    extra = {<div>正确答案：{item.value}</div>}>
+                    <div style={{color: wrongColor, fontWeight: "bold"}}>{item.fill}</div>
+                  </List.Item>
+                  )
                 }
-                return v;
-              },
-            })}
-            type={"text"}
-            maxLength={7}
-            placeholder="money format"
-            clear
-            disabledKeys={['.', '0', '3']}
-          >数字键盘</InputItem>
-        )
+              })}
+            </List>
+          )
+        }else{
+          console.log(answer_log)
+          return(
+            <List>              
+              {answer_log.map((item, index) => 
+                <InputItem
+                    {...getFieldProps('money2', {
+                      normalize: (v, prev) => {
+                        if (v && !/^[a-z]+$/.test(v)) {
+                          return prev;
+                        }
+                        return v.toUpperCase();
+                      },
+                    })}
+                    onChange={(v) => this.props.inputChange(exindex, index, v.toUpperCase())}
+                    type={"text"}
+                    value={item.fill}
+                    maxLength={7}
+                    placeholder="填入英文选项"
+                    clear
+                  >
+                  （{index}）  
+                </InputItem>
+              )}
+            </List>
+          )
+        }
       case 1:
         //文字选择题
         //已做完

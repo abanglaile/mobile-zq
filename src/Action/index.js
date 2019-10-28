@@ -693,20 +693,25 @@ const checkAnswer = (exercise_type, log_answer) => {
     switch(exercise_type){
         case 0:
             //填空题
-            for(var i = 0; i < exAnswer.length; i++){
-                if(userAnswer && userAnswer[i]){
-                    //去掉首尾标识字符
-                    const length = exAnswer[i].length;
-                    const checkAnswer = exAnswer[i].substr(1, length - 2);
-                    if(checkAnswer != userAnswer[i]){
-                        console.log("wrong");
-                        result = 0;
-                        break;
-                    }
-                }else{
-                    console.log("wrong");
-                    result = 0;
-                    break;
+            // for(var i = 0; i < exAnswer.length; i++){
+            //     if(userAnswer && userAnswer[i]){
+            //         //去掉首尾标识字符
+            //         const length = exAnswer[i].length;
+            //         const checkAnswer = exAnswer[i].substr(1, length - 2);
+            //         if(checkAnswer != userAnswer[i]){
+            //             console.log("wrong");
+            //             result = 0;
+            //             break;
+            //         }
+            //     }else{
+            //         console.log("wrong");
+            //         result = 0;
+            //         break;
+            //     }
+            // }
+            for(var i = 0; i < log_answer.length; i++){
+                if(log_answer[i].fill != (log_answer[i].value)){
+                    return 0;
                 }
             }
             break;
@@ -738,6 +743,18 @@ const checkAnswer = (exercise_type, log_answer) => {
             break;
     }
     return result;
+}
+
+/**
+ * [修改填空答案]
+ */
+export const inputChange = (exindex, index, value) => {
+    return{
+        type: 'EXERCISE_INPUT_CHANGE',
+        exindex,
+        index,
+        value,
+    } 
 }
 
 /**

@@ -146,6 +146,8 @@ export const testData = (state = defaulatTestData, action = {}) => {
         case 'SUBMIT_EXERCISE_LOG':
             const exindex = state.get('exindex');
             return state.mergeDeepIn(['exercise_log', exindex], Immutable.fromJS(action.exercise_log)).set("modalOpen", true);
+        case 'EXERCISE_INPUT_CHANGE':
+            return state.setIn(['exercise_log', action.exindex, 'answer', action.index, 'fill'], action.value)
         case 'EXERCISE_SELECT_CHANGE':
             console.log("EXERCISE_SELECT_CHANGE: "+action.index);
             return state.updateIn(['exercise_log', action.exindex, 'answer', action.index, 'select'], select => !select)
