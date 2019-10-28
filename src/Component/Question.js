@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { WingBlank, Grid, Flex, List, Checkbox, Button, Icon, Modal, Toast, Progress, Badge, NavBar,ActivityIndicator} from 'antd-mobile';
+import { InputItem, WingBlank, Grid, Flex, List, Checkbox, Button, Icon, Modal, Toast, Progress, Badge, NavBar,ActivityIndicator} from 'antd-mobile';
 import Tex from './renderer.js';
 // import MathInput from '../../math-input/src/components/app.js'
 
@@ -8,6 +8,8 @@ import *as action from '../Action/';
 import {connect} from 'react-redux';
 const CheckboxItem = Checkbox.CheckboxItem;
 const AgreeItem = Checkbox.AgreeItem;
+
+import { createForm } from 'rc-form';
 
 const Item = List.Item;
 const alert = Modal.alert; 
@@ -193,6 +195,8 @@ class Question extends React.Component {
     
     const wrongColor = "#ff7875", correctColor = "#73d13d";
 
+    const { getFieldProps } = this.props.form;
+
     switch(exercise_type){
       case 0:
         //TO-DO: 添加多个填空答案
@@ -200,6 +204,23 @@ class Question extends React.Component {
         //   <MathInput onChange={(v) => this.onInputChange(v)} />
 
         // );
+        return(
+        <InputItem
+            {...getFieldProps('money2', {
+              normalize: (v, prev) => {
+                if (v && !/^[a-z]+$/.test(v)) {
+                  return prev;
+                }
+                return v;
+              },
+            })}
+            type={"text"}
+            maxLength={7}
+            placeholder="money format"
+            clear
+            disabledKeys={['.', '0', '3']}
+          >数字键盘</InputItem>
+        )
       case 1:
         //文字选择题
         //已做完
@@ -591,4 +612,4 @@ export default connect(state => {
     isFetching : isFetching,
     student_id:state.AuthData.get('userid'),
   }; 
-}, action)(Question);
+}, action)(createForm()(Question));
