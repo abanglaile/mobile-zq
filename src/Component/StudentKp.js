@@ -242,6 +242,7 @@ class StudentKp extends React.Component {
           <WhiteSpace size='lg'/>
           <WingBlank>
           <Button style={{marginTop: '0.5rem'}} type="primary"
+            disabled
             onClick={ e => this.props.generateTestByKp(student_id, kpid, kpcapatity.kpname, course_id)} >
               {kpcapatity ? "继续修炼" : "开始修炼"}
           </Button>
