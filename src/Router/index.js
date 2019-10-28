@@ -46,16 +46,16 @@ export default (
         </Route>
         <Route path="login" component={login} />
         
-        <Route path="mytest" component={MyTest} />
-        {/* <Route path="question/:test_id" component={requireAuthentication(Question)} /> */}
-        <Route path="question/:test_id" component={Question} />
-        <Route path="studentstatus/:course_id" component={StudentStatus} />
-        <Route path="student_kp/:kpid" component={StudentKp} />
-        <Route path="kp_test_result/:test_id" component={KpTestResult} />
-        <Route path="test_result/:test_id" component={TestResult} />
-        <Route path="invite" component={Invite} />
-        <Route path="chapter_kp/:chapter_id" component={ChapterKp} />
-        <Route path="name" component={Name} />
-        <Route path="group" component={Group} />
+        <Route path="mytest" component={requireAuthentication(MyTest)} />
+        <Route path="question/:test_id" component={requireAuthentication(Question)} />
+        {/* <Route path="question/:test_id" component={Question} /> */}
+        <Route path="studentstatus/:course_id" component={requireAuthentication(StudentStatus)} />
+        <Route path="student_kp/:kpid" component={requireAuthentication(StudentKp)} />
+        <Route path="kp_test_result/:test_id" component={requireAuthentication(KpTestResult)} />
+        <Route path="test_result/:test_id" component={requireAuthentication(TestResult)} />
+        <Route path="invite" component={requireAuthentication(Invite)} />
+        <Route path="chapter_kp/:chapter_id" component={requireAuthentication(ChapterKp)} />
+        <Route path="name" component={requireAuthentication(Name)} />
+        <Route path="group" component={requireAuthentication(Group)} />
     </Route>
 );

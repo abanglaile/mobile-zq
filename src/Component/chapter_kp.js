@@ -50,7 +50,8 @@ class ChapterKp extends React.Component {
                     marginLeft:'0.5rem',
                     width: '20px',
                     height: '20px',
-                    background: 'url(../../img/item_icon/pen.png) center center /  17px 17px no-repeat' }}
+                    // background: 'url(../../img/item_icon/pen.png) center center /  17px 17px no-repeat' }}
+                    background: 'url(/mobile-zq/img/item_icon/pen.png) center center /  17px 17px no-repeat' }}
                     />
                   }
                   style={{backgroundColor: '#f5f5f5'}}
@@ -64,7 +65,8 @@ class ChapterKp extends React.Component {
                     marginLeft:'0.5rem',
                     width: '20px',
                     height: '20px',
-                    background: 'url(../../img/item_icon/video2.png) center center /  17px 17px no-repeat' }}
+                    background: 'url(/mobile-zq/img/item_icon/video2.png) center center /  17px 17px no-repeat' }}
+                    // background: 'url(../../img/item_icon/video2.png) center center /  17px 17px no-repeat' }}
                     />
                   }
                   style={{backgroundColor: '#f5f5f5'}}

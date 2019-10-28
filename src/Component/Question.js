@@ -19,6 +19,8 @@ class Question extends React.Component {
       sheetmodal: false,
       title_img_width: "auto",
       title_img_height: "3rem",
+      // title_img_width: "18rem",
+      // title_img_height: "auto",
       answer_img_width: "auto",
       answer_img_height: "3rem",
     };
@@ -37,6 +39,18 @@ class Question extends React.Component {
     if(exindex){
       this.props.updateExindex(0);
     }  
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(this.props.exindex !== nextProps.exindex){
+      this.setState({
+        sheetmodal: false,
+        title_img_width: "auto",
+        title_img_height: "3rem",
+        answer_img_width: "auto",
+        answer_img_height: "3rem",
+      });
+    }
   }
 
   showModal(e){
@@ -119,7 +133,8 @@ class Question extends React.Component {
   }
 
   titleImageLoaded(){
-    console.log(this.title_img.width, window.innerWidth);
+    console.log("titleImageLoaded:",this.title_img.width, window.innerWidth);
+    console.log("this.title_img.width > window.innerWidth",this.title_img.width > window.innerWidth);
     if(this.title_img.width > window.innerWidth){
       this.setState({title_img_width: "90%", title_img_height: "auto"})
     }
@@ -137,15 +152,20 @@ class Question extends React.Component {
     const {title, title_img_url, title_audio_url} = exercise[exindex]; 
     const {title_img_width, title_img_height} = this.state;
     console.log("exercise.sample :"+JSON.stringify(exercise[0].sample));
-    console.log(title_img_url);
+    console.log("title_img_width, title_img_height:",title_img_width,title_img_height);
     return (
       <div style={{ margin: '30px 0 18px 0', fontSize: '1.0rem'}}>
         <Tex content={title} />
         {
           title_img_url? 
+          <div>
           <img src={title_img_url}  ref={element => {
               this.title_img = element;
-            }} onLoad = {() => this.titleImageLoaded()} style={{width: title_img_width, height: title_img_height}} />
+              console.log("this.title_img:",element);
+            }} onLoad = {() => this.titleImageLoaded()}  style={{display:'none'}}/>
+           {/* }} onLoad = {() => this.titleImageLoaded()} style={{width: title_img_width, height: title_img_height}} /> */}
+          <img src={title_img_url} style={{width: title_img_width, height: title_img_height}} />
+          </div>
           :
           null
         }
