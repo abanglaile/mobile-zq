@@ -194,7 +194,7 @@ class Question extends React.Component {
     // console.log(exercise_log, exindex);
     const {exercise_state, exercise_status} = exercise_log[exindex];
     const answer_log = exercise_log[exindex].answer;
-    // console.log(answer_log);
+    console.log(answer_log);
     const answerjson = answer;
     
     const wrongColor = "#ff7875", correctColor = "#73d13d";
@@ -350,15 +350,22 @@ class Question extends React.Component {
     }
   }
 
-  renderModal(){
+  renderModal(){ 
     const {modalOpen, exindex, exercise_log} = this.props;
     var {delta_student_rating, exercise_state} = exercise_log[exindex];
-    var title = 'Sorry!';
+    let title = '', content = "答案已成功提交"
     console.log(exercise_log[exindex]);
     delta_student_rating = delta_student_rating ? delta_student_rating : 0;
-    var delta_tip = delta_student_rating < 0 ? delta_student_rating : '+' + delta_student_rating;  
-    if(exercise_state){
-        title = 'Bingo!';
+    // var delta_tip = delta_student_rating < 0 ? delta_student_rating : '+' + delta_student_rating;  
+    console.log(exercise_state)
+    switch(exercise_state){
+      case 0: 
+        title = 'Sorry!'
+        content = '天梯分 ' + delta_student_rating
+        break;
+      case 1:
+        title = 'Bingo!'
+        content = '天梯分 +' + delta_student_rating
     }
     return (
       <Modal
@@ -370,44 +377,68 @@ class Question extends React.Component {
             text: 'OK', 
             onPress: () => this.onContinue()}]}
         > 
-        <span style={{fontSize: "1.1rem", fontWeight: "BOLD"}}>天梯分 {delta_tip}</span><br />
+        <span style={{fontSize: "1.1rem", fontWeight: "BOLD"}}>{content}</span><br />
       </Modal>
-      ) 
+    ) 
   }
 
   renderAnswerTest(){
     const {exercise, exindex, exercise_log, modalOpen} = this.props;
     const {breakdown, title} = exercise[exindex];
-    const {exercise_state, exercise_status, answer_test, breakdown_sn} = exercise_log[exindex];
-    console.log("breakdown", breakdown);
+    const {exercise_state, exercise_type, exercise_status, answer_test, breakdown_sn} = exercise_log[exindex];
+    console.log("exercise_log", exercise_log[exindex].old_exercise_rating);
+    const selfCheck = true
     if(exercise_status == 1){
-      
-      return (
-      <List renderHeader='请选择你做对的步骤'>
-        {breakdown.map((item,i) => {
-          console.log(breakdown_sn[i]);
-          const presn = item.presn;
-          //显示第一个或前置已经被选择（最后答案不显示）
-          if((i != breakdown.length - 1) && (breakdown_sn[i].sn_state >= 0 || (presn > 0 && breakdown_sn[presn - 1].sn_state > 0))){
-            return (
-            <CheckboxItem key={item.sn} check={breakdown_sn[i].sn_state} onChange={() => this.props.breakdownSelectChange(exindex, i)} wrap>
-              <Tex content = {item.content} />
-            </CheckboxItem>
-            )
-          }
-        })}
-      </List>
-      );
+      //主观答案未批改 && 允许自批改
+      /***TO-DO: 提交未完成 */
+      if(exercise_state < 0){
+        return (
+          <List renderHeader='自助批改'>
+            {
+              selfCheck ? 
+              <Item style = {{ display: selfCheck ? 'block' : 'none'}}>
+                <Button type="primary" size="small" inline onClick={e => this.props.selfCheck(exercise_log[exindex], exercise_type, 1, exindex)}>答案正确</Button>
+                <Button size="small" inline style={{ marginLeft: '2.5px' }} onClick={e => this.props.selfCheck(exercise_log[exindex], exercise_type, 0, exindex)}>答案错误</Button>
+              </Item>
+              : null
+            }
+            {
+              breakdown.map((item,i) => 
+                <CheckboxItem disabled key={item.sn} wrap>
+                  <Tex content = {item.content} />
+                </CheckboxItem>
+              )
+            }
+          </List>
+        )
+      }else {
+        return (
+          <List renderHeader='请选择你做对的步骤'>
+            {breakdown.map((item,i) => {
+              console.log(breakdown_sn[i]);
+              const presn = item.presn;
+              //自助判断阶段显示完整答案 || 显示第一个或前置已经被选择（最后答案不显示）
+              if((i != breakdown.length - 1) && (breakdown_sn[i].sn_state >= 0 || (presn > 0 && breakdown_sn[presn - 1].sn_state > 0))){
+                return (
+                <CheckboxItem disabled={exercise_status == 0.5} key={item.sn} check={breakdown_sn[i].sn_state} onChange={() => this.props.breakdownSelectChange(exindex, i)} wrap>
+                  <Tex content = {item.content} />
+                </CheckboxItem>
+                )
+              }
+            })}
+          </List>
+        );
+      }
     }
   }
 
   renderBreakdown(){
-    const {exercise, exindex, exercise_log, modalOpen} = this.props;
+    const {exercise, exindex, exercise_log} = this.props;
     const {breakdown, title} = exercise[exindex];
     const {exercise_state, exercise_status, answer_test, breakdown_sn} = exercise_log[exindex];
     if(exercise_status == 2){
       return (
-        <List renderHeader={() => '答案解析'} >
+        <List renderHea der={() => '答案解析'} >
           {
             breakdown_sn.map((item, i) => {
                 console.log(i, breakdown_sn[i]);
@@ -474,14 +505,14 @@ class Question extends React.Component {
         <Flex>
           <Flex.Item>
             <Button style={{margin: '0.5rem 0 0 0'}}
-                onClick={e => this.props.submitExerciseLog(exercise[exindex], exercise_log[exindex],exindex)} 
+                onClick={e => this.props.submitExerciseLog(exercise_log[exindex], exercise[exindex].exercise_type, exindex)} 
                 type="ghost" size='small'>
               我不会做
             </Button>
           </Flex.Item>
           <Flex.Item>
             <Button style={{margin: '0.5rem 0 0 0'}}
-                onClick={e => this.props.submitExerciseLog(exercise[exindex], exercise_log[exindex], exindex)} 
+                onClick={e => this.props.submitExerciseLog(exercise_log[exindex], exercise[exindex].exercise_type, exindex)} 
                 type="primary" size='small'>
               提交答案
             </Button>
@@ -581,7 +612,7 @@ class Question extends React.Component {
   render() {
     const {exercise, exindex, exercise_log, record, feedbackToast, isFetching} = this.props;
     // console.log("exercise:::::: ",JSON.stringify(exercise));
-    // console.log("exercise_log:::::: ",JSON.stringify(exercise_log));
+    console.log("exercise_log: ", exercise_log, exindex);
     const { exercise_status } = exercise_log[exindex];
     
     if(feedbackToast){

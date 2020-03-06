@@ -790,26 +790,69 @@ export const submitExerciseLogSuccess = (exercise_log, i) => {
 }
 
 
-export const submitExerciseLog = (exercise, exercise_log, exindex) => {
-    // console.log("exercise :",JSON.stringify(exercise));
-    console.log("exercise_log :",JSON.stringify(exercise_log));
-    console.log("student_id :",exercise_log.student_id);
-    const {exercise_id, answer, exercise_type, exercise_rating, breakdown} = exercise;
-    const result = checkAnswer(exercise_type, exercise_log.answer);
 
-    exercise_log.exercise_state = result;
+
+export const submitExerciseLog = (exercise_log, exercise_type, exindex) => {
+    // console.log("exercise :",JSON.stringify(exercise));
+    // console.log("exercise_log :", exercise_log);
+    console.log("------------------------exindex :", exindex);
+    // const {exercise_id, answer, exercise_type, exercise_rating, breakdown} = exercise;
+
+    // if(exercise_type != 2){
+    //     const result = checkAnswer(exercise_type, exercise_log.answer);
+    //     exercise_log.exercise_state = result;
+    // }else{
+    //     exercise_log.exercise_status = 0.5
+    // }
+
     let url = target + "/submitExerciseLog";
     return (dispatch) => {
         //dispatch(getTestStart());
-        return axios.post(url,{exercise_log})
+        return axios.post(url,{exercise_log, exercise_type})
         .then(function (response) {
-            dispatch(submitExerciseLogSuccess(response.data, exindex));
+            const new_exercise_log = response.data
+            console.log(new_exercise_log)
+            dispatch({
+                type: 'SUBMIT_EXERCISE_LOG_SUCCESS',
+                exercise_log: new_exercise_log,
+                exindex,
+            });
+            dispatch({
+                type: 'OPEN_MODAL',
+                isOpen: true
+            })
         })
         .catch(function (error) {
             console.log(error);
         });
     }
 }
+
+export const selfCheck = (exercise_log, exercise_type, exercise_state, exindex) => {
+    exercise_log.exercise_state = exercise_state;
+    let url = target + "/submitExerciseLog";
+    return (dispatch) => {
+        return axios.post(url, {exercise_log, exercise_type})
+        .then(function (response) {
+            const new_exercise_log = response.data
+            dispatch({
+                type: 'SUBMIT_EXERCISE_LOG_SUCCESS',
+                exercise_log: new_exercise_log,
+                exindex,
+            });
+            dispatch({
+                type: 'OPEN_MODAL',
+                isOpen: true
+            })    
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+}
+
+
+
 
 /**
  * [提交单题测试结果]

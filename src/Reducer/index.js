@@ -108,8 +108,7 @@ export const testData = (state = defaulatTestData, action = {}) => {
             break;
 
         case 'SUBMIT_EXERCISE_LOG_SUCCESS':
-            console.log(action.i, action.exercise_log);
-            return state.setIn(['exercise_log', action.i], Immutable.fromJS(action.exercise_log)).set("modalOpen", true);
+            return state.setIn(['exercise_log', action.exindex], Immutable.fromJS(action.exercise_log)).set("modalOpen", true);
         case 'GET_MY_TEST_SUCCESS':
             return state.set('exercise', Immutable.fromJS(action.exercise))
                 // .set('test_log', Immutable.fromJS(test_log))
@@ -143,9 +142,11 @@ export const testData = (state = defaulatTestData, action = {}) => {
             return state.set('feedbackToast', false);
         case 'CLOSE_MODAL':
             return state.set('modalOpen', false);
-        case 'SUBMIT_EXERCISE_LOG':
-            const exindex = state.get('exindex');
-            return state.mergeDeepIn(['exercise_log', exindex], Immutable.fromJS(action.exercise_log)).set("modalOpen", true);
+        case 'OPEN_MODAL':
+            return state.set('modalOpen', action.isOpen);
+        // case 'SUBMIT_EXERCISE_LOG':
+        //     const exindex = state.get('exindex');
+        //     return state.mergeDeepIn(['exercise_log', exindex], Immutable.fromJS(action.exercise_log)).set("modalOpen", true);
         case 'EXERCISE_INPUT_CHANGE':
             return state.setIn(['exercise_log', action.exindex, 'answer', action.index, 'fill'], action.value)
         case 'EXERCISE_SELECT_CHANGE':
