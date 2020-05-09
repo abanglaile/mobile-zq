@@ -60,6 +60,8 @@ const defaulatStudentData = Immutable.fromJS({
 export const testData = (state = defaulatTestData, action = {}) => {
     console.log("action.type: "+action.type);
     switch(action.type){
+        case 'SET_LOADING':
+            return state.set('isLoading', action.is_loading);
         case 'GET_TEST_START':
             return state.set('isFetching', true);
         case 'GET_TEST_STATUS':
@@ -108,7 +110,7 @@ export const testData = (state = defaulatTestData, action = {}) => {
             break;
 
         case 'SUBMIT_EXERCISE_LOG_SUCCESS':
-            return state.setIn(['exercise_log', action.exindex], Immutable.fromJS(action.exercise_log)).set("modalOpen", true);
+            return state.setIn(['exercise_log', action.exindex], Immutable.fromJS(action.exercise_log));
         case 'GET_MY_TEST_SUCCESS':
             return state.set('exercise', Immutable.fromJS(action.exercise))
                 // .set('test_log', Immutable.fromJS(test_log))
