@@ -3,6 +3,9 @@ import config from '../utils/Config'
 import axios from 'axios';
 import { Toast } from 'antd-mobile';
 
+import * as qiniu from 'qiniu-js'
+
+
 
 let target = config.server_url;
 
@@ -13,6 +16,14 @@ let target = config.server_url;
 function elo_rating(Ra, Rb){
     const m = (Rb - Ra)/400;
     return 1/(1 + Math.pow(10, m));
+}
+
+//开始获取测试数据
+const setLoading = (is_loading) => {
+    return {
+      type: 'SET_LOADING',
+      is_loading,
+    }
 }
 
 //开始获取测试数据
@@ -207,7 +218,7 @@ export const getMyStudentRating = (student_id, course_id) => {
     let url = target + "/getMyStudentRating";
     console.log(student_id, course_id);
     return (dispatch) => {
-        dispatch(getDataStart());
+        dispatch(setLoading(true));
         return axios.get(url,{
                 params:{
                    student_id,
@@ -220,6 +231,7 @@ export const getMyStudentRating = (student_id, course_id) => {
                 type: 'GET_MY_RATING',
                 json: response.data,
             })
+            dispatch(setLoading(false));
         })
         .catch(function (error) {
             console.log(error);
@@ -232,7 +244,7 @@ export const getMyStudentRating = (student_id, course_id) => {
 export const getMyBookChapter = (student_id, course_id) => {
     let url = target + "/getMyBookChapter";
     return (dispatch) => {
-        dispatch(getDataStart());
+        dispatch(setLoading(true));
         return axios.get(url,{
                 params:{
                    student_id,
@@ -241,6 +253,7 @@ export const getMyBookChapter = (student_id, course_id) => {
         })
         .then(function (response) {
             dispatch(getMyChapterSuccess(response.data));
+            dispatch(setLoading(false));
         })
         .catch(function (error) {
             console.log(error);
@@ -327,7 +340,7 @@ export const getChapterKpStatus = (student_id, chapter_id) => {
 export const getTestExercise = (student_id, test_id) => {
     let url = target + "/getExerciseByTest";
     return (dispatch) => {
-        dispatch(getTestStart());
+        dispatch(setLoading(true));
         return axios.get(url,{
                 params:{
                    test_id,
@@ -336,6 +349,7 @@ export const getTestExercise = (student_id, test_id) => {
         })
         .then(function (response) {
             dispatch(getTestExerciseSuccess(response.data.exercise));
+            dispatch(setLoading(false));
         })
         .catch(function (error) {
             console.log(error);
@@ -348,7 +362,7 @@ export const getTestExercise = (student_id, test_id) => {
 export const getTestData = (student_id, test_id, test_type, entry) => {
     let url = target + "/getExerciseByTest";
     return (dispatch) => {
-        dispatch(getTestStart());
+        dispatch(setLoading(true));
         return axios.get(url,{
                 params:{
                    test_id,
@@ -370,7 +384,7 @@ export const getTestData = (student_id, test_id, test_type, entry) => {
 export const getMyTestData = (student_id, test_id) => {
     let url = target + "/getMyTestData";
     return (dispatch) => {
-        dispatch(getTestStart());
+        dispatch(setLoading(true));
         return axios.get(url,{
                 params:{
                    test_id,
@@ -380,6 +394,7 @@ export const getMyTestData = (student_id, test_id) => {
         .then(function (response) {
             // dispatch(getMyScoreSuccess(response.data));
             dispatch(getMyTestDataSuccess(response.data));
+            dispatch(setLoading(false));
             // dispatch(push("/mobile-zq/question"));
         })
         .catch(function (error) {
@@ -425,7 +440,7 @@ export const getTestRatingReward = (student_id, test_id) => {
 export const generateTestByKp = (student_id, kpid, kpname, course_id) => {
     let url = target + "/generateTestByKp";
     return (dispatch) => {
-        dispatch(getTestStart());
+        dispatch(setLoading(true));
         return axios.post(url, {
                    student_id,
                    kpid,
@@ -494,10 +509,11 @@ const submitBreakdownLogSuccess = (exercise_log, exindex) => {
 export const submitBreakdownLog = (exercise_log, exindex) => {
     let url = target + "/submitBreakdownLog";
     return (dispatch) => {
-        //dispatch(getTestStart());
+        dispatch(setLoading(true));
         return axios.post(url, {exercise_log})
         .then(function (response) {
             dispatch(submitBreakdownLogSuccess(response.data, exindex));
+            dispatch(setLoading(false));
         })
         .catch(function (error) {
             console.log(error);
@@ -512,110 +528,120 @@ export const submitBreakdownLog = (exercise_log, exindex) => {
 
 /**
  * 提交后跳转到下一题
- * @param  exercise_status [0:当前为做题页面，1:当前为导学页面，2:当前为完成页面]
+ * @param  exercise_status [0:未提交答案，1:已提交答案，2:已提交反馈]
  */
-export const jumpNext = () => {
-    console.log('jumpNext');
-    return (dispatch, getState) => {
-        const testData = getState().testData;
-        const student_id = getState().AuthData.get('userid');
-        const exindex = testData.get("exindex");
-        const test_log = testData.get("test_log");
-        const exercise_log = testData.get("exercise_log").toJS();
-        const exercise = testData.get("exercise").toJS();
-        const {exercise_status} = exercise_log[exindex];
-        const test_id = testData.get("test_id");
-        console.log("testData: ",JSON.stringify(testData));
-        // console.log("testData test_log: ",JSON.stringify(test_log));
-        console.log("jumpNext test_id: ",test_id);
-
-        if(exercise_status == 2){
-            var next = -1;
-            var i = (exindex + 1)%exercise.length;
-            while(i != exindex){
-                if(exercise_log[i].exercise_status < 2){
-                    next = i;
-                    break;
-                }
-                i = ++i%exercise.length;
-            }
-            console.log('next' + next);
-            //还有未完成的题目
-            if(next >= 0){
-                dispatch(updateExindex(next));
+export const jumpNext = (logs, exindex) => {
+    return (dispatch) => {
+        console.log(logs[exindex])
+        if(logs[exindex].exercise_status == 2){
+            if(logs[exindex].next == -1){
+                dispatch(push("/mobile-zq/kp_test_result/" + logs[exindex].test_id));
             }else{
-                let url = target + "/submitTestLog";
-                //提交整个Test
-                return axios.post(url,{exercise_log})
-                .then(function (response) {
-                    dispatch(push("/mobile-zq/kp_test_result/" + test_id));
-                })
+                dispatch(updateExindex(logs[exindex].next));
             }
         }
-        dispatch(closeModal());
-        // console.log(exercise_status);
-        // if(exercise_status > 0 || exercise_state || blength == 1){
-        //     //跳过导学页面
-
-        //     if(exercise_status == 0){
-        //         console.log(exercise_status, exercise_state, blength);
-        //         dispatch(updateExerciseStatus(exindex, 2));
-        //     }
-
-        //     var next = -1;
-        //     var i = (exindex + 1)%exercise.length;
-        //     while(i != exindex){
-        //         if(exercise_log[i].exercise_state < 0){
-        //             next = i;
-        //             break;
-        //         }
-        //         i = ++i%exercise.length;
-        //     }
-        //     console.log('next' + next);
-        //     //还有未完成的题目
-        //     if(next >= 0){
-        //         console.log('update');
-                
-        //         dispatch(updateExindex(next));
-        //         // dispatch(updateExerciseST());
-        //         //dispatch(push("/mobile-zq/question"));
-        //     }
-        //     //题目全部完成
-        //     else{
-        //         //测试完成，记录测试结束时间
-        //         dispatch(updateFinishTime());
-        //         const testData = getState().testData.toJS();
-        //         console.log(testData);
-        //         dispatch(submitTestStart());
-        //         let url = target + '/submitTest';
-
-        //         /**
-        //          * [提交后台测试数据]
-        //          */
-        //         const test_result = {
-        //             test_id: testData.test_log.test_id,
-        //             exercise_log: testData.exercise_log,
-        //             start_time: testData.test_log.start_time,
-        //             finish_time: testData.test_log.finish_time,
-        //         }
-        //         console.log(test_result);
-        //         return axios.post(url,{student_id: student_id, student_rating: 500, test_result: test_result})
-        //         .then(function (response) {
-        //             console.log(response.data);
-        //             dispatch(submitTestSuccess(response.data));
-        //             dispatch(push("/mobile-zq/kp_test_result/"+testData.test_log.test_id));
-        //         })
-        //         .catch(function (error) {
-        //             console.log(error);
-        //         });
-        //     }
-        // }else{
-        //     console.log('jump');
-        //     dispatch(closeModal());
-        //     dispatch(showAnswerTest(exindex));
-        //     //dispatch(push("/mobile-zq/AnswerTest"));
-        // }
     }
+    
+    // return (dispatch, getState) => {
+    //     const testData = getState().testData;
+    //     const student_id = getState().AuthData.get('userid');
+    //     const exindex = testData.get("exindex");
+    //     const test_log = testData.get("test_log");
+    //     const exercise_log = testData.get("exercise_log").toJS();
+    //     const exercise = testData.get("exercise").toJS();
+    //     const {exercise_status} = exercise_log[exindex];
+    //     const test_id = testData.get("test_id");
+    //     console.log("testData: ",JSON.stringify(testData));
+    //     // console.log("testData test_log: ",JSON.stringify(test_log));
+    //     console.log("jumpNext test_id: ",test_id);
+
+    //     if(exercise_status == 2){
+    //         var next = -1;
+    //         var i = (exindex + 1)%exercise.length;
+    //         while(i != exindex){
+    //             if(exercise_log[i].exercise_status < 2){
+    //                 next = i;
+    //                 break;
+    //             }
+    //             i = ++i%exercise.length;
+    //         }
+    //         console.log('next' + next);
+    //         //还有未完成的题目
+    //         if(next >= 0){
+    //             dispatch(updateExindex(next));
+    //         }else{
+    //             let url = target + "/submitTestLog";
+    //             //提交整个Test
+    //             return axios.post(url,{exercise_log})
+    //             .then(function (response) {
+    //                 dispatch(push("/mobile-zq/kp_test_result/" + test_id));
+    //             })
+    //         }
+    //     }
+    //     dispatch(closeModal());
+    //     // console.log(exercise_status);
+    //     // if(exercise_status > 0 || exercise_state || blength == 1){
+    //     //     //跳过导学页面
+
+    //     //     if(exercise_status == 0){
+    //     //         console.log(exercise_status, exercise_state, blength);
+    //     //         dispatch(updateExerciseStatus(exindex, 2));
+    //     //     }
+
+    //     //     var next = -1;
+    //     //     var i = (exindex + 1)%exercise.length;
+    //     //     while(i != exindex){
+    //     //         if(exercise_log[i].exercise_state < 0){
+    //     //             next = i;
+    //     //             break;
+    //     //         }
+    //     //         i = ++i%exercise.length;
+    //     //     }
+    //     //     console.log('next' + next);
+    //     //     //还有未完成的题目
+    //     //     if(next >= 0){
+    //     //         console.log('update');
+                
+    //     //         dispatch(updateExindex(next));
+    //     //         // dispatch(updateExerciseST());
+    //     //         //dispatch(push("/mobile-zq/question"));
+    //     //     }
+    //     //     //题目全部完成
+    //     //     else{
+    //     //         //测试完成，记录测试结束时间
+    //     //         dispatch(updateFinishTime());
+    //     //         const testData = getState().testData.toJS();
+    //     //         console.log(testData);
+    //     //         dispatch(submitTestStart());
+    //     //         let url = target + '/submitTest';
+
+    //     //         /**
+    //     //          * [提交后台测试数据]
+    //     //          */
+    //     //         const test_result = {
+    //     //             test_id: testData.test_log.test_id,
+    //     //             exercise_log: testData.exercise_log,
+    //     //             start_time: testData.test_log.start_time,
+    //     //             finish_time: testData.test_log.finish_time,
+    //     //         }
+    //     //         console.log(test_result);
+    //     //         return axios.post(url,{student_id: student_id, student_rating: 500, test_result: test_result})
+    //     //         .then(function (response) {
+    //     //             console.log(response.data);
+    //     //             dispatch(submitTestSuccess(response.data));
+    //     //             dispatch(push("/mobile-zq/kp_test_result/"+testData.test_log.test_id));
+    //     //         })
+    //     //         .catch(function (error) {
+    //     //             console.log(error);
+    //     //         });
+    //     //     }
+    //     // }else{
+    //     //     console.log('jump');
+    //     //     dispatch(closeModal());
+    //     //     dispatch(showAnswerTest(exindex));
+    //     //     //dispatch(push("/mobile-zq/AnswerTest"));
+    //     // }
+    // }
 }
 
 
@@ -789,26 +815,54 @@ export const submitExerciseLogSuccess = (exercise_log, i) => {
     }
 }
 
+export const submitExerciseLogByFile = (files, exercise_log, exercise_type, exindex) => {
 
+    let config = {
+        useCdnDomain: true,
+        region: qiniu.region.z2
+    };
+    let putExtra = {
+        fname: "",
+        params: {},
+        mimeType: null
+    };
+      
+    let file = files[0].file;
+    let key = exercise_log.exercise_id.toString() + "-" + new Date().getTime().toString();
 
+    let token_url = target + "/getQiniuToken";
+    return (dispatch) => {
+        // dispatch(setLoading(true));
+        return axios.get(token_url, {})
+        .then(function (response) {
+            const token = response.data
+            let observer = {
+                error(err){
+                    console.log(err)
+                    // ...
+                }, 
+                complete(res){
+                    //console.log(res);
+                    exercise_log.answer = "http://cdn.zhiqiu.pro/" + res.key
+                    dispatch(submitExerciseLog(exercise_log, 3, exindex));  
+                }
+            }
+            let observable = qiniu.upload(file, key, token, putExtra, config);
+            observable.subscribe(observer)            
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+}
 
 export const submitExerciseLog = (exercise_log, exercise_type, exindex) => {
-    // console.log("exercise :",JSON.stringify(exercise));
-    // console.log("exercise_log :", exercise_log);
     console.log("------------------------exindex :", exindex);
-    // const {exercise_id, answer, exercise_type, exercise_rating, breakdown} = exercise;
-
-    // if(exercise_type != 2){
-    //     const result = checkAnswer(exercise_type, exercise_log.answer);
-    //     exercise_log.exercise_state = result;
-    // }else{
-    //     exercise_log.exercise_status = 0.5
-    // }
 
     let url = target + "/submitExerciseLog";
     return (dispatch) => {
-        //dispatch(getTestStart());
-        return axios.post(url,{exercise_log, exercise_type})
+        dispatch(setLoading(true));
+        return axios.post(url,{exercise_log, exercise_type, exindex})
         .then(function (response) {
             const new_exercise_log = response.data
             console.log(new_exercise_log)
@@ -817,6 +871,7 @@ export const submitExerciseLog = (exercise_log, exercise_type, exindex) => {
                 exercise_log: new_exercise_log,
                 exindex,
             });
+            dispatch(setLoading(false));
             dispatch({
                 type: 'OPEN_MODAL',
                 isOpen: true
