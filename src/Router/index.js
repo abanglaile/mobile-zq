@@ -48,7 +48,7 @@ export default (
         
         <Route path="mytest" component={requireAuthentication(MyTest)} />
         {/* <Route path="question/:test_id" component={requireAuthentication(Question)} /> */}
-        <Route path="question/:test_id" component={Question} />
+        <Route path="question/:test_id" component={requireAuthentication(Question)} />
         <Route path="studentstatus/:course_id" component={requireAuthentication(StudentStatus)} />
         <Route path="student_kp/:kpid" component={requireAuthentication(StudentKp)} />
         <Route path="kp_test_result/:test_id" component={requireAuthentication(KpTestResult)} />

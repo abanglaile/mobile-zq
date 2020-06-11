@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { InputItem, WingBlank, Grid, Flex, List, Checkbox, Button, Icon, Modal, Toast, Progress, Badge, NavBar,ActivityIndicator, ImagePicker} from 'antd-mobile';
+import { InputItem, WingBlank, Grid, Flex, List, Checkbox, Button, Icon, Modal, Toast, Progress, WhiteSpace, Tag, Badge, NavBar,ActivityIndicator, ImagePicker} from 'antd-mobile';
 import Tex from './renderer.js';
 // import MathInput from '../../math-input/src/components/app.js'
 
@@ -13,6 +13,8 @@ import { createForm } from 'rc-form';
 
 const Item = List.Item;
 const alert = Modal.alert; 
+const grayColor = "#d9d9d9", wrongColor = "#F56C6C", correctColor = "#67C23A", defaultColor = '#409EFF';//#d2978a #67BC36 #73d13d #F56C6C
+
 class Question extends React.Component {
   constructor(props) { 
   	super(props);
@@ -112,7 +114,7 @@ class Question extends React.Component {
     const {exercise_log, exindex} = this.props
     this.props.closeModal();
     this.accExerciseTime();
-    this.props.jumpNext(exercise_log, exindex);
+    this.props.jumpNext(exercise_log[exindex]);
   }
 
   onInputChange(val){
@@ -162,7 +164,7 @@ class Question extends React.Component {
     console.log("exercise.sample :"+JSON.stringify(exercise[0].sample));
     console.log("title_img_width, title_img_height:",title_img_width,title_img_height);
     return (
-      <div style={{ margin: '30px 0 18px 0', fontSize: '1.0rem'}}>
+      <div style={{ fontSize: '1.1rem'}}>
         <Tex content={title} />
         {
           title_img_url? 
@@ -201,7 +203,7 @@ class Question extends React.Component {
     console.log(answer_log);
     const answerjson = answer;
     
-    const wrongColor = "#ff7875", correctColor = "#73d13d";
+    // const wrongColor = "#ff7875", correctColor = "#73d13d";
 
     const { getFieldProps } = this.props.form;
 
@@ -448,31 +450,74 @@ class Question extends React.Component {
   }
 
   renderBreakdown(){
+    // style={item.sn_state == 0 ? {backgroundColor: "#ffccc7"} : {backgroundColor: "white"}}
     const {exercise, exindex, exercise_log} = this.props;
     const {breakdown, title} = exercise[exindex];
     const {exercise_state, exercise_status, answer_test, breakdown_sn} = exercise_log[exindex];
+    // const wrongColor = "#94b1a2", correctColor = "#d2978a";
     if(exercise_status == 2){
       return (
-        <List renderHea der={() => '答案解析'} >
+        <div style={{padding: '4rem 0 0 0 '}}>
+          <div style={{fontWeight: "bold", fontSize: "1.1rem"}}>知识步骤分解</div>
+        <List 
+          // renderHeader={
+          // // () => 
+          // <div style={{
+          //     width: '100%',
+          //     textAlign: 'center',
+          //     fontSize: '1rem',
+          //     position: 'relative',
+          //     display: 'flex',
+          //     alignItems: 'center',
+          //     justifyContent: 'center', 
+          //   }}>
+          //   <div style={{
+          //     position: 'relative',
+          //     zIndex: '1',
+          //     display: 'inline-block',
+          //     padding: '0 10px',
+          //     backgroundColor: '#fff',
+          //   }}>
+          //     知识点解析
+          //   </div>
+          //   <div style = {{
+          //     position:'absolute',
+          //     left:'0',
+          //     width:'100%',
+          //     height:'1px',
+          //     backgroundColor: '#f7f7f7',
+          //     top:'50%'
+          //   }}></div>
+          // </div>}
+        >
           {
             breakdown_sn.map((item, i) => {
                 console.log(i, breakdown_sn[i]);
+                const borderColor = item.sn_state == 1 ? correctColor : (item.sn_state == 0 ? wrongColor : grayColor)
                 return (
-                  <Item arrow="horizontal" multipleLine wrap onClick={() => this.props.router.push("/mobile-zq/studentkp/" + item.kpid)}
-                    style={item.sn_state == 0 ? {backgroundColor: "#ffccc7"} : {backgroundColor: "white"}}>
-                    <Tex content = {breakdown[i].content} />
-                    <Item.Brief>{item.kpname}</Item.Brief>
+                  <Item 
+                    style = {{border:"2px solid " + borderColor, borderRadius: "5px", margin :"1rem 0"}}
+                    arrow="horizontal" multipleLine wrap onClick={() => this.props.router.push("/mobile-zq/studentkp/" + item.kpid)}
+                    >
+                    <div style={{fontSize: "1rem"}}>
+                      <Tex content = {breakdown[i].content} />
+                    </div>  
+                    <Item.Brief>
+                      <Tag disabled style={{color: "white", backgroundColor: borderColor }}>{item.kpname}</Tag>
+                    </Item.Brief>
                   </Item>
                 )
             })
           }
         </List>
+        </div>
       )
     }
   }
 
+
   renderSubmitFooter(){
-    const {exindex, exercise_log, exercise, student_rating} = this.props;
+    const {exindex, exercise_log, exercise, student_rating, test_log} = this.props;
     const { exercise_state, exercise_status} = exercise_log[exindex];
     if(exercise_status == 1){
       return(
@@ -496,7 +541,7 @@ class Question extends React.Component {
           </Flex.Item>
           <Flex.Item>
             <Button style={{margin: '0.5rem 0 0 0'}}
-                  onClick={e => this.props.submitBreakdownLog(exercise_log[exindex], exindex)} 
+                  onClick={e => this.props.submitFeedback(exercise_log[exindex], exindex)} 
                   type="primary" size='small'>
               提交反馈
             </Button>
@@ -517,26 +562,145 @@ class Question extends React.Component {
                     background:"#fff",
               }}>
         <WingBlank>
-        <Flex>
-          <Flex.Item>
-            <Button style={{margin: '0.5rem 0 0 0'}}
-                onClick={e => this.props.submitExerciseLogByFile(this.state.files, exercise_log[exindex], exercise[exindex].exercise_type, exindex)} 
-                type="ghost" size='small'>
-              我不会做
-            </Button>
-          </Flex.Item>
-          <Flex.Item>
-            <Button style={{margin: '0.5rem 0 0 0'}}
-                onClick={e => this.props.submitExerciseLog(exercise_log[exindex], exercise[exindex].exercise_type, exindex)} 
-                type="primary" size='small'>
-              提交答案
-            </Button>
-          </Flex.Item>
-        </Flex>
+          <Flex>
+            <Flex.Item>
+              <Button inline 
+                style={{margin: '0 18% 0 0rem'}} 
+                type="ghost"                
+                size="small"
+                onClick={(e) => this.showModal(e)}
+              >
+                题目列表
+              </Button>
+            </Flex.Item>
+            <Flex.Item>
+              <Button style={{margin: '0.5rem 0 0 0'}}
+                  onClick={e => this.props.submitExerciseLog(exercise_log[exindex], exercise[exindex].exercise_type, exindex)} 
+                  type="primary" size='small'>
+                提交答案
+              </Button>
+            </Flex.Item>
+          </Flex>
         </WingBlank>
       </div>
       )
     }
+  }
+
+  renderSubmitButton(){
+    const {exindex, exercise, exercise_log, test_log} = this.props;
+    if(test_log.finish_time){
+      return(
+        <Button 
+          onClick={e => this.props.router.push("/mobile-zq/kp_test_result/" + test_log.test_id)} 
+          type="primary" >
+          查看报告
+        </Button>
+      )
+    }else if(exercise_log[exindex].exercise_status == 0){
+      return(
+        <Button 
+          onClick={e => this.props.submitExerciseLog(exercise_log[exindex], exercise[exindex].exercise_type, exindex)} 
+          type="primary" >
+          提交答案
+        </Button>
+      )
+    }else if(exercise_log[exindex].exercise_status == 1 && exercise_log[exindex].exercise_state >= 0){
+      return(
+        <Button 
+          onClick={e => this.props.submitFeedback(exercise_log[exindex], exercise[exindex].exercise_type, exindex)} 
+          type="primary" >
+          提交反馈
+        </Button>
+      )
+    }else{
+      return(
+        <Button 
+          disabled
+          type="primary" >
+          答案已提交
+        </Button>
+      )
+    }
+  }
+
+  renderFooterNew(){
+    const {exindex, exercise_log} = this.props;
+    const {sheetmodal} = this.state;
+    return (
+        <div style={{
+            position: 'fixed',
+            bottom: '0',
+            width: '100%',
+            zIndex: 100,
+            background: "#fff",
+            // borderTop: "solid 1px " + grayColor,
+            }}>
+          <Flex style={{margin: '1rem 1rem'}}>
+            <Flex.Item style={{paddingRight: '1rem'}}>
+              <Button  
+                type="ghost"                
+                onClick={(e) => this.showModal(e)}
+              >
+                题目列表
+              </Button>
+            </Flex.Item>
+            <Flex.Item>
+              {this.renderSubmitButton()}
+            </Flex.Item>
+          </Flex>
+
+          <Modal
+            popup
+            visible={sheetmodal}
+            onClose={() => this.onCloseModal()}
+            animationType="slide-up"
+          >
+            <Grid data={exercise_log} hasLine={false} onClick={(e, i) => this.jumpToExercise(i)}
+                columnNum={5}
+                itemStyle={{
+                  padding: '1rem 1rem 0 1rem'
+                }}
+                renderItem={(item, i) => (
+                  <div style = {{
+                    width: '35px',
+                    height: '35px',
+                    fontSize: '16px',
+                    display: 'flex',
+                    borderRadius: '50px',
+                    border: item.exercise_state < 0 ? 'solid 1px #d9d9d9' : null, 
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: item.exercise_state < 0 ? '#1890ff' : 'white',
+                    backgroundColor: item.exercise_state == 1 ? correctColor : item.exercise_state == 0 ? wrongColor : 'white',
+                  }}>
+                    { i + 1 }
+                  </div>
+                )} 
+            />
+            <div style={{margin: '1rem 0 1rem 0'}}>
+              <Button inline 
+                style={{margin: '0 5% 0 0'}} 
+                type="ghost"
+                size="small"
+                disabled = {exindex == 0}
+                onClick={e => this.props.updateExindex(exindex-1)}
+              >
+                上一题
+              </Button>
+              <Button inline 
+                style={{margin: '0rem 0 0 0'}} 
+                type="ghost"                
+                size="small"
+                disabled = {exindex == exercise_log.length - 1}
+                onClick={e => this.props.updateExindex(exindex+1)}
+              >
+                下一题
+              </Button>
+            </div>
+          </Modal>
+        </div>
+      )
   }
 
   renderFooter(){
@@ -625,43 +789,65 @@ class Question extends React.Component {
   }
 
   render() {
-    const {exercise, exindex, exercise_log, record, feedbackToast, isFetching, isLoading} = this.props;
+    const {exercise, exindex, exercise_log, record, test_log, isFetching, isLoading} = this.props;
     // console.log("exercise:::::: ",JSON.stringify(exercise));
     console.log("exercise_log: ", exercise_log, exindex);
     const { exercise_status } = exercise_log[exindex];
     
-    if(feedbackToast){
-      Toast.success("谢谢你的反馈", 1, () => {
-        this.props.hideFeedbackToast();
-        this.accExerciseTime();
-        this.propsprops.jumpNext();
-      })
-    }
+    // if(feedbackToast){
+    //   Toast.success("谢谢你的反馈", 1, () => {
+    //     this.props.hideFeedbackToast();
+    //     this.accExerciseTime();
+    //     this.props.jumpNext(exercise_log, exindex);
+    //   })
+    // }
    
     return (
       <div>
-        <NavBar
+        {/* <NavBar
         mode="light"
-        icon={<Icon type="cross" />}
-        onLeftClick={() => this.onLeftClick()}
+        leftContent={[
+          <div>{test_log.test_name}</div>
+        ]}
+        // icon={<Icon type="cross" />}
+        // onLeftClick={() => this.onLeftClick()}
         rightContent={[
           <div><span style={{fontSize: '2rem'}}>{exindex + 1}</span><span>{'/' + exercise.length}</span></div>
         ]}
-        ></NavBar>
-        <WingBlank>
-        {this.renderAnswerTest()}
-        {this.renderTitle()}
-        </WingBlank>
-        <WingBlank>
-        {this.renderAnswer()}
-        {this.renderBreakdown()}
-        </WingBlank>
+        ></NavBar> */}
         <div style={{
-                  width: '100%',
-                  height: "6rem",}}>
+            padding: '0.3rem 1rem',
+            color: '#bfbfbf',
+            backgroundColor: '#fafafa',
+            // borderBottom: 'solid 1px #CCC',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <div style={{fontSize: "1rem"}}>{test_log.test_name}</div>
+          <div>
+            <span style={{fontSize: '2rem', color: '#1890ff'}}>{exindex + 1}</span><span style={{fontSize: '1rem'}}>{'/' + exercise.length}</span>
+          </div>
         </div>
-        {this.renderSubmitFooter()}
-        {this.renderFooter()}
+        <div style={{padding: "3.5rem 1.5rem 5rem 1.5rem"}}>
+
+          {this.renderAnswerTest()}
+          
+          
+          {this.renderTitle()}
+          
+          <WhiteSpace size='lg' />
+          
+          {this.renderAnswer()}
+          
+          
+          
+          {this.renderBreakdown()}
+
+        </div>
+
+        {this.renderFooterNew()}
         {this.renderModal()}
         <ActivityIndicator toast animating={isLoading} />
         <Modal

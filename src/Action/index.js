@@ -497,32 +497,24 @@ export const getNotFinishTest = (student_id) => {
 
 //-------------------------------做题交互-------------------------------//
 
-const submitBreakdownLogSuccess = (exercise_log, exindex) => {
-    console.log(exercise_log);
-    return {
-        type: 'SUBMIT_BREAKDOWN_LOG_SUCCESS',
-        exercise_log,
-        exindex,
-    }
-}
-
-export const submitBreakdownLog = (exercise_log, exindex) => {
-    let url = target + "/submitBreakdownLog";
+export const submitFeedback = (exercise_log, exindex) => {
+    let url = target + "/submitFeedback";
     return (dispatch) => {
         dispatch(setLoading(true));
-        return axios.post(url, {exercise_log})
+        return axios.post(url, {exercise_log, exindex})
         .then(function (response) {
-            dispatch(submitBreakdownLogSuccess(response.data, exindex));
+            exercise_log = response.data
+            dispatch({
+                type: 'SUBMIT_FEEDBACK_SUCCESS',
+                exercise_log,
+                exindex,
+            });
             dispatch(setLoading(false));
+            dispatch(jumpNext(exercise_log))
         })
         .catch(function (error) {
             console.log(error);
         });
-    }
-    console.log(exindex);
-    return {
-        type: 'SUBMIT_FEEDBACK',
-        exindex,
     }
 }
 
@@ -530,14 +522,14 @@ export const submitBreakdownLog = (exercise_log, exindex) => {
  * 提交后跳转到下一题
  * @param  exercise_status [0:未提交答案，1:已提交答案，2:已提交反馈]
  */
-export const jumpNext = (logs, exindex) => {
+export const jumpNext = (exercise_log) => {
     return (dispatch) => {
-        console.log(logs[exindex])
-        if(logs[exindex].exercise_status == 2){
-            if(logs[exindex].next == -1){
-                dispatch(push("/mobile-zq/kp_test_result/" + logs[exindex].test_id));
+        console.log("jumpNext", exercise_log)
+        if(exercise_log.exercise_status == 2){
+            if(exercise_log.next == -1){
+                dispatch(push("/mobile-zq/kp_test_result/" + exercise_log.test_id));
             }else{
-                dispatch(updateExindex(logs[exindex].next));
+                dispatch(updateExindex(exercise_log.next));
             }
         }
     }
@@ -660,16 +652,10 @@ export const updateEntry = (entry) => {
     }
 }
 
-
-export const hideFeedbackToast = () => {
-    return {
-        type: 'HIDE_FEEDBACK_TOAST'
-    }
-}
-
 export const closeModal = () => {
     return {
-        type: 'CLOSE_MODAL',
+        type: 'OPEN_MODAL',
+        isOpen: false
     }
 }
 

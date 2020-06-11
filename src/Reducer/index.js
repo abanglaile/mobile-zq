@@ -140,10 +140,6 @@ export const testData = (state = defaulatTestData, action = {}) => {
             return state.setIn(['test_log', "finish_time"], new Date());
         case 'SHOW_ANSWER_TEST':
             return state.setIn(["exercise_log", action.exindex, 'exercise_status'], 1);
-        case 'HIDE_FEEDBACK_TOAST':
-            return state.set('feedbackToast', false);
-        case 'CLOSE_MODAL':
-            return state.set('modalOpen', false);
         case 'OPEN_MODAL':
             return state.set('modalOpen', action.isOpen);
         // case 'SUBMIT_EXERCISE_LOG':
@@ -168,8 +164,8 @@ export const testData = (state = defaulatTestData, action = {}) => {
                 }
             }
             return state.setIn(['exercise_log', action.exindex, 'breakdown_sn'], Immutable.fromJS(breakdown_log));
-        case 'SUBMIT_BREAKDOWN_LOG_SUCCESS':
-            return state.setIn(['exercise_log', action.exindex], Immutable.fromJS(action.exercise_log)).set('feedbackToast', true);
+        case 'SUBMIT_FEEDBACK_SUCCESS':
+            return state.setIn(['exercise_log', action.exindex], Immutable.fromJS(action.exercise_log));
         case 'SUBMIT_TEST_START':
             return state;
         case 'SUBMIT_TEST_SUCCESS':
