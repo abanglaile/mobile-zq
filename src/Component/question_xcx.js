@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { InputItem, WingBlank, Grid, Flex, List, Checkbox, Button, Icon, Modal, Toast, Progress, Badge, NavBar,ActivityIndicator} from 'antd-mobile';
+import { InputItem, WingBlank, Grid, Flex, List, Checkbox, Button, Icon, Modal, Toast, Progress, Badge, NavBar,ActivityIndicator, ImagePicker} from 'antd-mobile';
 import Tex from './renderer.js';
 // import MathInput from '../../math-input/src/components/app.js'
 
@@ -26,16 +26,34 @@ class QuestionXcx extends React.Component {
       // title_img_height: "auto",
       answer_img_width: "auto",
       answer_img_height: "3rem",
+      
+      files: [],
     };
   }
 
   componentDidMount(){
-    const {student_id, params} = this.props;
-    console.log("student_id:",student_id);
-    const test_id = params.test_id;
+    const {params,location} = this.props;
+    // var tdata = {userid:'4e1845e0644711e98a720fd6f7c4240e',testid:'310'};
+    // console.log("tdata:",JSON.stringify(tdata));
+    console.log("params:",JSON.stringify(params));
+    console.log("location:",JSON.stringify(location));
+    // url:http://localhost:8000/mobile-zq/question_xcx/%7B%22userid%22:%22ffe6a3a0045411e9b965fd02f0885d74%22,%22testid%22:%22404%22%7D
+    var test_id = params.test_id;
+    var userid = location.query.userid;
     //TO-DO
-    this.props.getMyTestData(student_id, test_id);
+    // this.props.getMyTestData(student_id, test_id);
+    this.props.getMyTestData(userid, test_id);
   }
+
+ //跳转到小程序  通过onClick事件 点击调用
+  // wx.miniProgram.getEnv(function(res){
+  //   if(res.miniprogram){
+  //       wx.miniProgram.navigateTo({ url: `../details/index?id=${goodsId}`,success:function () {
+  //     },fail:function (result) {
+  //         alert(result)
+  //     }})
+  // }
+
 
   componentWillUnmount(){
     const {exindex} = this.props;
@@ -107,9 +125,10 @@ class QuestionXcx extends React.Component {
   }
 
   onContinue(){
+    const {exercise_log, exindex} = this.props
     this.props.closeModal();
     this.accExerciseTime();
-    this.props.jumpNext();
+    this.props.jumpNext(exercise_log, exindex);
   }
 
   onInputChange(val){
@@ -118,6 +137,7 @@ class QuestionXcx extends React.Component {
 
   accExerciseTime(){
     const {exercise_st, exindex, exercise_log} = this.props;
+    console.log("exindex: " + exindex)
     const {exercise_status} = exercise_log[exindex];
     //做题页面累加页面停留时间
     if(exercise_status == 0){
@@ -212,20 +232,16 @@ class QuestionXcx extends React.Component {
           return(
             <List>              
               {answer_log.map((item, index) => {
-                if(item.value == item.fill){
-                  return (
-                    <List.Item thumb={<Icon size="lg" type="check" color={correctColor} />}>
-                      <div style={{color: correctColor, fontWeight: "bold"}}>{item.fill}</div>
-                    </List.Item>
-                  )
-                }else{
-                  return ( 
-                  <List.Item thumb={<Icon size="lg" type="cross" color={wrongColor} />} 
-                    extra = {<div>正确答案：{item.value}</div>}>
+                let borderColor = item.value == item.fill ? correctColor : wrongColor
+                let borderStyle = {border:"2px solid " + borderColor, borderRadius: "5px",margin :"1rem 0"};
+                let iconflag = item.value == item.fill ? <Icon type="check" color={correctColor} /> : <Icon type="cross" color={wrongColor} />;
+                return ( 
+                  <List.Item style={borderStyle} thumb={<span>（{index + 1}）</span>}
+                    extra = {iconflag}>
                     <div style={{color: wrongColor, fontWeight: "bold"}}>{item.fill}</div>
+                    <List.Item.Brief>正确答案：{item.value}</List.Item.Brief>
                   </List.Item>
-                  )
-                }
+                )
               })}
             </List>
           )
@@ -250,7 +266,7 @@ class QuestionXcx extends React.Component {
                     placeholder="填入英文选项"
                     clear
                   >
-                  （{index}）  
+                  （{index + 1}）  
                 </InputItem>
               )}
             </List>
@@ -344,7 +360,39 @@ class QuestionXcx extends React.Component {
                 ))}
               </List>
           );
-        }  
+        }
+      //图片主观题
+      case 3:
+        if(exercise_status >= 1){
+          let borderStyle = {border:"1px solid #f5f5f5",borderRadius: "5px",margin :"1rem 0"};
+          let iconflag = "待批改";
+          if(exercise_log.exercise_state == 1){
+            borderStyle = {border:"2px solid " + correctColor, borderRadius: "5px",margin :"1rem 0"};
+            iconflag = <Icon type="check" color={correctColor} />;
+          }else if(exercise_log.exercise_state == 0){
+            borderStyle =  {border:"2px solid " + wrongColor, borderRadius: "5px",margin :"1rem 0"};
+            iconflag = <Icon type="cross" color={wrongColor} />;
+          }
+          return (
+            <List>
+              <List.Item onClick={() => {this.setState({show_img_modal: true, img_url: answer_log.url})}} 
+                style={borderStyle} 
+                thumb={<img style={{ width: '88.25px', height: '88.25px', objectFit: 'cover', margin: '10px' }} src={answer_log.url} alt="" />}
+                extra = {iconflag}>
+                  我的答案                  
+                  <List.Item.Brief>点击查看大图</List.Item.Brief>
+              </List.Item>
+            </List>
+          )
+        }
+        return (
+          <ImagePicker
+            files={this.state.files}
+            onChange={(files, type, index) => this.setState({files})}
+            onImageClick={(index, fs) => this.setState({show_img_modal: true, img_url: fs[index].url})}
+            selectable={this.state.files.length < 1}
+          />
+        )
       default:
         return;
     }
@@ -388,47 +436,30 @@ class QuestionXcx extends React.Component {
     const {exercise_state, exercise_type, exercise_status, answer_test, breakdown_sn} = exercise_log[exindex];
     console.log("exercise_log", exercise_log[exindex].old_exercise_rating);
     const selfCheck = true
-    if(exercise_status == 1){
-      //主观答案未批改 && 允许自批改
-      /***TO-DO: 提交未完成 */
-      if(exercise_state < 0){
-        return (
-          <List renderHeader='自助批改'>
-            {
-              selfCheck ? 
-              <Item style = {{ display: selfCheck ? 'block' : 'none'}}>
-                <Button type="primary" size="small" inline onClick={e => this.props.selfCheck(exercise_log[exindex], exercise_type, 1, exindex)}>答案正确</Button>
-                <Button size="small" inline style={{ marginLeft: '2.5px' }} onClick={e => this.props.selfCheck(exercise_log[exindex], exercise_type, 0, exindex)}>答案错误</Button>
-              </Item>
-              : null
-            }
-            {
-              breakdown.map((item,i) => 
-                <CheckboxItem disabled key={item.sn} wrap>
-                  <Tex content = {item.content} />
-                </CheckboxItem>
-              )
-            }
-          </List>
-        )
-      }else {
-        return (
-          <List renderHeader='请选择你做对的步骤'>
-            {breakdown.map((item,i) => {
-              console.log(breakdown_sn[i]);
-              const presn = item.presn;
-              //自助判断阶段显示完整答案 || 显示第一个或前置已经被选择（最后答案不显示）
-              if((i != breakdown.length - 1) && (breakdown_sn[i].sn_state >= 0 || (presn > 0 && breakdown_sn[presn - 1].sn_state > 0))){
-                return (
-                <CheckboxItem disabled={exercise_status == 0.5} key={item.sn} check={breakdown_sn[i].sn_state} onChange={() => this.props.breakdownSelectChange(exindex, i)} wrap>
-                  <Tex content = {item.content} />
-                </CheckboxItem>
-                )
-              }
-            })}
-          </List>
-        );
-      }
+    if(exercise_status == 1 && exercise_state >= 0){
+      //客观题反馈
+      return (
+        <List renderHeader='请选择你做对的步骤'>
+          {breakdown.map((item,i) => {
+            console.log(breakdown_sn[i]);
+            const presn = item.presn;
+            //显示第一个或前置已经被选择（最后答案不显示）
+            // if(breakdown_sn[i].sn_state >= 0 || (presn > 0 && breakdown_sn[presn - 1].sn_state > 0)){
+            //   return (
+            //   <CheckboxItem disabled={i == breakdown.length - 1} key={item.sn} check={breakdown_sn[i].sn_state} onChange={() => this.props.breakdownSelectChange(exindex, i)} wrap>
+            //     <Tex content = {item.content} />
+            //   </CheckboxItem>
+            //   )
+            // }
+            return (
+            <CheckboxItem disabled={i == breakdown.length - 1 || (presn > 0 && breakdown_sn[presn - 1].sn_state > 0)} 
+              key={item.sn} check={breakdown_sn[i].sn_state} onChange={() => this.props.breakdownSelectChange(exindex, i)} wrap>
+              <Tex content = {item.content} />
+            </CheckboxItem>
+            )
+          })}
+        </List>
+      );
     }
   }
 
@@ -505,7 +536,7 @@ class QuestionXcx extends React.Component {
         <Flex>
           <Flex.Item>
             <Button style={{margin: '0.5rem 0 0 0'}}
-                onClick={e => this.props.submitExerciseLog(exercise_log[exindex], exercise[exindex].exercise_type, exindex)} 
+                onClick={e => this.props.submitExerciseLogByFile(this.state.files, exercise_log[exindex], exercise[exindex].exercise_type, exindex)} 
                 type="ghost" size='small'>
               我不会做
             </Button>
@@ -593,7 +624,7 @@ class QuestionXcx extends React.Component {
       )
   }
 
-  onLeftClick(){
+  onLeftClick(){//此处判断并跳回小程序
     const {test_log, entry} = this.props;
     const {finish_time} = test_log;
     this.props.router.goBack();
@@ -610,7 +641,7 @@ class QuestionXcx extends React.Component {
   }
 
   render() {
-    const {exercise, exindex, exercise_log, record, feedbackToast, isFetching} = this.props;
+    const {exercise, exindex, exercise_log, record, feedbackToast, isFetching, isLoading} = this.props;
     // console.log("exercise:::::: ",JSON.stringify(exercise));
     console.log("exercise_log: ", exercise_log, exindex);
     const { exercise_status } = exercise_log[exindex];
@@ -619,14 +650,11 @@ class QuestionXcx extends React.Component {
       Toast.success("谢谢你的反馈", 1, () => {
         this.props.hideFeedbackToast();
         this.accExerciseTime();
-        this.props.jumpNext();
+        this.propsprops.jumpNext();
       })
     }
    
     return (
-      isFetching ?
-        <ActivityIndicator toast animating={isFetching} />
-      :
       <div>
         <NavBar
         mode="light"
@@ -651,6 +679,18 @@ class QuestionXcx extends React.Component {
         {this.renderSubmitFooter()}
         {this.renderFooter()}
         {this.renderModal()}
+        <ActivityIndicator toast animating={isLoading} />
+        <Modal
+          visible={this.state.show_img_modal}
+          transparent
+          popup
+          closable
+          animationType="slide-up"
+          maskClosable={true}
+          onClose={() => this.setState({show_img_modal: false})}
+        >
+          <img style={{ width: '100%', height: 'auto'}} src={this.state.img_url} />
+        </Modal>
       </div>
     );
   }
@@ -662,7 +702,7 @@ export default connect(state => {
   var test_state = state.testData.toJS();
   var student_rating = state.studentData.get("student_rating");
   // console.log(test_state);
-  var {exercise, exindex, exercise_log, test_log, modalOpen, feedbackToast, exercise_st, isFetching} = test_state;
+  var {exercise, exindex, exercise_log, test_log, modalOpen, feedbackToast, exercise_st, isFetching, isLoading} = test_state;
   console.log("test_log: ",test_log);
   console.log("test_log.test_id: ",test_log.test_id);
   return {
@@ -676,6 +716,7 @@ export default connect(state => {
     student_rating: student_rating,
     feedbackToast: feedbackToast,
     isFetching : isFetching,
-    student_id:state.AuthData.get('userid'),
+    isLoading : isLoading,
+    // student_id:state.AuthData.get('userid'),
   }; 
 }, action)(createForm()(QuestionXcx));

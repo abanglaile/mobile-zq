@@ -12,6 +12,7 @@
     "antd-mobile": "^2.1.2",
     "axios": "^0.17.1",
     "katex": "^0.10.0",
+    "qiniu-js": "^2.5.5",
     "react-redux": "^4.4.8",
     "react-router": "^3.2.0",
     "react-router-redux": "^4.0.8",
