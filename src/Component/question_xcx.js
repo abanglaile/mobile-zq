@@ -46,8 +46,13 @@ class QuestionXcx extends React.Component {
     // url:http://localhost:8000/mobile-zq/question_xcx/%7B%22userid%22:%22ffe6a3a0045411e9b965fd02f0885d74%22,%22testid%22:%22404%22%7D
     var test_id = params.test_id;
     var userid = location.query.userid;
+    var exindex = location.query.index;
     //TO-DO
     this.props.getMyTestData(userid, test_id);
+    if(exindex !=null){
+      exindex = parseInt(exindex);
+      this.props.updateExindex(exindex);
+    }
   }
 
    //跳转到小程序  通过onClick事件 点击调用
