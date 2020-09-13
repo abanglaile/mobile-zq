@@ -43,7 +43,7 @@ class QuestionXcx extends React.Component {
     // console.log("tdata:",JSON.stringify(tdata));
     console.log("params:",JSON.stringify(params));
     console.log("location:",JSON.stringify(location));
-    // url:http://localhost:8000/mobile-zq/question_xcx/%7B%22userid%22:%22ffe6a3a0045411e9b965fd02f0885d74%22,%22testid%22:%22404%22%7D
+    // url:http://localhost:8000/mobile-zq/question_xcx/435?userid=866d1720036411e98175d1610e288342&index=2
     var test_id = params.test_id;
     var userid = location.query.userid;
     var exindex = location.query.index;
