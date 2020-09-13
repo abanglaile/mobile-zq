@@ -522,6 +522,19 @@ export const submitFeedback = (exercise_log, exindex) => {
  * 提交后跳转到下一题
  * @param  exercise_status [0:未提交答案，1:已提交答案，2:已提交反馈]
  */
+// export const gotoReport = () => {
+//     return (dispatch) => {
+//          wx.miniProgram.getEnv(function(res){
+//             if(res.miniprogram){
+//             //    or  window.wx.miniProgram.navigateTo
+//                 wx.miniProgram.navigateTo({ url: `../details/index?id=${goodsId}`,success:function () {
+//             }
+//         }
+//         }
+//     }
+// }
+// }
+
 export const jumpNext = (exercise_log) => {
     return (dispatch) => {
         console.log("jumpNext", exercise_log)
