@@ -20,6 +20,7 @@ class QuestionXcx extends React.Component {
   	super(props);
     this.answer_img = [];
     this.state = {
+      test_id : null,
       sheetmodal: false,
       title_img_width: "auto",
       // title_img_height: "3rem",
@@ -45,9 +46,13 @@ class QuestionXcx extends React.Component {
     console.log("location:",JSON.stringify(location));
     // url:http://localhost:8000/mobile-zq/question_xcx/435?userid=866d1720036411e98175d1610e288342&index=2
     var test_id = params.test_id;
+    this.setState({test_id : test_id});
     var userid = location.query.userid;
     var exindex = location.query.index;
     //TO-DO
+    if(userid){
+      this.props.updateFromXcx('xcx');
+    }
     this.props.getMyTestData(userid, test_id);
     if(exindex !=null){
       exindex = parseInt(exindex);
@@ -65,7 +70,7 @@ class QuestionXcx extends React.Component {
   //     }})
   // }
   goBackXcx(){
-    const {test_log} = this.props;
+    const {params} = this.props;
     console.log('goBackXcx');
     // window.wx.miniProgram.navigateTo({url: '/pages/home/home'});
     console.log('wx:',JSON.stringify(wx));
@@ -75,7 +80,7 @@ class QuestionXcx extends React.Component {
       console.log('res.miniprogram:',JSON.stringify(res.miniprogram));
       if(res.miniprogram){
         // or  window.wx.miniProgram.navigateTo
-        wx.miniProgram.navigateTo({ url: `/pages/report/report?test_id=${test_log.test_id}`,success:function () {
+        wx.miniProgram.navigateTo({ url: `/pages/report/report?id=${params.test_id}`,success:function () {
         },fail:function (result) {
             alert(result)
         }})
@@ -565,79 +570,82 @@ class QuestionXcx extends React.Component {
   }
 
 
-  renderSubmitFooter(){
-    const {exindex, exercise_log, exercise, student_rating, test_log} = this.props;
-    const { exercise_state, exercise_status} = exercise_log[exindex];
-    if(exercise_status == 1){
-      return(
-      <div style={{
-        position: 'fixed',
-                    bottom: '3rem',
-                    width: '100%',
-                    height: "3.1rem",
-                    borderTop: "solid 1px #CCC",
-                    zIndex: 100,
-                    background: "#fff",
-              }}>
-        <WingBlank>
-        <Flex>
-          <Flex.Item>
-            <Button style={{margin: '0.5rem 0 0 0'}}
-                  onClick={e => this.props.submitBreakdownLog(exercise_log[exindex], exindex)} 
-                  type="ghost" size='small'>
-              没有思路
-            </Button>
-          </Flex.Item>
-          <Flex.Item>
-            <Button style={{margin: '0.5rem 0 0 0'}}
-                  onClick={e => this.props.submitFeedback(exercise_log[exindex], exindex)} 
-                  type="primary" size='small'>
-              提交反馈
-            </Button>
-          </Flex.Item>
-        </Flex>
-        </WingBlank>
-      </div>
-      )
-    }else if(exercise_status == 0){
-      return(
-      <div style={{
-        position: 'fixed',
-                    bottom: '3rem',
-                    width: '100%',
-                    height: "3.1rem",
-                    borderTop: "solid 1px #CCC",
-                    zIndex: 100,
-                    background:"#fff",
-              }}>
-        <WingBlank>
-          <Flex>
-            <Flex.Item>
-              <Button inline 
-                style={{margin: '0 18% 0 0rem'}} 
-                type="ghost"                
-                size="small"
-                onClick={(e) => this.showModal(e)}
-              >
-                题目列表
-              </Button>
-            </Flex.Item>
-            <Flex.Item>
-              <Button style={{margin: '0.5rem 0 0 0'}}
-                  onClick={e => this.props.submitExerciseLog(exercise_log[exindex], exercise[exindex].exercise_type, exindex)} 
-                  type="primary" size='small'>
-                提交答案
-              </Button>
-            </Flex.Item>
-          </Flex>
-        </WingBlank>
-      </div>
-      )
-    }
-  }
+  // renderSubmitFooter(){
+  //   const {exindex, exercise_log, exercise, student_rating, test_log} = this.props;
+  //   const { exercise_state, exercise_status} = exercise_log[exindex];
+  //   console.log("renderSubmitFooter exindex:",exindex);
+  //   if(exercise_status == 1){
+  //     return(
+  //     <div style={{
+  //       position: 'fixed',
+  //                   bottom: '3rem',
+  //                   width: '100%',
+  //                   height: "3.1rem",
+  //                   borderTop: "solid 1px #CCC",
+  //                   zIndex: 100,
+  //                   background: "#fff",
+  //             }}>
+  //       <WingBlank>
+  //       <Flex>
+  //         <Flex.Item>
+  //           <Button style={{margin: '0.5rem 0 0 0'}}
+  //                 onClick={e => this.props.submitBreakdownLog(exercise_log[exindex], exindex)} 
+  //                 type="ghost" size='small'>
+  //             没有思路
+  //           </Button>
+  //         </Flex.Item>
+  //         <Flex.Item>
+  //           <Button style={{margin: '0.5rem 0 0 0'}}
+  //                 onClick={e => this.props.submitFeedback(exercise_log[exindex], exindex)} 
+  //                 type="primary" size='small'>
+  //             提交反馈
+  //           </Button>
+  //         </Flex.Item>
+  //       </Flex>
+  //       </WingBlank>
+  //     </div>
+  //     )
+  //   }else if(exercise_status == 0){
+  //     return(
+  //     <div style={{
+  //       position: 'fixed',
+  //                   bottom: '3rem',
+  //                   width: '100%',
+  //                   height: "3.1rem",
+  //                   borderTop: "solid 1px #CCC",
+  //                   zIndex: 100,
+  //                   background:"#fff",
+  //             }}>
+  //       <WingBlank>
+  //         <Flex>
+  //           <Flex.Item>
+  //             <Button inline 
+  //               style={{margin: '0 18% 0 0rem'}} 
+  //               type="ghost"                
+  //               size="small"
+  //               onClick={(e) => this.showModal(e)}
+  //             >
+  //               题目列表
+  //             </Button>
+  //           </Flex.Item>
+  //           <Flex.Item>
+  //             <Button style={{margin: '0.5rem 0 0 0'}}
+  //                 onClick={e => this.props.submitExerciseLog(exercise_log[exindex], exercise[exindex].exercise_type, exindex)} 
+  //                 type="primary" size='small'>
+  //               提交答案
+  //             </Button>
+  //           </Flex.Item>
+  //         </Flex>
+  //       </WingBlank>
+  //     </div>
+  //     )
+  //   }
+  // }
 
   renderSubmitButton(){
     const {exindex, exercise, exercise_log, test_log} = this.props;
+    console.log('renderSubmitButton exindex:',exindex);
+    console.log('renderSubmitButton exercise_log:',JSON.stringify(exercise_log));
     if(test_log.finish_time){
       return(
         <Button 
@@ -658,7 +666,7 @@ class QuestionXcx extends React.Component {
     }else if(exercise_log[exindex].exercise_status == 1 && exercise_log[exindex].exercise_state >= 0){
       return(
         <Button 
-          onClick={e => this.props.submitFeedback(exercise_log[exindex], exercise[exindex].exercise_type, exindex)} 
+          onClick={e => this.props.submitFeedback(exercise_log[exindex], exindex)} 
           type="primary" >
           提交反馈
         </Button>

@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Toast } from 'antd-mobile';
 
 import * as qiniu from 'qiniu-js'
-
+import wx from 'weixin-js-sdk';
 
 
 let target = config.server_url;
@@ -499,6 +499,7 @@ export const getNotFinishTest = (student_id) => {
 
 export const submitFeedback = (exercise_log, exindex) => {
     let url = target + "/submitFeedback";
+    // console.log('exindex:',exindex);
     return (dispatch) => {
         dispatch(setLoading(true));
         return axios.post(url, {exercise_log, exindex})
@@ -534,13 +535,34 @@ export const submitFeedback = (exercise_log, exindex) => {
 //     }
 // }
 // }
+export const updateFromXcx = (isfromxcx) => {
+    return {
+        type: 'UPDATE_FROM_XCX',
+        isfromxcx,
+    }
+}
 
 export const jumpNext = (exercise_log) => {
-    return (dispatch) => {
+    return (dispatch,getState) => {
+        const testData = getState().testData;
+        const isfromxcx = testData.get("isfromxcx");
+        console.log('isfromxcx:',isfromxcx);
         console.log("jumpNext", exercise_log)
         if(exercise_log.exercise_status == 2){
             if(exercise_log.next == -1){
-                dispatch(push("/mobile-zq/kp_test_result/" + exercise_log.test_id));
+                if(isfromxcx == 'xcx'){
+                    wx.miniProgram.getEnv(function(res){
+                        // console.log('res.miniprogram:',JSON.stringify(res.miniprogram));
+                        if(res.miniprogram){
+                          wx.miniProgram.navigateTo({ url: `/pages/report/report?id=${exercise_log.test_id}`,success:function () {
+                          },fail:function (result) {
+                              alert(result)
+                          }})
+                        }
+                      });
+                }else{
+                    dispatch(push("/mobile-zq/kp_test_result/" + exercise_log.test_id));
+                }
             }else{
                 dispatch(updateExindex(exercise_log.next));
             }

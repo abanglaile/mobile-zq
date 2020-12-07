@@ -17,6 +17,7 @@ const defaulatTestData = Immutable.fromJS({
             score : [],
             kp_rating: []
         },
+        isfromxcx : null,
     });
 const defaulatStudentData = Immutable.fromJS({
         isFetching: false,
@@ -60,6 +61,8 @@ const defaulatStudentData = Immutable.fromJS({
 export const testData = (state = defaulatTestData, action = {}) => {
     console.log("action.type: "+action.type);
     switch(action.type){
+        case 'UPDATE_FROM_XCX':
+            return state.set('isfromxcx', action.isfromxcx);
         case 'SET_LOADING':
             return state.set('isLoading', action.is_loading);
         case 'GET_TEST_START':
