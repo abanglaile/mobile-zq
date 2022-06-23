@@ -28,7 +28,7 @@
     "babel-preset-stage-1": "^6.5.0",
     "babel-register": "^6.7.2",
     "exports-loader": "^0.6.3",
-    "jsdom": "^8.4.0",
+    "jsdom": "^16.5.0",
     "less": "^2.7.2",
     "less-plugin-autoprefix": "^1.5.1",
     "less-plugin-clean-css": "^1.5.1",
